@@ -39,9 +39,10 @@
 
     .holding__word h1 {
         font-weight: 800;
-        font-size: min(11.2vw, 32vh);
+        font-size: min(9.5vw, 30vh);
         line-height: 1;
-        letter-spacing: -0.03em;
+        letter-spacing: -0.012em;
+        text-transform: uppercase;
         text-wrap: nowrap;
     }
 
@@ -93,14 +94,19 @@
 
     @media (max-aspect-ratio: 4/5) {
         .holding__word h1 {
-            font-size: 19.5vw;
-            line-height: 1.02;
+            font-size: 16.6vw;
+            line-height: 0.86;
         }
 
         .holding__word span {
             display: block;
             width: fit-content;
             margin-inline: auto;
+        }
+
+        /* Both lines share the same measure. */
+        .holding__word span + span {
+            font-size: 1.4em;
         }
     }
 

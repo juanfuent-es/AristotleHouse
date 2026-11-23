@@ -22,7 +22,7 @@ Until launch, visitors only see the holding screen at `/`. Signed-in admins brow
 whole site, starting at `/home`. Set `COMING_SOON=false` to open it.
 
 The scene is in `app/javascript/scene`: the bust read for heat (`bust.*.glsl`), the room
-(`field.frag.glsl`) and the glass word (`glass.js`), which follows the real `h1` of the
+(`field.frag.glsl`) and the glass word (`glass.js`, `variable_glyph.js`), a variable-weight extrusion that follows the real `h1` of the
 page. Without WebGL, the poster in `public/brand` and the text remain.
 
 ## Content

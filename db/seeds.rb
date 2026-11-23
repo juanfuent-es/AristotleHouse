@@ -1,7 +1,6 @@
 # Admin login. The address is a placeholder used only to sign in.
 email = ENV.fetch("ADMIN_EMAIL", "admin@aristotlehouse.com")
-password = ENV["ADMIN_PASSWORD"].presence
-password ||= "aristotle-dev" unless Rails.env.production?
+password = "password"
 abort "Set ADMIN_PASSWORD to seed the admin user in production." if password.blank?
 
 admin = User.find_or_initialize_by(email: email)

@@ -36,10 +36,10 @@
     --text-subhead--line-height: 1.2;
     --text-headline: clamp(2rem, 1.2rem + 2.8vw, 3.5rem);
     --text-headline--line-height: 1;
-    --text-headline--letter-spacing: -0.03em;
+    --text-headline--letter-spacing: -0.02em;
     --text-display: clamp(2.75rem, 0.6rem + 7.2vw, 8.75rem);
-    --text-display--line-height: 0.9;
-    --text-display--letter-spacing: -0.04em;
+    --text-display--line-height: 0.92;
+    --text-display--letter-spacing: -0.03em;
 
     /* Nothing in the House has round corners. */
     --radius-*: initial;

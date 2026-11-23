@@ -23,14 +23,14 @@ typography:
     fontFamily: "Zalando Sans Expanded"
     fontWeight: 600
     fontSize: "140px"
-    lineHeight: "0.9"
-    letterSpacing: "-0.04em"
+    lineHeight: "0.92"
+    letterSpacing: "-0.03em"
   headline:
     fontFamily: "Zalando Sans Expanded"
     fontWeight: 600
     fontSize: "56px"
     lineHeight: "1"
-    letterSpacing: "-0.03em"
+    letterSpacing: "-0.02em"
   subhead:
     fontFamily: "Inter"
     fontWeight: 500
@@ -103,7 +103,8 @@ surface is ink or bone; heat appears where there is something to read.
 The WebGL scene reads them from `app/javascript/scene/spectra.js`.
 
 ## Typography
-- **Zalando Sans Expanded** for display, headlines and the wordmark (800, −4%). Title case leads.
+- **Zalando Sans Expanded** for display and headlines, always in capitals (CSS `text-transform`, so content stays in sentence case). The wordmark stays in title case (800, −4%).
+- On the holding screen its weight axis (200–900) is live: the letter under the cursor turns black, the far ones go thin. Glass thickness follows the weight.
 - **Inter** for everything that is read, and for the readouts (500, 13px, caps, +4%).
 - Readouts are a quiet layer at the edges. Do not use them as a label above every section.
 - Fonts are self-hosted in `public/fonts` under the SIL Open Font License.

@@ -8,6 +8,7 @@ uniform vec2 uResolution;
 uniform vec2 uPointer;
 uniform float uTime;
 uniform float uReveal;
+uniform float uWeight;
 
 vec3 at(vec2 uv) {
     return texture2D(uScene, clamp(uv, .001, .999)).rgb;
@@ -55,7 +56,9 @@ void main() {
     vec3 iris = foil(front.x * .35 + front.y * .5 + uv.x * .6 + uPointer.x * .15 + uTime * .02);
 
     // Glass gathers light: lift what it refracts so the word reads over the dark room.
-    vec3 body = color * 1.22 + vec3(.95, .937, .91) * .13;
-    vec3 glass = body + iris * (fresnel * .95 + sheen * .26 + .1) + vec3(1., .985, .95) * spec * .9;
+    // The thinner the stroke, the more light it carries.
+    float thin = smoothstep(.75, -.6, uWeight);
+    vec3 body = color * mix(1.28, 1.1, thin) + vec3(.95, .937, .91) * mix(.22, .44, thin);
+    vec3 glass = body + iris * (fresnel * .95 + sheen * .26 + mix(.12, .26, thin)) + vec3(1., .985, .95) * spec * .9;
     gl_FragColor = vec4(mix(at(uv), glass, uReveal), 1.);
 }

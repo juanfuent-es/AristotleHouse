@@ -192,6 +192,7 @@ export default class HoldingScene {
             const y = 1 - e.clientY / this.height
             this.target.set(x * 2 - 1, y * 2 - 1)
             this.lastMove = performance.now()
+            this.cursor = { x: e.clientX, y: e.clientY }
             const head = this.trail[(this.trailIndex + TRAIL - 1) % TRAIL]
             if (Math.hypot((x - head.x) * this.width, (y - head.y) * this.height) < 14) return
             this.trail[this.trailIndex].set(x, y, .85)
@@ -276,6 +277,8 @@ export default class HoldingScene {
         this.bust.rotation.x = -this.pointer.y * .12
         this.glass.group.rotation.y = this.pointer.x * .035
         this.glass.group.rotation.x = -this.pointer.y * .03
+
+        this.glass.update(delta, this.time, idle ? null : this.cursor)
 
         let heat = 0
         this.trail.forEach((point) => {
