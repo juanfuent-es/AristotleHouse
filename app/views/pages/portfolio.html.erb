@@ -1,0 +1,240 @@
+<%= provide(:title, "Portfolio") %>
+<%= provide(:description, "Diseño y desarrollo digital desde cero: concepto, diseño, código e infraestructura para proyectos, campañas y plataformas digitales.") %>
+
+<%
+default_project_image = "/static/otongo.jpg"
+
+portfolio_projects = [
+    {
+        id: "ibero",
+        title: "Ibero FWD</br><small>Planes Manresa | Licenciaturas</small>",
+        summary: "Una nueva IBERO. Oferta académica en la web.",
+        img: "./clients/juanfuent.es-ibero.png",
+        meta: [
+        ],
+        blocks: [
+            ["Problema / objetivo", ["Ibero necesitaba publicar una nueva oferta académica en un plazo muy corto, después de que un equipo anterior no lograra resolver el proyecto."]],
+            ["Solución", ["Organicé la planeación, la arquitectura técnica, la infraestructura y el desarrollo necesario para publicar el sitio. Después, el proyecto evolucionó hacia Planes Manresa y las páginas de licenciaturas."]],
+            ["Participación y responsabilidad", ["Llevé la dirección del proyecto, la planeación, la programación, la infraestructura y la gestión del servidor."]],
+            ["Colaboración", ["Trabajé con un diseñador y otro desarrollador para resolver la implementación y coordinar la salida del sitio."]],
+            ["Resultado", ["La plataforma se publicó a contrarreloj y posteriormente se amplió para nuevas necesidades de comunicación académica."]]
+        ]
+    },
+    {
+        id: "bienal-de-ilustracion",
+        title: "Bienal de Ilustración",
+        summary: "De convocatoria abierta a archivo vivo de ilustración latinoamericana.",
+        img: "./clients/juanfuent.es-bienaldeilustracion.png",
+        meta: [
+            ["Cliente", "Pictoline"],
+            ["Participación", "Segunda, tercera, cuarta y quinta edición"],
+            ["Enlace", link_to("bienaldeilustracion.com", "https://bienaldeilustracion.com", target: "_blank", rel: "noopener")]
+        ],
+        blocks: [
+            ["Problema / objetivo", ["La Bienal necesitaba una plataforma capaz de acompañar todo el proceso: convocatoria, registro, recepción de obra, evaluación, selección, premiación y galería."]],
+            ["Solución", ["Desarrollé una plataforma integral con perfiles, carga de obra, administración, evaluación para jurados, almacenamiento, procesamiento de archivos y galería digital. También trabajé en la estabilidad del servidor durante los picos de participación y en los límites de archivos y recursos."]],
+            ["Participación y responsabilidad", ["Desde la segunda edición llevo la dirección técnica, el desarrollo frontend y backend, la infraestructura y la operación del servidor. También dirijo las colaboraciones de animación."]],
+            ["Colaboración", ["Trabajo con Pictoline, diseño, contenido, jurados, organización y colaboradores técnicos y de animación."]],
+            ["Resultado", ["La plataforma ha acompañado cuatro ediciones y permite llevar una convocatoria completa desde el registro hasta la exposición digital de las obras seleccionadas."]]
+        ]
+    },
+    {
+        id: "pictoline",
+        title: "Pictoline",
+        img: "./clients/juanfuent.es-pictoline.png",
+        summary: "Encuentra información visualmente épica, dibujándola.",
+        meta: [
+            ["Enlace", link_to("pictoline.com", "https://pictoline.com", target: "_blank", rel: "noopener")]
+        ],
+        blocks: [
+            ["Problema / objetivo", ["Las personas recordaban los dibujos de Pictoline, pero no siempre las palabras necesarias para encontrarlos."]],
+            ["Solución", ["Desarrollé un buscador que permite dibujar lo que se está buscando. Utilicé el dataset Quick, Draw! de Google para relacionar los trazos con el archivo de contenidos. También migré la información existente desde WordPress y construí un sistema administrable."]],
+            ["Participación y responsabilidad", ["Participé en el concepto, diseño de interacción, arquitectura de información, infraestructura, frontend, backend, API y migración de datos. La implementación principal fue desarrollada en Ruby on Rails."]],
+            ["Colaboración", ["Trabajé con mi socio de diseño, colaboradores técnicos y los equipos de contenido y tecnología de Pictoline."]],
+            ["Resultado", ["Un sitio publicado que permite explorar información visual mediante dibujo o texto."]]
+        ]
+    },
+    {
+        id: "spaceboy-studio",
+        title: "Spaceboy.Studio",
+        img: "./clients/juanfuent.es-spaceboy.png",
+        meta: [
+            ["v2.0", link_to("spaceboy.studio", "https://spaceboy.studio", target: "_blank", rel: "noopener")],
+            ["v1.0", link_to("spaceboy.mx", "https://v1.spaceboy.mx/", target: "_blank", rel: "noopener")]
+        ],
+        summary: "De una cartera creciente a un portafolio experimental para una nueva presencia digital para el estudio.",
+        blocks: [
+            ["Problema / objetivo", ["Spaceboy necesitaba actualizar su presencia digital y contar con una plataforma flexible para presentar una cartera creciente de clientes, proyectos, servicios y nuevas áreas de trabajo, incluyendo proyectos de videojuegos."]],
+            ["Solución", ["Diseñé y desarrollé una plataforma web administrable, partiendo de una primera versión experimental con WebGL y evolucionándola hacia un sistema más robusto para organizar proyectos, categorías, servicios y contenidos del estudio."]],
+            ["Participación y responsabilidad", ["Realicé la dirección técnica y el desarrollo integral del proyecto: frontend, backend, CMS, procesamiento de imágenes y video, optimización de recursos para mobile, tablet y desktop, infraestructura y despliegue."]],
+            ["Colaboración", ["En la primera etapa colaboré con un diseñador y otro desarrollador. Posteriormente trabajé directamente con el equipo de Spaceboy para estructurar contenidos, categorías, servicios y nuevas áreas de negocio."]],
+            ["Resultado", ["Una plataforma administrable y escalable que fortaleció la presencia digital del estudio y permitió gestionar un portafolio de clientes y proyectos en expansión."]]
+        ]
+    },
+    {
+        id: "puma-suede-guerrillas",
+        title: "Puma Suede Guerrillas",
+        summary: "From the streets, united by creativity.",
+        img: "/clients/puma-suede-guerrillas.jpg",
+        meta: [
+            ["Cliente", "Puma · Dubái · 2018"]
+        ],
+        blocks: [
+            ["Problema / objetivo", ["Puma necesitaba una plataforma para registrar a jóvenes talentos de Dubái, recibir sus trabajos y dar seguimiento a la participación de la campaña."]],
+            ["Solución", [
+                "Desarrollé el frontend público y un backend con CMS para administrar usuarios, obras, videos, estadísticas, reportes y datos de participación. El sistema incluía registro, recuperación de contraseña, perfiles, notificaciones y mailing transaccional.",
+                "La plataforma fue responsiva y optimizada para mobile, desktop y tablet, con especial atención al uso desde dispositivos móviles."
+            ]],
+            ["Participación y responsabilidad", ["Realicé la programación completa de la plataforma, el backend administrativo, el flujo de usuarios y la implementación responsive."]],
+            ["Colaboración", ["Trabajé directamente con Daniel y el equipo de Dubái. Su equipo desarrolló el diseño y yo construí la experiencia funcional, las herramientas de administración y el sistema de medición."]],
+            ["Resultado", ["Una plataforma de participación fácil de gestionar, con información centralizada para consultar registros, obras, métricas y reportes de la campaña."]]
+        ]
+    },
+    {
+        id: "indio-barrios",
+        title: "Indio · Los barrios auténticos de México",
+        summary: "Una campaña que convirtió los barrios en identidad de marca.",
+        img: "/clients/documentales-barrios-indio.png",
+        blocks: [
+            ["Problema / objetivo", ["Indio buscaba llevar la identidad de distintos barrios y comunidades mexicanas a una campaña digital."]],
+            ["Solución", ["Desarrollé experiencias y piezas digitales para presentar las historias, lugares y personajes de la campaña, junto con las herramientas necesarias para su publicación y operación."]],
+            ["Participación y responsabilidad", ["Participé en el desarrollo, las decisiones de interacción, las bajadas tecnológicas y la implementación web."]],
+            ["Colaboración", ["Trabajé con equipos de agencia, creatividad, diseño, contenido, producción y tecnología."]],
+            ["Resultado", ["La campaña fue reconocida con premios Effie y otros reconocimientos de la industria."]]
+        ]
+    },
+    {
+        id: "chivo-lubezki-indio",
+        title: "Chivo Lubezki × Indio",
+        summary: "Ver a través del ojo del Chivo Lubezki.",
+        img: "/clients/lubezki-indio.jpg",
+        blocks: [
+            ["Problema / objetivo", ["La pieza necesitaba mostrar no sólo el resultado final, sino también la manera en que fue filmada."]],
+            ["Solución", ["Desarrollé una experiencia que permite alternar entre el anuncio terminado y el detrás de cámaras mediante la barra espaciadora."]],
+            ["Participación y responsabilidad", ["Desarrollo web interactivo, integración audiovisual y dirección de la solución técnica."]],
+            ["Colaboración", ["Trabajo con los equipos de agencia, producción, diseño, contenido y tecnología."]],
+            ["Resultado", ["Una experiencia digital que convierte el detrás de cámaras en una segunda forma de mirar la pieza."]]
+        ]
+    },
+    {
+        id: "money-in-the-bank",
+        title: "Money in the Bank / Molotov",
+        summary: "Tu rostro grabado en un billete del banco de Molotov.",
+        blocks: [
+            ["Problema / objetivo", ["La producción necesitaba integrar la imagen de cada persona dentro del universo visual del video."]],
+            ["Solución", ["Desarrollé una experiencia que convertía una fotografía en un billete digital personalizado y la integraba en la secuencia de billetes cayendo del video."]],
+            ["Participación y responsabilidad", ["Realicé la programación, el procesamiento de imagen, la generación de recursos y la integración de la experiencia."]],
+            ["Colaboración", ["Trabajé con los equipos de producción, diseño y tecnología de la campaña."]],
+            ["Resultado", ["La pieza se produjo y entregó completamente. No fue publicada por decisiones externas relacionadas con la producción y la pandemia."]]
+        ]
+    },
+    {
+        id: "like-invader",
+        title: "Like Invader",
+        summary: "Una fábrica de likes.",
+        blocks: [
+            ["Problema / objetivo", ["El brief de Digital Invaders era directo: construir una fábrica de likes."]],
+            ["Solución", ["Desarrollé una aplicación conectada con la API de Facebook. La persona elegía a un amigo y la aplicación daba like a sus publicaciones, álbumes y fotografías."]],
+            ["Participación y responsabilidad", ["Realicé toda la programación, la integración con la API y la lógica de interacción. El diseño y la creatividad fueron desarrollados junto con otros integrantes del equipo."]],
+            ["Colaboración", ["Trabajé con el equipo creativo, de diseño y producción de Digital Invaders."]],
+            ["Resultado", ["La aplicación se volvió viral y fue utilizada en distintos países durante su primera semana, antes de que Facebook bloqueara su funcionamiento. Fue el proyecto por el que comencé a ser reconocido dentro de la industria."]]
+        ]
+    },
+    {
+        id: "equills",
+        title: "eQuills 1.0",
+        summary: "Dejar rastros que no existen en el mundo físico.",
+        blocks: [
+            ["Problema / objetivo", ["Explorar qué posibilidades aparecen cuando la escritura deja de estar limitada por las herramientas físicas."]],
+            ["Solución", ["Desarrollamos una herramienta experimental para crear formas de escritura, letras y pictogramas digitales que pueden comportarse de maneras imposibles sobre el papel."]],
+            ["Participación y responsabilidad", ["Coautoría, investigación, desarrollo y diseño de interacción."]],
+            ["Colaboración", ["Proyecto de código abierto desarrollado junto con otros colaboradores de la comunidad."]],
+            ["Resultado", ["El proyecto fue incluido en el catálogo del 20.º aniversario de Processing."]]
+        ]
+    },
+    {
+        id: "direccion-craft-development",
+        title: "Dirección de craft development",
+        summary: "De la idea a una experiencia que puede funcionar.",
+        blocks: [
+            ["Problema / objetivo", ["Los equipos de agencia necesitaban convertir conceptos creativos en sitios, campañas y experiencias digitales viables."]],
+            ["Solución", ["Trabajé desde la dirección técnica, la planeación, la definición de soluciones y el acompañamiento de equipos multidisciplinarios."]],
+            ["Participación y responsabilidad", [
+                "En Circus fui director de craft development. Trabajé con equipos relacionados con Genome Lab, Netflix y Spotify, además de dar clases y acompañar procesos de desarrollo.",
+                "En FU participé desde la dirección y el desarrollo en proyectos para Coca-Cola, Bigrante y Volkswagen."
+            ]],
+            ["Colaboración", ["Coordiné trabajo entre diseño, creatividad, estrategia, contenido, producción, tecnología y clientes."]],
+            ["Resultado", ["Dirección y desarrollo de campañas, sitios y experiencias digitales para marcas y agencias."]]
+        ]
+    },
+    {
+        id: "canvas-digital",
+        title: "Canvas Digital",
+        summary: "Creative Web Development & Digital Design.",
+        blocks: [
+            ["Problema / objetivo", ["Canvas Digital fue el estudio que desarrollé junto con mi socio para trabajar en proyectos de diseño y desarrollo digital."]],
+            ["Solución", ["Desde ahí participé en proyectos para estudios creativos, instituciones, marcas y agencias, combinando dirección, programación, bajadas tecnológicas, infraestructura, servidores y producción web."]],
+            ["Participación y responsabilidad", ["Trabajé desde la dirección, programación, bajadas tecnológicas, infraestructura, servidores y producción web."]],
+            ["Colaboración", ["Desarrollé el estudio junto con mi socio para trabajar en proyectos de diseño y desarrollo digital."]],
+            ["Resultado", ["Los casos documentados en este portfolio forman parte de esa práctica."]]
+        ]
+    }
+]
+%>
+
+<section id="portfolio" class="mx-auto container max-w-5xl flex items-center portrait:aspect-square landscape:aspect-video min-h-dvh">
+    <header class="text-center mx-auto dark:prose-invert prose prose-2xl max-w-xl">
+        <h1 class="mb-0">Portfolio</h1>
+        <p class="mt-0 mb-0 pb-2">
+            <strong class="font-semibold">Diseño y desarrollo digital de inicio a fin.</strong> <br>
+        </p>
+        <p class="mt-0 p-0 italic mx-auto">
+            Exploro distintos lenguajes y elijo las herramientas que mejor responden a cada proyecto.
+        </p>
+        <a href="#portfolio-projects" class="no-underline uppercase !text-sm border-2 border-white px-4 py-2">
+            <small>Proyectos Destacados</small>
+        </a>
+    </header>
+</section>
+<section class="mx-auto container max-w-5xl" id="portfolio-projects">
+    <header class="mx-auto dark:prose-invert prose prose-xl max-w-2xl py-24 text-center">
+        <%# <h2><small>Proyectos Destacados</small></h2> %>
+        <p class="mt-0 p-0 italic">
+            Esta selección resume problemas, soluciones, responsabilidad, colaboración y resultados de algunos de mis proyecto más relevantes.
+        </p>
+    </header>
+    <% portfolio_projects.each do |project| %>
+        <article aria-labelledby="<%= project[:id] %>" class="my-8 mx-auto dark:prose-invert prose prose-2xl max-w-xl">
+            <header>
+                <% if project[:img].present? %>
+                    <img src="<%= project[:img] %>" alt="<%= project[:title] %>">
+                <% end %>
+                <h3 id="<%= project[:id] %>" class="mb-0 uppercase font-regular text-center w-full"><%= project[:title].to_s.try(:html_safe) %></h3>
+                <p class="mt-0 pt-0 text-center"><em><%= project[:summary] %></em></p>
+                <% if project[:meta].present? %>
+                    <dl>
+                        <% project[:meta].each do |label, value| %>
+                            <div>
+                                <dt><%= label %></dt>
+                                <dd><%= value %></dd>
+                            </div>
+                        <% end %>
+                    </dl>
+                <% end %>
+            </header>
+
+            <% project[:blocks].each do |title, paragraphs| %>
+                <details name="<%= project[:id] %>-accordion">
+                    <summary>
+                        <h4 class="cursor-pointer"><%= title.to_s.try(:html_safe) %></h4>
+                    </summary>
+
+                    <% paragraphs.each do |paragraph| %>
+                        <p><%= paragraph %></p>
+                    <% end %>
+                </details>
+            <% end %>
+        </article>
+        <hr>
+    <% end %>
+</section>

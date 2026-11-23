@@ -1,0 +1,17 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  host: localhost
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  timeout: 5000
+  # port: 5050
+  username: postgres
+  database: juanfuent-es
+
+development:
+  <<: *default
+  password: password
+
+production:
+  <<: *default
+  password: <%= Rails.application.credentials.database_password %>

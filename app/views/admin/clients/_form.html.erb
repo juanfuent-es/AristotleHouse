@@ -1,0 +1,63 @@
+<section class="content">
+  <%= form_for [:admin, client], local: true, html: { :class=> "row" } do |f| %>
+    <div class="col-md-12">
+      <!-- .card/ -->
+      <%= render "admin/shared/errors", object: client %>
+      <div class="card card-primary card-outline">
+        <!-- .card-body/ -->
+        <div class="card-body row">
+          
+          <div class="form-group col-md-12">
+            <%= f.label :name, t(:name) %>
+            <%= f.text_field :name, class: "form-control", placeholder: t(:name) %>
+          </div>
+          
+          
+          <div class="form-group col-md-12">
+            <%= f.label :description, t(:description) %>
+            <%= f.text_field :description, class: "form-control", placeholder: t(:description) %>
+          </div>
+          
+          
+          <div class="form-group col-md-12">
+            <%= f.label :url, t(:url) %>
+            <%= f.text_field :url, class: "form-control", placeholder: t(:url) %>
+          </div>
+          
+          
+          <div class="form-group col-md-12">
+            <%= f.label :email, t(:email) %>
+            <%= f.text_field :email, class: "form-control", placeholder: t(:email) %>
+          </div>
+          
+          
+          <div class="form-group col-md-12">
+            <%= f.label :logo, t(:logo) %>
+            <%= f.text_field :logo, class: "form-control", placeholder: t(:logo) %>
+          </div>
+          
+          
+          <div class="form-group col-md-12">
+            <%= f.label :country_id, t(:country_id) %>
+            <%= f.text_field :country_id, class: "form-control", placeholder: t(:country_id) %>
+          </div>
+          
+          
+          <div class="form-group col-md-12">
+            <%= f.label :address, t(:address) %>
+            <%= f.text_area :address, class: "form-control editor", placeholder: t(:address) %>
+          </div>
+          
+          
+        </div>
+        <!-- /.card-body -->
+        <!-- .card-footer/ -->
+        <footer class="card-footer text-right">
+          <button class="btn btn-outline-primary mt-2 mb-2 btn-sm"><i class="fas fa-save"></i> <%= t(:save) %></button>
+        </footer>
+        <!-- /.card-footer -->
+      </div>
+      <!-- /.card -->
+    </div>
+  <% end %>
+</section>

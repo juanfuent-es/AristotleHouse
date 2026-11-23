@@ -1,0 +1,47 @@
+<% if images.empty? %>
+    <div class="col-md-12 text-center mt-4">
+        <p>Aún no se ha agregado ninguna imagen</p>
+    </div>
+<% else %>
+    <% images.each do |image| %>
+    <div class="col-6 col-sm-4 col-md-3">
+        <%= link_to edit_admin_image_url(image), class: "m-2 w-full", style: "background-color: #{image.bg};", title: image.title do %>
+        <%= image_tag image.file.thumb.url, alt: image.alt, width: 240, height: 240 %>
+        <ul class="palette">
+            <% image.palette.each do |hex| %>
+            <li style='background-color: <%= hex %>;'></li>
+            <% end %>
+        </ul>
+        <% end %>
+    </div>
+    <% end %>
+<% end %>
+
+<style>
+#img-grid {
+
+}
+#img-grid a {
+  display: inline-block;
+  border: 1px solid #dbdbdb;
+  border-radius: 6px;
+  width: 100%;
+  text-align: center;
+}
+#img-grid a img {
+  width: 100%%;
+  max-width: 240px;
+  height: auto;
+}
+ul.palette {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  list-style: none;
+  display: flex;
+}
+ul.palette  li {
+  width: 100%;
+  height: 1em;
+}
+</style>

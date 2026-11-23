@@ -1,0 +1,11 @@
+<article>
+    <h1><%= @page.title %></h1>
+    <p><%= @page.content %></p>
+    <ul>
+        <% @experiments.each do |experiment| %>
+        <li>
+            <%= link_to experiment.title, experiment_path(experiment.slug), title: experiment.title %>
+        </li>
+        <% end %>
+    </ul>
+</article>

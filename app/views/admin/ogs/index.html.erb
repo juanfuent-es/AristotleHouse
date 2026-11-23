@@ -1,0 +1,62 @@
+<% provide(:title, "Lista de archivos OpenGraph") %>
+
+<!-- Content Header (Page header) -->
+<header class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1>Lista de <%= t(:ogs) %></h1>
+        <br>
+        <%= link_to new_admin_og_path, class: 'btn btn-outline-primary btn-sm' do %>
+          <i class="fas fa-plus"></i>
+          <%= "#{t(:new)} #{t(:og)}" %>
+        <% end %>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right mt-2">
+          <li class="breadcrumb-item active"><%= t(:ogs) %></li>
+        </ol>
+      </div>
+    </div>
+  </div><!-- /.container-fluid -->
+</header>
+
+<!-- Main content -->
+<section class="content">
+  <!-- Default box -->
+  <div class="card card-primary card-outline">
+    <header class="card-header">
+      <h3 class="card-title"><%= t(:ogs) %></h3>
+    </header>
+    <div class="card-body p-0">
+      <table class="table table-hover table-sm">
+        <thead>
+          <tr>
+            <th>Editar</th>
+            <th>Eliminar</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @ogs.each do |og| %>
+            <td>
+            <%= link_to admin_og_url(og), class: "btn btn-link btn-sm" do %>
+              <i class="fa-solid fa-eye"></i> Ver <%= t(og.category.to_sym) %>
+            <% end -%>
+            </td>
+            <td>
+              <%= link_to admin_og_path(og), method: :delete, class: "btn btn-outline-danger btn-sm" , data: { confirm: "¿Estás seguro de eliminar este #{t(:og)}?" } do %>
+                <i class='fas fa-trash'></i> Eliminar
+              <% end -%>
+            </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <!-- /.card-body -->
+  </div>
+  <!-- /.card -->
+
+</section>
+<!-- /.content -->

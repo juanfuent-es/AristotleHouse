@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="<%= @lang %>">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name='viewport'           content='width=device-width, initial-scale=1.0'>
+    
+    <title><%= full_title(yield(:title)) %></title>
+
+    <%= stylesheet_link_tag "application" %>
+
+    <%= render "shared/metadata" %>
+    <%= render "shared/favicons" %>
+    <%= render "shared/fonts" %>
+
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <script type="application/ld+json">
+    {
+    "@context": "http://schema.org",
+    <%= render "json_ld/page" %>,
+    <%= render "json_ld/publisher" %>,
+    <%= render "json_ld/provider" %>
+    }
+    </script>
+  </head>
+  <body class="errors <%= params[:action] %> <%= params[:status] %> overflow-hidden">
+    <%= render "shared/preloader" %>
+    <%= render "shared/header" %>
+    <main id="app" class="inline-block w-full"><%= yield %></main>
+    <%= render "shared/footer" %>
+    <%= render "pwa/sw" %>
+     <!--
+      If using a TypeScript entrypoint file:
+        vite_typescript_tag 'application'
+
+      If using a .jsx or .tsx entrypoint, add the extension:
+        vite_javascript_tag 'application.jsx'
+      Visit the guide for more information: https://vite-ruby.netlify.app/guide/rails
+    -->
+    <%= vite_client_tag %>
+    <%= vite_javascript_tag 'errors' %>
+  </body>
+</html>

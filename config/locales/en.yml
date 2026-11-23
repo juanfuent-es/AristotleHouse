@@ -1,0 +1,29 @@
+en:
+  offline: Please check your internet connection
+  es: Spanish
+  en: English
+  spanish: Español
+  english: English
+  profile: Perfil
+  full_name: Full Name
+  new_account: New Account
+  sign_up: Sign Up
+  recover: Recover
+  recover_password: Recover Password
+  close_session: Close Session
+  password: Password
+  password_confirmation: Password Confirmation
+  remember_me: Remember me
+  login: "Log In"
+  email: "E-mail"
+  login_with: Sign in with
+  or: OR
+  characters_minimum: Characters Minimum
+  accept: Accept
+  terms: Terms and Conditions
+  privacy: Privacy Notice
+  home: Inicio
+  metatag: Metatag
+  metatags: Metatags
+  synopsis: Synopsis
+  picture: Image

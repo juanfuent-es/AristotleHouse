@@ -1,0 +1,4 @@
+User.create(email: "input@juanfuent.es", password: "f3Rg0l3n#Pe4ch", password_confirmation: "password", role: "admin")
+
+Page.create(lang: 'es', title: "www lab", og_title: "Web Lab", og_description: "Experimental space for exploration of new web technologies.", category: "static", keywords: "js, css, svg, threejs, glsl, math, experimental web", restricted: true)
+Page.create(lang: 'es', title: "Variable Font: Motion Glyph with threejs", og_description: "Variable fonts on threejs render like svg texture.", og_title: "Variable Glyph on three.js", keywords: "variable font, threejs, svg, fontkit, glyph, motion", category: "web-lab")

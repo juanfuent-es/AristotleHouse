@@ -1,0 +1,9 @@
+<%= provide(:title, "Error 500") %>
+<%= provide(:description, t(:server_error)) %>
+
+<main id="app" class="bg-red absolute left-0 top-0 w-full h-full flex items-center p-6 py-6 lg:py-14 xl:py-26 xl:p-12">
+    <section class="mx-auto max-w-lg sm:max-w-lg md:max-w-xl lg:max-w-2xl xl:max-w-3xl text-left">
+        <h1 class="text-white my-0 text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl text-gl">Error 500</h1>
+        <p class="text-white mt-1 sm:mt-2 md:mt-3 xl:mt-2 max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl xl:max-w-3xl text-gl"><%= t(:server_error) %></p>
+    </section>
+</main>

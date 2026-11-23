@@ -1,0 +1,95 @@
+<textarea id="html-input" class="hidden">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js" integrity="sha512-3RlxD1bW34eFKPwj9gUXEWtdSMC59QqIqHnD8O/NoTwSJhgxRizdcFVQhUMFyTp5RwLTDL0Lbcqtl8b7bFAzog==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/addons/p5.sound.min.js" integrity="sha512-WzkwpdWEMAY/W8WvP9KS2/VI6zkgejR4/KTxTl4qHx0utqeyVE0JY+S1DlMuxDChC7x0oXtk/ESji6a0lP/Tdg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</textarea>
+<textarea id="css-input" class="hidden">
+body {
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    background: #000;
+}
+</textarea>
+<textarea id="javascript-input" class="hidden">
+let song;
+let bins = 64; // Número de muestras a analizar 16 - 1024
+/* FFT: Fast Fourier Transform (Transformada rápida de Fourier) */
+let fft = new p5.FFT(0.915, bins); 
+let cursor = new p5.Vector(1, 1)
+let points = []
+
+function preload() {
+    song = loadSound('<%= "#{request.protocol}#{request.host_with_port}" %>/static/ItsOnlyNatural.mp3');
+}
+
+function setup() {
+    let canvas = createCanvas(windowWidth, windowHeight);
+    canvas.mousePressed(playSong)
+    cursor = new p5.Vector(mouseX, mouseY)
+    fft.setInput(song)
+    noStroke()
+    setPoints()
+    background(0)
+}
+
+function windowResized() {
+    resizeCanvas(windowWidth, windowHeight)
+}
+
+function setPoints() {
+    for (let i = 0; i < bins; i++) {
+        let point = new Point()
+        points.push(point)
+    }
+}
+
+function playSong() {
+    if (song.isPlaying()) return song.stop()
+    else return song.play()
+}
+
+function draw() {
+    background("rgba(0,0,0,.15)")
+    /* Actualizamos el análisis de ondas */
+    let spectrum = fft.analyze()
+    // Iteramos el total de muestras
+    for (let i = 0; i < spectrum.length; i++) {
+        let level = spectrum[i] / 255
+        let point = points[i]
+        point.update(level)
+        point.draw()
+    }
+    //update mouse
+    cursor.x = mouseX
+    cursor.y = mouseY
+}
+
+class Point {
+  constructor() {
+    this.diameter = random(10, 30)
+    this.pos = new p5.Vector(mouseX, mouseY)
+    this.vel = new p5.Vector(random(-10, 10), random(-10, 10))
+    this.pow = 0
+    this.limit = 15
+  }
+
+  update(level) {
+    this.pow = level
+    this.limit = map(this.pow, 0, 1, 1, 15)
+    this.acc = new p5.Vector.sub(cursor, this.pos)
+    this.acc.setMag(.875)
+    this.vel.add(this.acc)
+    this.vel.limit(this.limit)
+    this.pos.add(this.vel)
+  }
+
+  draw() {
+    let r = map(this.pow, 0, 1, 0, 255)
+    let g = map(this.pow, 0, 1, 100, 255)
+    let b = map(this.pow, 0, 1, 0, 255)
+    noStroke()
+    fill(r,g,b)
+    ellipse(this.pos.x, this.pos.y, this.diameter * this.pow, this.diameter * this.pow)
+  }
+}
+</textarea>

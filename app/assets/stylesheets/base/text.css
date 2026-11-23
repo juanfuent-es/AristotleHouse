@@ -1,0 +1,21 @@
+::selection {
+    background-color: var(--color-selection-light);
+    color: var(--color-selection-text-light);
+}
+
+::-moz-selection {
+    background-color: var(--color-selection-light);
+    color: var(--color-selection-text-light);
+}
+
+@media (prefers-color-scheme: dark) {
+    ::selection {
+        background-color: var(--color-selection-dark);
+        color: var(--color-selection-text-dark);
+    }
+
+    ::-moz-selection {
+        background-color: var(--color-selection-dark);
+        color: var(--color-selection-text-dark);
+    }
+}
