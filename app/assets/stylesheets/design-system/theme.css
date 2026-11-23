@@ -1,0 +1,79 @@
+/* Roles. Components read these, never the palette. */
+@layer base {
+    :root,
+    .night {
+        color-scheme: dark;
+        --canvas: var(--color-ink);
+        --surface: var(--color-night);
+        --text: var(--color-bone);
+        --text-soft: var(--color-soft);
+        --text-muted: var(--color-mute);
+        --rule: var(--color-line);
+        --control: #6f6a80;
+        --accent: var(--color-lilac);
+        --focus: var(--color-lilac);
+        --error: var(--color-danger-night);
+        --fill: var(--color-bone);
+        --on-fill: var(--color-ink);
+    }
+
+    .day {
+        color-scheme: light;
+        --canvas: var(--color-bone);
+        --surface: #faf8f4;
+        --text: var(--color-ink);
+        --text-soft: var(--color-charcoal);
+        --text-muted: var(--color-paper-mute);
+        --rule: var(--color-paper-line);
+        --control: #8a847a;
+        --accent: var(--color-violet);
+        --focus: var(--color-violet);
+        --error: var(--color-danger);
+        --fill: var(--color-ink);
+        --on-fill: var(--color-bone);
+    }
+
+    html {
+        -webkit-text-size-adjust: none;
+        scrollbar-color: var(--control) var(--canvas);
+        scrollbar-width: thin;
+    }
+
+    body {
+        font-family: var(--font-body);
+        font-size: var(--text-body);
+        line-height: 1.5;
+        background-color: var(--canvas);
+        color: var(--text);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    ::selection {
+        background-color: var(--color-violet);
+        color: var(--color-bone);
+    }
+
+    :focus-visible {
+        outline: 2px solid var(--focus);
+        outline-offset: 3px;
+    }
+
+    h1, h2, h3, h4 {
+        font-family: var(--font-display);
+        font-weight: 600;
+        text-wrap: balance;
+    }
+
+    p {
+        text-wrap: pretty;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        *, ::before, ::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+}

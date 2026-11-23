@@ -1,63 +1,41 @@
 module ApplicationHelper
+  def device
+    return "mobile" if browser.device.mobile?
+    browser.device.tablet? ? "tablet" : "desktop"
+  end
 
-	def device
-		require "browser"
-		if browser.device.mobile?
-			return "mobile"
-		elsif browser.device.tablet?
-			return "tablet"
-		else
-			return "desktop"
-		end
-	end
+  def canonical
+    "#{request.base_url}#{request.path}"
+  end
 
-	def canonical
-		# "https://#{request.host_with_port}/#{request.original_url}"
-		request.original_url.gsub('http','https').gsub('www','')
-	end
+  def full_title(title)
+    title.blank? ? "#{site.name} · #{site.tagline}" : "#{title} · #{site.name}"
+  end
 
-	def lang_link(lang='es')
-		return "/#{lang}#{request.path.gsub("/#{@lang}",'')}"
-	end
+  def meta_image(image)
+    "#{request.base_url}#{image.presence || "/brand/share.jpg"}"
+  end
 
-	def texto(_copy, _lang="es")
-		return "<p>Undefined</p>".html_safe if _copy.nil?
-		case _lang
-        when "en"
-            return _copy.en
-        when "pt"
-            return _copy.pt
-        else
-            return _copy.es
-        end
-	end
+  def meta_description(description)
+    description.presence || site.description
+  end
 
-	def full_title title
-		base_title = 'Web Craft Developer'
-		if title.empty?
-			base_title
-		else
-			"#{title} | #{base_title}"
-		end
-	end
+  # Gaze and wordmark from 40 px up. Below that the seal signs alone.
+  def lockup(tone: :light, **options)
+    image_tag "/brand/lockup-#{tone}.svg", alt: site.name, width: 720, height: 78, **options
+  end
 
-	def meta_image image
-		_url = image.empty? ? "/juanfuent.es-share.png" : image
-		return "#{request.protocol}#{request.host_with_port}#{_url}"
-	end
+  def seal(tone: :light, **options)
+    image_tag "/brand/seal-#{tone}.svg", alt: site.name, width: 40, height: 40, **options
+  end
 
-	def meta_description description
-		return description.empty? ? "Diseño y desarrollo digital desde cero." : description
-	end
+  def nav_item(label, path, **options)
+    active = request.path == path || request.path.start_with?("#{path}/")
+    link_to label, path, **options, "aria-current": (active ? "page" : nil)
+  end
 
-	def breadcrumb(_url="")
-		urls = ["Root"]
-		urls << _url if _url.present?
-		return urls.join(" > ")
-	end
-
-	def meta_keys keys
-		return keys.empty? ? "" : ""
-	end
-
+  # Plain text with paragraphs. Never renders markup from the CMS.
+  def paragraphs(text)
+    simple_format(h(text.to_s), {}, sanitize: false)
+  end
 end

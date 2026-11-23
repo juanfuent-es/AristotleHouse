@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="<%= @lang %>">
   <head>
-    <%= render "shared/tag_manager" %>
     <meta charset="utf-8">
+    <meta name="robots" content="noindex">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name='viewport'           content='width=device-width, initial-scale=1.0'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.css" integrity="sha512-uf06llspW44/LZpHzHT6qBOIVODjWtv4MxCricRxkzvopAlSWnTf6hpZTFxuuZcuNE9CBQhqE0Seu1CoRk84nQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -14,18 +14,8 @@
     <%= render "shared/favicons" %>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-    <script type="application/ld+json">
-    {
-    "@context": "http://schema.org",
-    <%= render "json_ld/page" %>,
-    <%= render "json_ld/publisher" %>,
-    <%= render "json_ld/provider" %>
-    }
-    </script>
   </head>
   <body>
-    <%= render "shared/tag_manager_ns" %>
-    <%= render "shared/preloader" %>
     <%= render "lab/editor" %>
     <%= yield %>
     <button class="lab-btn" id="update-btn">Update</button>

@@ -1,0 +1,16 @@
+<% if projects.any? %>
+  <ul class="grid gap-x-6 gap-y-14 md:grid-cols-2">
+    <% projects.each_with_index do |project, i| %>
+      <li class="<%= "md:col-span-2" if i.zero? && projects.size.odd? %>">
+        <%= link_to project.public_path, class: "group block" do %>
+          <%= image_tag(project.cover? ? project.og_image.card.url : "/brand/img/isotherm.webp", alt: "", loading: "lazy", class: "w-full object-cover #{i.zero? && projects.size.odd? ? "aspect-[21/9]" : "aspect-[4/3]"}") %>
+          <h3 class="title mt-4 !text-2xl group-hover:text-[var(--accent)]"><%= project.title %></h3>
+          <p class="mt-2 max-w-[60ch] text-[var(--text-soft)]"><%= project.og_description %></p>
+          <p class="micro mt-3 flex flex-wrap gap-x-6"><% [project.fact("Client"), project.fact("Location"), project.fact("Year")].compact.each do |value| %><span><%= value %></span><% end %></p>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p class="subhead max-w-[36ch] text-[var(--text-soft)]">The first readings are being taken.</p>
+<% end %>

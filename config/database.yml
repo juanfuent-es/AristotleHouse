@@ -1,17 +1,20 @@
 default: &default
   adapter: postgresql
   encoding: unicode
-  host: localhost
+  host: <%= ENV.fetch("DATABASE_HOST", "localhost") %>
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  timeout: 5000
-  # port: 5050
-  username: postgres
-  database: juanfuent-es
+  username: <%= ENV.fetch("DATABASE_USER", "postgres") %>
+  password: <%= ENV.fetch("DATABASE_PASSWORD", "password") %>
 
 development:
   <<: *default
-  password: password
+  database: aristotle_house
+
+test:
+  <<: *default
+  database: aristotle_house_test
 
 production:
   <<: *default
-  password: <%= Rails.application.credentials.database_password %>
+  database: aristotle_house
+  password: <%= ENV["DATABASE_PASSWORD"] %>

@@ -1,5 +1,5 @@
-<% if flash.any? %>
-  <div id="error_explanation" class="bg-yellow-700 p-4 rounded-lg mb-4 text-black text-center">
-    <h2>Access Invalid!</h2>
-  </div>
+<% if flash[:alert].present? || resource.errors.any? %>
+  <div class="notice notice--error mb-6" role="alert"><%= flash[:alert].presence || resource.errors.full_messages.to_sentence %></div>
+<% elsif flash[:notice].present? %>
+  <div class="notice mb-6" role="status"><%= flash[:notice] %></div>
 <% end %>

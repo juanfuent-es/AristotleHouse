@@ -1,29 +1,35 @@
 en:
-  offline: Please check your internet connection
-  es: Spanish
-  en: English
-  spanish: Español
-  english: English
-  profile: Perfil
-  full_name: Full Name
-  new_account: New Account
-  sign_up: Sign Up
-  recover: Recover
-  recover_password: Recover Password
-  close_session: Close Session
-  password: Password
-  password_confirmation: Password Confirmation
-  remember_me: Remember me
-  login: "Log In"
-  email: "E-mail"
-  login_with: Sign in with
-  or: OR
-  characters_minimum: Characters Minimum
-  accept: Accept
-  terms: Terms and Conditions
-  privacy: Privacy Notice
-  home: Inicio
-  metatag: Metatag
-  metatags: Metatags
-  synopsis: Synopsis
-  picture: Image
+  site:
+    nav:
+      work: Work
+      thinking: Thinking
+      house: House
+      contact: Contact
+  errors_pages:
+    not_found:
+      title: Nothing here to read.
+      body: The page you are looking for has moved, or was never here.
+    unprocessable_entity:
+      title: We could not read that.
+      body: The request could not be processed. Go back and try again.
+    server_error:
+      title: We lost the signal.
+      body: Something failed on our side. Try again in a few minutes.
+    offline:
+      title: No signal.
+      body: Check your connection. We will be here when you are back.
+  activerecord:
+    attributes:
+      page:
+        og_title: Share title
+        og_description: Summary
+        og_image: Cover
+        slug: URL slug
+      block:
+        content: Content
+    errors:
+      models:
+        block:
+          attributes:
+            content:
+              unknown_media: does not match any file in the library

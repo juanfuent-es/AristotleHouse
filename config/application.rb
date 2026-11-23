@@ -6,7 +6,7 @@ require "rails/all"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-module JuanFuentes
+module AristotleHouse
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 8.0
@@ -23,17 +23,9 @@ module JuanFuentes
       g.stylesheets     false
     end
 
-    config.time_zone = 'Mexico City'
-    
-    I18n.available_locales = [:en, :es]
-    I18n.default_locale = :es
+    config.time_zone = "Abu Dhabi"
 
-    # Configuration for the application, engines, and railties goes here.
-    #
-    # These settings can be overridden in specific environments using the files
-    # in config/environments, which are processed later.
-    #
-    # config.time_zone = "Central Time (US & Canada)"
-    # config.eager_load_paths << Rails.root.join("extras")
+    config.i18n.available_locales = [:en]
+    config.i18n.default_locale = :en
   end
 end

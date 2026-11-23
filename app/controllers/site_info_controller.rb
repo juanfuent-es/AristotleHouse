@@ -1,36 +1,31 @@
 class SiteInfoController < ApplicationController
+  skip_before_action :hold_until_launch
 
-	def robots
-	end
-	
-	def manifest
-		render json: {
-			"name": "JuanFuent.es",
-			"short_name": "JuanFuent.es",
-			"description": "",
-			"icons": [
-				{ "src": "/android-chrome-192x192.png", "sizes": "192x192", "type": "image/png" },
-				{ "src": "/android-chrome-512x512.png", "sizes": "512x512", "type": "image/png" }
-			],
-			"start_url": "/",
-			"theme_color": "#000000",
-			"background_color": "#000000",
-			"display": "standalone",
-			"scope": "/"
-		}
-	end
+  def robots
+    @base_url = request.base_url
+    render formats: :text
+  end
 
-	def sitemap
-		@base_url = "#{request.protocol}#{request.host_with_port}"
-		respond_to do |format|
-			format.xml
-		end
-	end
+  def manifest
+    render json: {
+      name: site.name,
+      short_name: site.short_name,
+      description: site.description,
+      icons: [
+        { src: "/android-chrome-192x192.png", sizes: "192x192", type: "image/png" },
+        { src: "/android-chrome-512x512.png", sizes: "512x512", type: "image/png" },
+        { src: "/web-app-manifest-192x192.png", sizes: "192x192", type: "image/png", purpose: "maskable" },
+        { src: "/web-app-manifest-512x512.png", sizes: "512x512", type: "image/png", purpose: "maskable" }
+      ],
+      start_url: "/",
+      scope: "/",
+      display: "standalone",
+      theme_color: "#0B0A0F",
+      background_color: "#0B0A0F"
+    }
+  end
 
-	def humans
-	end
-
-	def tech
-	end
-
+  def humans
+    render formats: :text
+  end
 end

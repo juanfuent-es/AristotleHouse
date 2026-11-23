@@ -1,0 +1,19 @@
+<header class="gutter grid items-end gap-10 pb-16 pt-12 md:grid-cols-2 md:pt-20">
+  <h1 class="display !text-[clamp(2.5rem,1rem+4.4vw,6rem)]">Before he was a statue, he was an observer.</h1>
+  <img src="/brand/img/head-profile.webp" alt="Profile of the bust of Aristotle read as a heat map" width="1400" height="1400" class="reading-cut h-auto w-full">
+</header>
+<div class="gutter space-y-24">
+  <% if @page&.content.present? || @page&.story&.any? %>
+    <div class="prose-house subhead max-w-[46ch]"><%= paragraphs @page.content %></div>
+    <%= render "content/story", page: @page %>
+  <% else %>
+    <p class="subhead max-w-[46ch] text-soft">Where his teacher looked for truth in ideas, Aristotle went looking for it in the world. He wrote the first serious studies of perception and memory, and taught while walking the colonnades with his students.</p>
+    <dl class="grid gap-10 md:grid-cols-3">
+      <div class="rule"><dt class="title">He walked</dt><dd class="mt-3 text-soft">His followers were called the Peripatetics, the ones who walk around. Ideas were formed in motion, in a space, with people.</dd></div>
+      <div class="rule"><dt class="title">He observed</dt><dd class="mt-3 text-soft">Knowledge starts with the senses. Watch closely, record what you see, then build understanding on top of it.</dd></div>
+      <div class="rule"><dt class="title">He studied audiences</dt><dd class="mt-3 text-soft">The Poetics and the Rhetoric are the first manuals on how people feel in a room: what moves them, what they remember, why.</dd></div>
+    </dl>
+    <section class="grid gap-10 md:grid-cols-2"><h2 class="headline">Same instinct, new instruments.</h2><p class="max-w-[60ch] text-soft">Aristotle had his eyes, a notebook and a garden to walk in. The House has thermal cameras, sensors and dwell data. The method has not changed in 2,400 years: watch people closely, and let what they feel shape what you build next.</p></section>
+    <figure class="max-w-5xl"><blockquote class="headline">“All men by nature desire to know. An indication of this is the delight we take in our senses.”</blockquote><figcaption class="mt-5 text-mute">Aristotle, Metaphysics, Book I</figcaption></figure>
+  <% end %>
+</div>

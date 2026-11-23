@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Aristotle House · Sensor</title>
+<style>
+:root{--ink:#0A0A0B;--w:#F3F3F0;--g:#8B8B92;--l:#26262B;--sig:#3DFF8A}
+*{box-sizing:border-box;margin:0}
+body{background:var(--ink);color:var(--w);font:13px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;height:100vh;display:grid;grid-template-columns:320px 1fr;overflow:hidden}
+aside{border-right:1px solid var(--l);padding:22px 20px;overflow:auto;display:flex;flex-direction:column;gap:18px}
+h1{font:600 15px/1.2 -apple-system,Helvetica,sans-serif;letter-spacing:.08em;text-transform:uppercase}
+h1 small{display:block;color:var(--g);font:400 11px ui-monospace,Menlo,monospace;letter-spacing:0;text-transform:none;margin-top:6px}
+.grp{display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--l);padding-top:14px}
+.grp>b{font-weight:500;color:var(--g);font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+label{display:grid;grid-template-columns:92px 1fr 34px;align-items:center;gap:8px;color:var(--w)}
+label span:last-child{color:var(--g);text-align:right;font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--w)}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button,.btn{all:unset;cursor:pointer;padding:7px 10px;border:1px solid var(--l);border-radius:2px;color:var(--w);font-size:12px}
+.seg button[aria-pressed=true]{background:var(--w);color:var(--ink);border-color:var(--w)}
+.btn{text-align:center;background:var(--w);color:var(--ink);font-weight:600}
+.btn.sec{background:none;color:var(--w)}
+.chk{display:flex;gap:8px;align-items:center;cursor:pointer}
+.ramp{height:10px;border-radius:1px}
+main{position:relative;display:flex;align-items:center;justify-content:center;padding:28px;overflow:hidden}
+#drop{position:absolute;inset:28px;border:1px dashed #3a3a40;display:flex;align-items:center;justify-content:center;color:var(--g);text-align:center;pointer-events:none}
+canvas{max-width:100%;max-height:100%;image-rendering:auto}
+.corner{position:absolute;font-size:11px;color:var(--g)}
+.tl{left:28px;top:12px}.tr{right:28px;top:12px}.bl{left:28px;bottom:8px}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--sig);margin-right:6px}
+</style></head><body>
+<aside>
+<h1>Aristotle House<small>Sensor · image treatment tool v1</small></h1>
+<div class="grp"><b>Source</b>
+<input type="file" id="file" accept="image/*" style="display:none">
+<button class="btn sec" onclick="file.click()">Open image or icon</button>
+<div class="seg" id="mode"><button data-v="photo" aria-pressed="true">Photo</button><button data-v="icon">Icon</button></div>
+<input type="file" id="maskfile" accept="image/*" style="display:none">
+<button class="btn sec" onclick="maskfile.click()">Add subject mask (optional)</button>
+<label class="chk"><input type="checkbox" id="body" checked> Body read: people warm, room cool</label>
+<p style="color:var(--g);font-size:11px" id="maskstat">No mask. In Photoshop: Select Subject, fill white on black, export PNG.</p>
+</div>
+<div class="grp"><b>Spectrum</b>
+<div class="seg" id="spec"></div>
+<div class="ramp" id="rampbar"></div>
+</div>
+<div class="grp"><b>Read</b>
+<label>Soften<input type="range" id="soften" min="0" max="40" value="6" step=".5"><span></span></label>
+<label>Bloom<input type="range" id="bloom" min="0" max="1" value=".5" step=".05"><span></span></label>
+<label>Heat<input type="range" id="gamma" min=".4" max="2.4" value="1" step=".05"><span></span></label>
+<label>Ambient<input type="range" id="ambient" min="0" max=".5" value="0" step=".01"><span></span></label>
+<label>Equalise<input type="range" id="eq" min="0" max="1" value=".5" step=".05"><span></span></label>
+<label class="chk"><input type="checkbox" id="invert"> Invert heat</label>
+<label class="chk"><input type="checkbox" id="iso"> Isotherms (stepped bands)</label>
+</div>
+<div class="grp"><b>Texture</b>
+<label>Scan drift<input type="range" id="drift" min="0" max="40" value="0" step="1"><span></span></label>
+<label>Sensor grid<input type="range" id="grid" min="0" max="40" value="0" step="1"><span></span></label>
+<label>Grain<input type="range" id="grain" min="0" max="60" value="22" step="1"><span></span></label>
+<label>Trace lines<input type="range" id="trace" min="0" max="24" value="0" step="1"><span></span></label>
+</div>
+<div class="grp"><b>Overlay</b>
+<label class="chk"><input type="checkbox" id="frame"> Detection frame</label>
+<label class="chk"><input type="checkbox" id="readout"> Readout label</label>
+</div>
+<div class="grp"><b>Presets</b>
+<div class="seg" id="presets"></div>
+</div>
+<div class="grp">
+<button class="btn" onclick="exportPNG()">Export PNG, full size</button>
+<p style="color:var(--g);font-size:11px">Everything runs on this computer. Nothing is uploaded. Export keeps the source resolution.</p>
+</div>
+</aside>
+<main>
+<div class="corner tl"><span class="dot"></span><span id="stat">Ready</span></div>
+<div class="corner tr" id="dims"></div>
+<div class="corner bl">Drop a file anywhere</div>
+<div id="drop">Drop a photograph, render or icon here</div>
+<canvas id="cv"></canvas>
+</main>
+<script>
+const SPECTRA={
+ lyceum:[[0, "#07060D"], [0.18, "#1B1464"], [0.36, "#4B2EF5"], [0.52, "#C7B8FF"], [0.66, "#FF4FB4"], [0.78, "#FF2E7E"], [0.88, "#FF7A5C"], [1, "#FFEFC2"]],
+ ring:[[0, "#07060D"], [0.2, "#1B1464"], [0.38, "#5B3BFF"], [0.55, "#FF3FA8"], [0.68, "#C9B6FF"], [0.82, "#FF6FB8"], [0.92, "#FFB08A"], [1, "#FFF3D6"]],
+ ultra:[[0, "#0B0A14"], [0.3, "#2A1FA8"], [0.55, "#5F5CFF"], [0.75, "#A9A6FF"], [0.88, "#FF9A84"], [1, "#F3EEE4"]],
+ lday:[[0, "#F2EFE8"], [0.32, "#F2EFE8"], [0.48, "#C7B8FF"], [0.62, "#6E52FF"], [0.76, "#FF4FB4"], [0.9, "#FF7A5C"], [1, "#FFD9A0"]],
+ infrared:[[0,"#06040C"],[.16,"#14093F"],[.34,"#3A16F2"],[.52,"#E21FD0"],[.68,"#FF3D6E"],[.82,"#FF7A1A"],[.93,"#FFD43B"],[1,"#FFF6DA"]],
+ night:[[0,"#0B0B0D"],[.36,"#0B0B0D"],[.5,"#1E2340"],[.62,"#3E4280"],[.74,"#2F5BFF"],[.86,"#8187C5"],[.94,"#EA8669"],[1,"#F2EEE8"]],
+ daylight:[[0,"#F3F3F0"],[.3,"#F3F3F0"],[.45,"#C9C2FF"],[.6,"#7A5BFF"],[.74,"#E21FD0"],[.86,"#FF5A1F"],[1,"#FFC21A"]],
+ mono:[[0,"#0A0A0B"],[.5,"#3A3A40"],[.85,"#B9B9C0"],[1,"#F3F3F0"]]};
+const PRESETS={
+ "Work · Lyceum":{spec:"lyceum",soften:6,bloom:.5,gamma:1,ambient:0,eq:.5,drift:0,grid:0,grain:22,trace:0,mode:"photo"},
+ "Work · isotherm":{spec:"ring",soften:12,bloom:.6,gamma:1,ambient:0,eq:.4,drift:0,grid:0,grain:12,trace:0,mode:"photo",iso:true},
+ "House · Ultra":{spec:"ultra",soften:4,bloom:.3,gamma:1.1,ambient:0,eq:.4,drift:0,grid:0,grain:18,trace:0,mode:"photo"},
+ "Day · Lyceum":{spec:"lday",soften:6,bloom:.4,gamma:1.5,ambient:0,eq:.3,drift:0,grid:0,grain:12,trace:0,mode:"photo"},
+ "Work · infrared":{spec:"infrared",soften:6,bloom:.5,gamma:1,ambient:0,eq:.5,drift:0,grid:0,grain:22,trace:0,mode:"photo"},
+ "Work · sensor grid":{spec:"infrared",soften:10,bloom:.6,gamma:1.1,ambient:0,eq:.6,drift:0,grid:12,grain:10,trace:0,mode:"photo"},
+ "Work · daylight":{spec:"daylight",soften:6,bloom:.4,gamma:1,ambient:0,eq:.5,drift:0,grid:0,grain:14,trace:0,mode:"photo"},
+ "House · mono":{spec:"mono",soften:2,bloom:.2,gamma:1,ambient:0,eq:.4,drift:0,grid:0,grain:18,trace:0,mode:"photo"},
+ "House · trace":{spec:"mono",soften:3,bloom:.2,gamma:1,ambient:0,eq:.4,drift:0,grid:0,grain:12,trace:14,mode:"photo"},
+ "Icon · heat":{spec:"infrared",soften:5,bloom:.7,gamma:1,ambient:.3,eq:0,drift:0,grid:0,grain:16,trace:0,mode:"icon"}};
+const $=id=>document.getElementById(id), cv=$('cv'), ctx=cv.getContext('2d');
+let src=null, maskImg=null, state={spec:"lyceum",mode:"photo"};
+const sliders=['soften','bloom','gamma','ambient','eq','drift','grid','grain','trace'];
+function hex(h){return [1,3,5].map(i=>parseInt(h.slice(i,i+2),16))}
+function lut(stops){const o=new Uint8ClampedArray(256*3);for(let i=0;i<256;i++){const x=i/255;let k=0;while(k<stops.length-2&&x>stops[k+1][0])k++;const [p0,c0]=stops[k],[p1,c1]=stops[k+1];const t=Math.min(1,Math.max(0,(x-p0)/(p1-p0||1)));const a=hex(c0),b=hex(c1);for(let j=0;j<3;j++)o[i*3+j]=a[j]+(b[j]-a[j])*t}return o}
+function boxBlur(a,w,h,r){if(r<1)return a;r=Math.round(r);const t=new Float32Array(a.length),o=new Float32Array(a.length);
+ for(let y=0;y<h;y++){let s=0,row=y*w;for(let x=-r;x<=r;x++)s+=a[row+Math.min(w-1,Math.max(0,x))];for(let x=0;x<w;x++){t[row+x]=s/(2*r+1);s+=a[row+Math.min(w-1,x+r+1)]-a[row+Math.max(0,x-r)]}}
+ for(let x=0;x<w;x++){let s=0;for(let y=-r;y<=r;y++)s+=t[Math.min(h-1,Math.max(0,y))*w+x];for(let y=0;y<h;y++){o[y*w+x]=s/(2*r+1);s+=t[Math.min(h-1,y+r+1)*w+x]-t[Math.max(0,y-r)*w+x]}}return o}
+function gauss(a,w,h,s){if(s<.5)return a;const r=Math.sqrt(12*s*s/3+1)/2;let o=a;for(let i=0;i<3;i++)o=boxBlur(o,w,h,r);return o}
+let seed=7;function rnd(){seed=(seed*16807)%2147483647;return seed/2147483647}
+function render(full){
+ if(!src)return null;
+ const P=Object.fromEntries(sliders.map(s=>[s,+$(s).value])); const inv=$('invert').checked;
+ let W=src.width,H=src.height; if(!full){const m=Math.min(1,1400/Math.max(W,H));W=Math.round(W*m);H=Math.round(H*m)}
+ const k=W/900; const c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');x.drawImage(src,0,0,W,H);
+ const d=x.getImageData(0,0,W,H).data, n=W*H; let L=new Float32Array(n);
+ if(state.mode==='icon'){for(let i=0;i<n;i++){const a=d[i*4+3]/255,l=(d[i*4]*.2126+d[i*4+1]*.7152+d[i*4+2]*.0722)/255;L[i]=a<.99?a:1-l}}
+ else{for(let i=0;i<n;i++)L[i]=(d[i*4]*.2126+d[i*4+1]*.7152+d[i*4+2]*.0722)/255;
+  const hist=new Uint32Array(256);for(let i=0;i<n;i++)hist[Math.min(255,L[i]*255|0)]++;let acc=0,lo=0,hi=255;const cdf=new Float32Array(256);for(let i=0;i<256;i++){acc+=hist[i];cdf[i]=acc/n}
+  for(let i=0;i<256;i++){if(cdf[i]<.02)lo=i;if(cdf[i]<.98)hi=i}lo/=255;hi/=255;
+  for(let i=0;i<n;i++){const v=Math.min(1,Math.max(0,(L[i]-lo)/Math.max(hi-lo,.001)));L[i]=v*(1-P.eq)+cdf[Math.min(255,L[i]*255|0)]*P.eq}}
+ if(inv)for(let i=0;i<n;i++)L[i]=1-L[i];
+ if(maskImg&&state.mode==='photo'&&$('body').checked){const mc=document.createElement('canvas');mc.width=W;mc.height=H;const mx=mc.getContext('2d');mx.drawImage(maskImg,0,0,W,H);const md=mx.getImageData(0,0,W,H).data;
+  let m=new Float32Array(n);for(let i=0;i<n;i++)m[i]=md[i*4]/255;const ms=gauss(m,W,H,2.5*k);const er=new Float32Array(n);const mb=gauss(m,W,H,5*k);for(let i=0;i<n;i++)er[i]=mb[i]>.92?1:0;const core=gauss(er,W,H,10*k);
+  for(let i=0;i<n;i++){const vb=.1+.32*L[i],vp=.52+.42*(.55*L[i]+.45*core[i]);L[i]=ms[i]*vp+(1-ms[i])*vb}}
+ let s=gauss(L,W,H,P.soften*k), g=gauss(s,W,H,P.soften*4*k+(state.mode==='icon'?8*k:0));
+ const out=new Float32Array(n);
+ for(let i=0;i<n;i++){let v=s[i]*(1-P.bloom*.4)+g[i]*P.bloom*.8; if(state.mode==='icon')v=Math.min(1,v*1.25)*.86;
+  v=Math.pow(Math.min(1,Math.max(0,v)),P.gamma); out[i]=P.ambient+(1-P.ambient)*v}
+ let F=out;
+ if(P.drift){seed=7;const sh=new Float32Array(H);let prev=0;for(let y=0;y<H;y++){prev=prev*.9+(rnd()-.5)*.6;sh[y]=prev*P.drift*k+(Math.sin(y/(11*k))>.85?P.drift*.25*k:0)}
+  const t=new Float32Array(n);for(let y=0;y<H;y++)for(let xx=0;xx<W;xx++){t[y*W+xx]=F[y*W+Math.min(W-1,Math.max(0,Math.round(xx-sh[y])))]}F=t}
+ if(P.grid>=2){const c2=Math.max(2,Math.round(P.grid*k)),t=new Float32Array(n);
+  for(let gy=0;gy<H;gy+=c2)for(let gx=0;gx<W;gx+=c2){let s2=0,m=0;for(let y=gy;y<Math.min(H,gy+c2);y++)for(let xx=gx;xx<Math.min(W,gx+c2);xx++){s2+=F[y*W+xx];m++}const v=s2/m,r=(.15+.85*v)*c2/2,cx=gx+(c2-1)/2,cy=gy+(c2-1)/2;
+   for(let y=gy;y<Math.min(H,gy+c2);y++)for(let xx=gx;xx<Math.min(W,gx+c2);xx++)t[y*W+xx]=(Math.abs(xx-cx)<=r&&Math.abs(y-cy)<=r)?v:P.ambient*.5}F=t}
+ if($('iso').checked){const st=9,t=new Float32Array(n),e=new Uint8Array(n);for(let i=0;i<n;i++){t[i]=Math.floor(Math.min(.999,F[i])*st)/st+.5/st}for(let i=0;i<n;i++){const xx=i%W;if((xx<W-1&&t[i+1]!==t[i])||(i+W<n&&t[i+W]!==t[i]))e[i]=1}F=t;window.__iso=e}else window.__iso=null;
+ const LUT=lut(SPECTRA[state.spec]); const img=x.createImageData(W,H),o=img.data; seed=11;
+ for(let i=0;i<n;i++){const v=Math.min(1,Math.max(0,F[i])),j=(v*255|0)*3;let gn=0;if(P.grain){gn=((rnd()+rnd()+rnd())-1.5)*P.grain*(0.6+0.6*(1-v))}
+  const mm=(window.__iso&&window.__iso[i])?.28:1;o[i*4]=LUT[j]*mm+gn;o[i*4+1]=LUT[j+1]*mm+gn;o[i*4+2]=LUT[j+2]*mm+gn;o[i*4+3]=255}
+ x.putImageData(img,0,0);
+ if(P.trace>0){const levels=P.trace, sm=gauss(L,W,H,6*k); x.save();x.strokeStyle=state.spec==='daylight'?'rgba(10,10,11,.55)':'rgba(243,243,240,.55)';x.lineWidth=Math.max(1,1.1*k);
+  const step=Math.max(2,Math.round(3*k));
+  for(let l=1;l<=levels;l++){const th=l/(levels+1);x.beginPath();
+   for(let y=0;y<H-step;y+=step)for(let xx=0;xx<W-step;xx+=step){const a=sm[y*W+xx]>th,b=sm[y*W+xx+step]>th,cc=sm[(y+step)*W+xx]>th;
+    if(a!==b){x.moveTo(xx+step/2,y);x.lineTo(xx+step/2,y+step)} if(a!==cc){x.moveTo(xx,y+step/2);x.lineTo(xx+step,y+step/2)}}
+   x.stroke()} x.restore()}
+ if($('frame').checked){const fw=W*.36,fh=H*.46,fx=W*.32,fy=H*.22,cl=Math.min(fw,fh)*.12;x.save();x.strokeStyle='rgba(243,243,240,.9)';x.lineWidth=Math.max(1.5,2*k);
+  x.strokeRect(fx,fy,fw,fh);x.strokeStyle='#3DFF8A';x.lineWidth=Math.max(2,3*k);
+  [[fx,fy,1,1],[fx+fw,fy,-1,1],[fx,fy+fh,1,-1],[fx+fw,fy+fh,-1,-1]].forEach(([px,py,sx,sy])=>{x.beginPath();x.moveTo(px+sx*cl,py);x.lineTo(px,py);x.lineTo(px,py+sy*cl);x.stroke()});
+  const cx=fx+fw/2,cy=fy+fh/2,r=cl*.45;x.strokeStyle='rgba(243,243,240,.9)';x.lineWidth=Math.max(1,1.5*k);x.beginPath();x.arc(cx,cy,r,0,7);x.moveTo(cx-r*2,cy);x.lineTo(cx+r*2,cy);x.moveTo(cx,cy-r*2);x.lineTo(cx,cy+r*2);x.stroke();x.restore()}
+ if($('readout').checked){const fs=Math.round(13*k);x.save();x.font=`500 ${fs}px ui-monospace,Menlo,monospace`;const t='AH! · SENSED · 36.8°C';const tw=x.measureText(t).width;
+  const lx=W*.32,ly=H*.22-fs*2.2;x.fillStyle='rgba(243,243,240,.92)';x.fillRect(lx,ly,tw+fs*2.4,fs*1.7);x.fillStyle='#0A0A0B';x.fillText(t,lx+fs*.6,ly+fs*1.22);
+  x.fillStyle='#3DFF8A';x.beginPath();x.arc(lx+tw+fs*1.6,ly+fs*.85,fs*.32,0,7);x.fill();x.restore()}
+ return c}
+let pend=0;function draw(){cancelAnimationFrame(pend);pend=requestAnimationFrame(()=>{const c=render(false);if(!c)return;cv.width=c.width;cv.height=c.height;ctx.drawImage(c,0,0);$('drop').style.display='none';$('dims').textContent=src.width+' × '+src.height+' px';$('stat').textContent='Sensing · '+state.spec})}
+function exportPNG(){if(!src)return;$('stat').textContent='Rendering full size…';setTimeout(()=>{const c=render(true);c.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`AH_sensed_${state.spec}_${Date.now()}.png`;a.click();$('stat').textContent='Exported'})},30)}
+function load(f){if(!f)return;const u=URL.createObjectURL(f),im=new Image();im.onload=()=>{src=im;if(/svg|png/.test(f.type)&&f.type!=='image/jpeg'){}draw()};im.src=u}
+$('file').onchange=e=>load(e.target.files[0]);
+$('maskfile').onchange=e=>{const f=e.target.files[0];if(!f)return;const im=new Image();im.onload=()=>{maskImg=im;$('maskstat').textContent='Mask loaded: '+f.name;draw()};im.src=URL.createObjectURL(f)};$('body').onchange=draw;
+addEventListener('dragover',e=>e.preventDefault());addEventListener('drop',e=>{e.preventDefault();load(e.dataTransfer.files[0])});
+function seg(id,key,vals){const el=$(id);if(vals)el.innerHTML=vals.map(v=>`<button data-v="${v}">${v}</button>`).join('');el.querySelectorAll('button').forEach(b=>{b.onclick=()=>{state[key]=b.dataset.v;sync();draw()}})}
+function sync(){document.querySelectorAll('#spec button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===state.spec));document.querySelectorAll('#mode button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===state.mode));
+ $('rampbar').style.background='linear-gradient(90deg,'+SPECTRA[state.spec].map(([p,c])=>c+' '+(p*100)+'%').join(',')+')';
+ sliders.forEach(s=>{$(s).nextElementSibling.textContent=$(s).value})}
+seg('spec','spec',Object.keys(SPECTRA));seg('mode','mode');
+$('presets').innerHTML=Object.keys(PRESETS).map(k=>`<button>${k}</button>`).join('');
+$('presets').querySelectorAll('button').forEach(b=>b.onclick=()=>{const p=PRESETS[b.textContent];state.spec=p.spec;state.mode=p.mode;sliders.forEach(s=>$(s).value=p[s]);$('iso').checked=!!p.iso;sync();draw()});
+sliders.forEach(s=>$(s).oninput=()=>{sync();draw()});['invert','frame','readout','iso'].forEach(s=>$(s).onchange=draw);
+sync();
+</script></body></html>

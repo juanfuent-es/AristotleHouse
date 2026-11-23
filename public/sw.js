@@ -10,9 +10,9 @@ Copyright 2015, 2019 Google Inc. All Rights Reserved.
  See the License for the specific language governing permissions and
  limitations under the License.
 */
-const CACHE_NAME = "JuanFuent.es.offline";
-const OFFLINE_VERSION = .1;
-const OFFLINE_URL = 'offline';
+const CACHE_NAME = "aristotle-house.offline";
+const OFFLINE_VERSION = 1;
+const OFFLINE_URL = "/offline";
 
 self.addEventListener('install', (event) => {
   event.waitUntil((async () => {

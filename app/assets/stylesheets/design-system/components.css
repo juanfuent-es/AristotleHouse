@@ -1,0 +1,270 @@
+@layer components {
+    /* Micrographic layer: the quiet readouts around everything. */
+    .micro {
+        font-family: var(--font-body);
+        font-weight: 500;
+        font-size: var(--text-micro);
+        line-height: 1.4;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .dot {
+        display: inline-block;
+        width: 0.5em;
+        height: 0.5em;
+        border-radius: 50%;
+        background: currentColor;
+        margin-right: 0.5em;
+        vertical-align: 0.08em;
+    }
+
+    .gutter {
+        padding-inline: clamp(1rem, 4vw, 4rem);
+    }
+
+    .display {
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-size: var(--text-display);
+        line-height: 0.9;
+        letter-spacing: -0.04em;
+    }
+
+    .headline {
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-size: var(--text-headline);
+        line-height: 1;
+        letter-spacing: -0.03em;
+    }
+
+    .subhead {
+        font-family: var(--font-body);
+        font-weight: 500;
+        font-size: var(--text-subhead);
+        line-height: 1.2;
+    }
+
+    .title {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 1.25rem;
+        line-height: 1.15;
+        letter-spacing: -0.02em;
+    }
+
+    .rule {
+        border-top: 1px solid var(--rule);
+        padding-top: 1.125rem;
+    }
+
+    /* Dissolves the square edge of a reading into ink. */
+    .reading-cut {
+        mix-blend-mode: lighten;
+        mask-image: radial-gradient(closest-side, #000 78%, transparent);
+    }
+
+    .link {
+        text-decoration: underline;
+        text-decoration-thickness: 1px;
+        text-underline-offset: 0.25em;
+    }
+
+    .link:hover {
+        color: var(--accent);
+    }
+
+    .prose-house > * + * {
+        margin-top: 1em;
+    }
+
+    /* Buttons */
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        min-height: 2.75rem;
+        padding: 0.5rem 1.25rem;
+        border: 1px solid var(--fill);
+        background: var(--fill);
+        color: var(--on-fill);
+        font: 500 0.9375rem/1.2 var(--font-body);
+        cursor: pointer;
+        transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+    }
+
+    .btn:hover {
+        background: var(--color-violet);
+        border-color: var(--color-violet);
+        color: var(--color-bone);
+    }
+
+    .btn--quiet {
+        background: transparent;
+        border-color: var(--control);
+        color: var(--text);
+    }
+
+    .btn--danger {
+        background: transparent;
+        border-color: var(--error);
+        color: var(--error);
+    }
+
+    .btn--danger:hover {
+        background: var(--error);
+        border-color: var(--error);
+        color: var(--canvas);
+    }
+
+    .btn--small {
+        min-height: 2.25rem;
+        padding: 0.25rem 0.75rem;
+        font-size: 0.875rem;
+    }
+
+    /* Forms */
+    .field {
+        display: block;
+    }
+
+    .field > label,
+    .field__label {
+        display: block;
+        margin-bottom: 0.375rem;
+        font: 500 0.875rem/1.4 var(--font-body);
+        color: var(--text);
+    }
+
+    .field__hint {
+        margin-top: 0.375rem;
+        font-size: 0.875rem;
+        line-height: 1.4;
+        color: var(--text-muted);
+    }
+
+    .input {
+        display: block;
+        width: 100%;
+        min-height: 2.75rem;
+        padding: 0.5rem 0.75rem;
+        border: 1px solid var(--control);
+        background-color: var(--surface);
+        color: var(--text);
+        font: 400 1rem/1.5 var(--font-body);
+    }
+
+    .input::placeholder {
+        color: var(--text-muted);
+        opacity: 1;
+    }
+
+    .input:focus {
+        border-color: var(--focus);
+        outline: 2px solid var(--focus);
+        outline-offset: 0;
+        box-shadow: none;
+    }
+
+    textarea.input {
+        min-height: 8rem;
+        resize: vertical;
+    }
+
+    .field_with_errors {
+        display: contents;
+    }
+
+    .field_with_errors > .input {
+        border-color: var(--error);
+    }
+
+    .notice {
+        border: 1px solid var(--rule);
+        border-left: 4px solid var(--accent);
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+    }
+
+    .notice--error {
+        border-left-color: var(--error);
+    }
+
+    .tag {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.125rem 0.5rem;
+        border: 1px solid var(--control);
+        font: 500 0.8125rem/1.5 var(--font-body);
+    }
+
+    .tag--on {
+        border-color: var(--fill);
+        background: var(--fill);
+        color: var(--on-fill);
+    }
+
+    /* Navigation */
+    .nav-link {
+        padding-block: 0.75rem;
+    }
+
+    .nav-link:hover,
+    .nav-link[aria-current] {
+        color: var(--accent);
+    }
+
+    .nav-link[aria-current] {
+        text-decoration: underline;
+        text-underline-offset: 0.4em;
+    }
+
+    /* Admin */
+    .admin-link {
+        display: block;
+        padding: 0.5rem 0.75rem;
+        font: 500 1rem/1.5 var(--font-body);
+        border-left: 3px solid transparent;
+    }
+
+    .admin-link:hover {
+        border-color: var(--control);
+    }
+
+    .admin-link[aria-current] {
+        border-color: var(--accent);
+        background: var(--surface);
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 1rem;
+    }
+
+    .table th {
+        text-align: left;
+        font: 500 0.875rem/1.4 var(--font-body);
+        color: var(--text-muted);
+    }
+
+    .table th,
+    .table td {
+        padding: 0.75rem 1rem 0.75rem 0;
+        border-bottom: 1px solid var(--rule);
+        vertical-align: middle;
+    }
+
+    .panel {
+        border: 1px solid var(--rule);
+        background: var(--surface);
+        padding: clamp(1rem, 2vw, 1.5rem);
+    }
+
+    .panel .input {
+        background-color: var(--canvas);
+    }
+}

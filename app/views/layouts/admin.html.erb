@@ -1,45 +1,38 @@
 <!DOCTYPE html>
-<html lang="<%= I18n.locale.to_s.downcase %>">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title><%= full_title(yield(:title)) %></title>
-
-  <%= render "shared/favicons" %>
-
-  <%= csrf_meta_tags %>
-  <%= csp_meta_tag %>
-
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.2.0/css/adminlte.min.css" integrity="sha512-IuO+tczf4J43RzbCMEFggCWW5JuX78IrCJRFFBoQEXNvGI6gkUw4OjuwMidiS4Lm9Q2lILzpJwZuMWuSEeT9UQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.5/css/selectize.bootstrap4.min.css" integrity="sha512-VL5zQAJyFw5RL9wN3a5nF508dBqgOAYOZeww5RuEq8A8JQLiWy20iG2lLyiTuF6bv7gz48UGMcxuMlUycoHfJw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/balloon-css/1.2.0/balloon.min.css" integrity="sha512-6jHrqOB5TcbWsW52kWP9TTx06FHzpj7eTOnuxQrKaqSvpcML2HTDR2/wWWPOh/YvcQQBGdomHL/x+V1Hn+AWCA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" href="/static/admin.css">
-</head>
-
-<body class="hold-transition sidebar-mini">
-  <div class="wrapper">
-    <%= render "admin/base/nav" %>
-    <%= render "admin/base/sidebar" %>
-
-    <div class="content-wrapper">
+<html lang="en" class="day">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex">
+    <title><%= full_title(yield(:title)) %></title>
+    <%= render "shared/fonts" %>
+    <%= render "shared/favicons" %>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "application" %>
+  </head>
+  <body class="min-h-dvh lg:grid lg:grid-cols-[16rem_minmax(0,1fr)]">
+    <a href="#main" class="sr-only focus:not-sr-only">Skip to content</a>
+    <aside class="border-b border-[var(--rule)] px-4 py-4 lg:sticky lg:top-0 lg:h-dvh lg:overflow-y-auto lg:border-b-0 lg:border-r lg:px-5 lg:py-6">
+      <%= link_to admin_path, class: "block pb-4 lg:pb-8" do %><%= lockup(tone: :dark, class: "w-48 h-auto") %><% end %>
+      <nav class="flex flex-wrap gap-1 lg:block lg:space-y-1" aria-label="Admin">
+        <%= link_to "Overview", admin_path, class: "admin-link", "aria-current": (request.path == admin_path ? "page" : nil) %>
+        <% [["Projects", admin_projects_path], ["Articles", admin_articles_path], ["Pages", admin_pages_path], ["Images", admin_images_path], ["Videos", admin_videos_path], ["Clients", admin_clients_path], ["Share files", admin_ogs_path]].each do |label, path| %>
+          <%= nav_item label, path, class: "admin-link" %>
+        <% end %>
+      </nav>
+      <div class="mt-4 flex flex-wrap gap-x-6 gap-y-2 border-t border-[var(--rule)] pt-4 text-base lg:mt-8 lg:block lg:space-y-2">
+        <p><%= link_to "View site", home_path, class: "link" %></p>
+        <p><%= link_to "Holding screen", root_path, class: "link" %></p>
+        <p><%= link_to "Sign out", destroy_user_session_path, class: "link" %></p>
+      </div>
+    </aside>
+    <main id="main" class="min-w-0 px-4 py-6 lg:px-10 lg:py-8">
+      <% if notice.present? %><p class="notice mb-6" role="status"><%= notice %></p><% end %>
+      <% if alert.present? %><p class="notice notice--error mb-6" role="alert"><%= alert %></p><% end %>
       <%= yield %>
-    </div>
-
-    <%= render "admin/base/footer" %>
-    <%= render "admin/base/control_sidebar" %>
-  <div>
-  
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" integrity="sha512-uto9mlQzrs59VwILcLiRYeLKPPbS/bT71da/OEBYEwcdNUk8jYIy+D176RYoop1Da+f9mvkYrmj5MCLZWEtQuA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.1/js/bootstrap.min.js" integrity="sha512-UR25UO94eTnCVwjbXozyeVd6ZqpaAE9naiEUBK/A+QDbfSTQFhPGj5lOR6d8tsgbBk84Ggb5A3EkjsOgPRPcKA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.2.0/js/adminlte.min.js" integrity="sha512-KBeR1NhClUySj9xBB0+KRqYLPkM6VvXiiWaSz/8LCQNdRpUm38SWUrj0ccNDNSkwCD9qPA4KobLliG26yPppJA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <!--
-  * Selectize is the hybrid of a textbox and <select> box.
-  * @see: https://selectize.dev/docs.html#usage
-  -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.5/js/standalone/selectize.min.js" integrity="sha512-JFjt3Gb92wFay5Pu6b0UCH9JIOkOGEfjIi7yykNWUwj55DBBp79VIJ9EPUzNimZ6FvX41jlTHpWFUQjog8P/sw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src="/static/admin.js"></script>
-</body>
+    </main>
+    <%= vite_client_tag %>
+    <%= vite_javascript_tag "admin" %>
+  </body>
 </html>

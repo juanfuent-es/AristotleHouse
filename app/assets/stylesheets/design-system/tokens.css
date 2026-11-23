@@ -1,0 +1,47 @@
+/* Aristotle House tokens. Values mirror the front matter of DESIGN.md. */
+@theme {
+    --color-*: initial;
+    --color-transparent: transparent;
+    --color-current: currentColor;
+
+    /* The bust's own colours */
+    --color-ink: #0b0a0f;
+    --color-charcoal: #2e2e31;
+    --color-bone: #f2efe8;
+    /* What the senses add */
+    --color-violet: #4b2ef5;
+    --color-lilac: #c7b8ff;
+    --color-pink: #ff4fb4;
+    /* Quiet steps between shadow and marble */
+    --color-night: #141416;
+    --color-soft: #c9c4d4;
+    --color-mute: #a49fb0;
+    --color-line: #3d3a4a;
+    --color-paper-line: #cfcac0;
+    --color-paper-mute: #625d55;
+    --color-paper: #e6e2d9;
+    /* Status */
+    --color-danger: #c2185b;
+    --color-danger-night: #ff7a9f;
+
+    --font-display: "Zalando Sans Expanded", "Arial Black", sans-serif;
+    --font-body: "Inter", system-ui, sans-serif;
+
+    --text-micro: 0.8125rem;
+    --text-micro--line-height: 1.4;
+    --text-micro--letter-spacing: 0.04em;
+    --text-body: 1.125rem;
+    --text-body--line-height: 1.5;
+    --text-subhead: clamp(1.375rem, 1rem + 1.2vw, 1.875rem);
+    --text-subhead--line-height: 1.2;
+    --text-headline: clamp(2rem, 1.2rem + 2.8vw, 3.5rem);
+    --text-headline--line-height: 1;
+    --text-headline--letter-spacing: -0.03em;
+    --text-display: clamp(2.75rem, 0.6rem + 7.2vw, 8.75rem);
+    --text-display--line-height: 0.9;
+    --text-display--letter-spacing: -0.04em;
+
+    /* Nothing in the House has round corners. */
+    --radius-*: initial;
+    --radius-none: 0;
+}

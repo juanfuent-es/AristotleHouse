@@ -1,21 +1,12 @@
 <!DOCTYPE html>
-<html lang="<%= @lang %>" class='h-full bg-gray-50'>
-<head>
-  <meta charset="utf-8">
-  <%= csrf_meta_tags %>
-  <%= csp_meta_tag %>
-  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-  <%= render "shared/favicons" %>
-  <%= render "shared/metadata" %>
-  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-</head>
-<body class="h-full bg-black text-white">
-  <main class="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-    <div class="w-full max-w-md">
-      <%= yield %>
-    </div>
-  </main>
-  <%= vite_client_tag %>
-  <%= vite_javascript_tag 'application', "data-turbo-track": "reload" %>
-</body>
+<html lang="<%= @lang %>" class="night">
+  <head>
+    <%= render "shared/head" %>
+    <meta name="robots" content="noindex">
+  </head>
+  <body class="gutter flex min-h-dvh flex-col justify-between py-6">
+    <header><%= render "devise/shared/header" %></header>
+    <main class="w-full max-w-md py-12"><%= yield %></main>
+    <footer class="micro rule flex flex-wrap justify-between gap-3"><span><%= site.tagline %></span><span><%= site.city %>, <%= site.country %></span></footer>
+  </body>
 </html>

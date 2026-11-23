@@ -1,11 +1,10 @@
-xml.instruct! :xml, :version=>"1.0"
-xml.tag! 'urlset', 'xmlns' => 'http://www.sitemaps.org/schemas/sitemap/0.9', 'xmlns:image' => 'http://www.google.com/schemas/sitemap-image/1.1', 'xmlns:video' => 'http://www.google.com/schemas/sitemap-video/1.1' do
+xml.instruct! :xml, version: "1.0"
+xml.urlset xmlns: "http://www.sitemaps.org/schemas/sitemap/0.9" do
+  xml.url { xml.loc "#{@base_url}/" }
   @pages.each do |page|
     xml.url do
-      xml.loc "#{@base_url}/#{page.lang}/#{page.slug}"
-      xml.lastmod page.updated_at
-      xml.changefreq 'monthly'
-      xml.priority '.9'
+      xml.loc "#{@base_url}#{page.public_path}"
+      xml.lastmod page.updated_at.iso8601
     end
   end
 end

@@ -17,7 +17,7 @@
 /tmp/*
 !/log/.keep
 !/tmp/.keep
-
+*:Zone.Identifier
 # Ignore pidfiles, but keep the directory.
 /tmp/pids/*
 !/tmp/pids/
@@ -50,3 +50,8 @@ node_modules
 
 */*/*Zone.Identifier
 /*Zone.Identifier
+# Uploaded content
+/public/uploads/
+/public/images/
+/public/videos/
+.env

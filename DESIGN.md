@@ -1,70 +1,52 @@
 ---
-name: "Psychedelic Glitch — WebCraft" #[cite: 4]
-version: "beta"
+name: "Aristotle House — Heatmap"
+version: "1.0"
 colors:
-  primary: "#DF00FF"
-  primary-light: "#A600DD"
-  primary-dark: "#DF00FF"
-  primary-hover: "#EA40FF"
-  primary-active: "#D900F9"
-  secondary: "#4533FF"
-  tertiary: "#00E5FF"
-  quaternary: "#FF2EC4"
-  deep-violet: "#550078"
-  background-light: "#EDEDED"
-  background-dark: "#121212"
-  surface-light: "#FFFFFF"
-  surface-dark: "#1A1A1A"
-  text-light: "#33313B"
-  text-dark: "#D6D6DB"
-  title-light: "#121212"
-  title-dark: "#F7F5FA"
-  muted-light: "#625B70"
-  muted-dark: "#A6A6B2"
-  border-light: "#787482"
-  border-dark: "#7C7C8A"
-  selection-light: "#E8D3FF"
-  selection-dark: "#3B124B"
-  selection-text-light: "#550078"
-  selection-text-dark: "#F7F5FA"
+  primary: "#0B0A0F"
+  ink: "#0B0A0F"
+  charcoal: "#2E2E31"
+  bone: "#F2EFE8"
+  violet: "#4B2EF5"
+  lilac: "#C7B8FF"
+  pink: "#FF4FB4"
+  night: "#141416"
+  soft: "#C9C4D4"
+  mute: "#A49FB0"
+  line: "#3D3A4A"
+  paper: "#E6E2D9"
+  paper-line: "#CFCAC0"
+  paper-mute: "#625D55"
+  danger: "#C2185B"
+  danger-night: "#FF7A9F"
 typography:
   display:
-    fontFamily: "Stack Sans Notch, sans-serif"
-    fontWeight: 900
-  body:
-    fontFamily: "Google Sans, monospace"
-    fontSize: "16px"
-    lineHeight: "1.6"
-  xs:
-    fontFamily: "Google Sans, monospace"
-    fontSize: "12px"
-    lineHeight: "1.2"
-    letterSpacing: "0.06em"
-  sm:
-    fontFamily: "Google Sans, monospace"
-    fontSize: "14px"
-    lineHeight: "1.5"
-  lg:
-    fontFamily: "Google Sans, monospace"
-    fontSize: "18px"
-    lineHeight: "1.55"
-  xl:
-    fontFamily: "Stack Sans Notch, sans-serif"
-    fontSize: "32px"
-    lineHeight: "1.08"
-    letterSpacing: "-0.025em"
-  2xl:
-    fontFamily: "Stack Sans Notch, sans-serif"
-    fontSize: "48px"
-    lineHeight: "1"
-    letterSpacing: "-0.035em"
-  3xl:
-    fontFamily: "Stack Sans Notch, sans-serif"
-    fontSize: "64px"
-    lineHeight: "0.98"
+    fontFamily: "Zalando Sans Expanded"
+    fontWeight: 600
+    fontSize: "140px"
+    lineHeight: "0.9"
     letterSpacing: "-0.04em"
+  headline:
+    fontFamily: "Zalando Sans Expanded"
+    fontWeight: 600
+    fontSize: "56px"
+    lineHeight: "1"
+    letterSpacing: "-0.03em"
+  subhead:
+    fontFamily: "Inter"
+    fontWeight: 500
+    fontSize: "30px"
+    lineHeight: "1.2"
+  body:
+    fontFamily: "Inter"
+    fontWeight: 400
+    fontSize: "18px"
+    lineHeight: "1.5"
+  readout:
+    fontFamily: "Inter"
+    fontWeight: 500
+    fontSize: "13px"
+    letterSpacing: "0.04em"
 spacing:
-  px: "1px"
   1: "4px"
   2: "8px"
   4: "16px"
@@ -73,89 +55,83 @@ spacing:
   16: "64px"
 rounded:
   none: "0px"
-  sm: "4px"
-  md: "6px"
-  lg: "10px"
-  full: "9999px"
 components:
   button-primary:
-    backgroundColor: "{colors.deep-violet}"
-    textColor: "{colors.title-dark}"
+    backgroundColor: "{colors.bone}"
+    textColor: "{colors.ink}"
     typography: "{typography.body}"
-    rounded: "{rounded.md}"
-    padding: "{spacing.2}"
+    rounded: "{rounded.none}"
   button-primary-hover:
-    backgroundColor: "{colors.primary-hover}"
-  surface-dark:
-    backgroundColor: "{colors.surface-dark}"
-    textColor: "{colors.text-dark}"
+    backgroundColor: "{colors.violet}"
+    textColor: "{colors.bone}"
+  button-day:
+    backgroundColor: "{colors.ink}"
+    textColor: "{colors.bone}"
+  surface-night:
+    backgroundColor: "{colors.night}"
+    textColor: "{colors.bone}"
+  surface-day:
+    backgroundColor: "{colors.bone}"
+    textColor: "{colors.ink}"
 ---
 
-# Psychedelic Glitch — WebCraft[cite: 4]
+# Aristotle House — Heatmap
+
+Based on the brand presentation "Route 02, Heatmap" (23 November 2026). Where the
+toolkit README in `design/toolkit` differs (ABC Diatype, sensor green), the
+presentation wins.
 
 ## Overview
-Un lenguaje visual de alto contraste para WebCraft, donde los rigurosos sistemas en blanco y negro son interrumpidos por colores saturados espectrales[cite: 4]. La interfaz debe sentirse lo suficientemente precisa y técnica para generar confianza, pero lo suficientemente extraña para invitar a la exploración y el descubrimiento[cite: 4].
+The classical form, read by modern senses. A face the world already knows, seen
+through the instruments an experiential agency works with every day. Most of every
+surface is ink or bone; heat appears where there is something to read.
 
 ## Colors
-La paleta tiene una base oscura/clara estable y espectros de interferencia saturados[cite: 4]:
-- **Primary (`#DF00FF`):** Púrpura psicodélico[cite: 4]. Úsalo para la acción principal, énfasis y highlights[cite: 4].
-- **Secondary (`#4533FF`):** Azul eléctrico[cite: 4]. Perfecto para enlaces y estados de selección en modo claro[cite: 4].
-- **Tertiary (`#00E5FF`):** Cian señal[cite: 4]. Ideal para enlaces e indicadores de enfoque técnico en modo oscuro[cite: 4].
-- **Quaternary (`#FF2EC4`):** Magenta intenso[cite: 4]. Resérvalo exclusivamente para efectos de desfase *glitch* y aberraciones cromáticas decorativas[cite: 4].
+- **Ink, charcoal, bone** are the shadow, the stone and the marble of the bust. They carry most of every surface.
+- **Violet** is the unseen, **lilac** is attention, **pink** is a person.
+- **Two registers.** The House speaks in the bust's colours with a touch of violet. The Work shows the full spectrum, on people and places. Day uses the spectrum on bone.
+- **Contrast.** Violet on ink is below 3:1: never set text in it. On ink the accent for text is lilac; on bone it is violet.
+
+### Spectra
+| Name | Use | Stops |
+| --- | --- | --- |
+| Lyceum | The Work | 0 `#07060D` · 18 `#1B1464` · 36 `#4B2EF5` · 52 `#C7B8FF` · 66 `#FF4FB4` · 78 `#FF2E7E` · 88 `#FF7A5C` · 100 `#FFEFC2` |
+| Lyceum ring | Isotherms | 0 `#07060D` · 20 `#1B1464` · 38 `#5B3BFF` · 55 `#FF3FA8` · 68 `#C9B6FF` · 82 `#FF6FB8` · 92 `#FFB08A` · 100 `#FFF3D6` |
+| Ultra | The House | 0 `#0B0A14` · 30 `#2A1FA8` · 55 `#5F5CFF` · 75 `#A9A6FF` · 88 `#FF9A84` · 100 `#F3EEE4` |
+| Lyceum day | White grounds | 0–32 `#F2EFE8` · 48 `#C7B8FF` · 62 `#6E52FF` · 76 `#FF4FB4` · 90 `#FF7A5C` · 100 `#FFD9A0` |
+
+The WebGL scene reads them from `app/javascript/scene/spectra.js`.
 
 ## Typography
-El sistema utiliza una voz *display* con mucha personalidad y una voz técnica para lectura prolongada[cite: 4]:
-- **Display (`font-display`):** Stack Sans Notch[cite: 4]. Debe sentirse construida, no ornamental[cite: 4]. Úsala con tracking negativo en titulares grandes[cite: 4].
-- **Body & Code (`font-body`):** Google Sans. Refuerza la autoría técnica y el concepto de programación manteniendo una estructura de lectura orgánica desde los 14px en adelante.
+- **Zalando Sans Expanded** for display, headlines and the wordmark (800, −4%). Title case leads.
+- **Inter** for everything that is read, and for the readouts (500, 13px, caps, +4%).
+- Readouts are a quiet layer at the edges. Do not use them as a label above every section.
+- Fonts are self-hosted in `public/fonts` under the SIL Open Font License.
+
+## Marks
+- **The gaze** has two masters: light shapes on dark grounds, dark shapes on light grounds. Never inverted, outlined or recoloured inside.
+- **The seal** takes over below 40 px, down to 16 px. Favicons and app icons use it.
+- As space shrinks the brand drops a layer: wordmark and icon, icon alone, seal.
+- Files live in `public/brand`. They were extracted from the presentation; replace them with the master artwork when the studio delivers it.
 
 ## Layout & Elevation
-- **Grid:** Estructura basada en bloques con un ritmo vertical de 8px[cite: 4]. El "medio paso" de 4px se reserva exclusivamente para ajustes ópticos[cite: 4].
-- **Profundidad:** Evita a toda costa las sombras genéricas y suaves[cite: 4]. Genera profundidad mediante diferencias cromáticas, superficies tonales o delineados estructurales de 1px[cite: 4]. El radio de los componentes va desde cortes rectos (0px) hasta bordes de tarjeta (10px)[cite: 4].
+- Square corners, 1px rules, no shadows. Depth comes from light and from tone.
+- Corners carry the facts; the centre carries the feeling.
+- Public pages are ink. Case studies, articles, legal texts and admin are day.
+
+## Motion
+- Heat moves slowly, like attention. Nothing bounces.
+- The bust turns to study whoever is there. The pointer leaves warmth that fades.
+- With reduced motion the scene is a still image.
 
 ## Do's and Don'ts
-- **Hazlo:** Preserva la estructura neutra antes de inyectar el estímulo del color saturado[cite: 4].
-- **Hazlo:** Asegúrate de que el color activo vaya acompañado de otra señal visual (un borde, un subrayado, un cambio de forma o etiqueta)[cite: 4].
-- **No lo hagas:** Usar `#DF00FF` sobre fondo blanco en textos pequeños; fallará en accesibilidad por falta de contraste[cite: 4].
-- **No lo hagas:** Aplicar gradientes saturados detrás de elementos de lectura esencial o formularios[cite: 4].
-- **No lo hagas:** Introducir otra familia tipográfica sin un rol sistémico justificado[cite: 4].
+- Do show people, clients' products and finished spaces as shot, without filters.
+- Do let the client lead on their work: their name as a fact, never their logo redrawn.
+- Don't put a spectrum behind text that has to be read or behind a form.
+- Don't publish the presentation's sample clients, people or figures.
 
-## Contrato compartido: sitio, editor y administración
-
-La revisión editorial del 22 de noviembre de 2026 adopta este documento como
-contrato de diseño para las vistas públicas, la edición en contexto y las
-pantallas de administración que se migren. La implementación y sus fases se
-describen en el [plan editorial](docs/admin-migration-plan.md).
-
-El front matter será la única fuente manual de valores de tokens. El plan prevé
-generar `app/assets/stylesheets/design-system/tokens.css` y consumirlo desde una
-configuración CSS compartida de Tailwind en `design-system/theme.css`. El
-exportador y esa integración todavía no están implementados; hoy hay valores
-duplicados en `application.tailwind.css`. Antes de activar la generación se deben
-resolver diferencias como la escala `xl/2xl/3xl`, sin cambiarla silenciosamente.
-
-La configuración Tailwind define el mapeo de tokens a utilidades y los roles
-semánticos; no introduce una segunda paleta editable. Los tokens controlan
-valores, mientras que los parciales y controladores implementan estructura y
-comportamiento. Una actualización de componentes debe reflejarse también en las
-reglas de este documento.
-
-- Compartir roles de fondo, superficie, texto, texto secundario, borde, acento,
-  foco, error y éxito en claro y oscuro. Los controles editoriales usan la misma
-  identidad que el contenido público.
-- Distinguir la escala de titulares del contenido y la escala de controles del
-  editor mediante su alcance. Un encabezado en un inspector no hereda el tamaño
-  de un titular de proyecto.
-- Definir estados de botón/campo, foco visible, carga, error, guardado pendiente
-  y publicación. Acompañar el color con texto o una señal adicional.
-- Mantener los controles de portada y edición accesibles con teclado y en móvil;
-  ninguna acción esencial depende del hover o de arrastrar.
-- Reutilizar la composición de proyecto y tarjeta entre lectura, edición y
-  preview. Las herramientas se agregan alrededor del contenido y el visitante
-  recibe únicamente la revisión publicada.
-- Reservar glitch, canvas y WebGL para contenido y experiencias creativas;
-  conservar legibilidad y movimiento reducido en formularios y herramientas.
-
-Un cambio de diseño se revisa en colección pública, ficha de proyecto, editor,
-home y un recurso admin migrado, a 375 px y escritorio, en claro y oscuro. Durante
-la transición, las pantallas anteriores de AdminLTE permanecen en su propio
-layout; no se mezclan sus estilos con el nuevo sistema en un mismo documento.
+## Implementation
+`app/assets/stylesheets/design-system/` holds tokens (`tokens.css`, the Tailwind
+theme), roles (`theme.css`, classes `.night` and `.day`), components and the holding
+screen. Components read roles, never the palette. Token values are kept in step with
+this front matter by hand.

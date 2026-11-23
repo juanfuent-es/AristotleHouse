@@ -1,9 +1,5 @@
-<%= provide(:title, "Error 422") %>
-<%= provide(:description, t(:unprocessable_entity)) %>
-<style>img { filter: invert(1); }</style>
-<main id="app" class="bg-white absolute left-0 top-0 w-full h-full flex items-center p-6 py-6 lg:py-14 xl:py-26 xl:p-12">
-    <section class="mx-auto max-w-lg sm:max-w-lg md:max-w-xl lg:max-w-2xl xl:max-w-3xl text-left">
-        <h1 class="text-black my-0 text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl text-gl">Error 422</h1>
-        <p class="text-black mt-1 sm:mt-2 md:mt-3 xl:mt-2 max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl xl:max-w-3xl text-gl"><%= t(:unprocessable_entity) %></p>
-    </section>
-</main>
+<% provide(:title, t("errors_pages.unprocessable_entity.title")) %>
+<% provide(:code, "Error 422") %>
+<h1 class="display"><%= t("errors_pages.unprocessable_entity.title") %></h1>
+<p class="subhead mt-8 max-w-xl text-soft"><%= t("errors_pages.unprocessable_entity.body") %></p>
+<p class="mt-10"><%= link_to "Back to the start", root_path, class: "btn" %></p>

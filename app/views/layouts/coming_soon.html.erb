@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html lang="<%= @lang %>" class="night">
+  <head><%= render "shared/head" %></head>
+  <body>
+    <%= yield %>
+    <%= vite_client_tag %>
+    <%= vite_javascript_tag "coming_soon" %>
+  </body>
+</html>

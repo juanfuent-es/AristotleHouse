@@ -1,4 +1,5 @@
 class LabController < ApplicationController
+  before_action :authenticate_admin!
 
   def index
     @page = Page.find_by_slug("web-lab")

@@ -1,4 +1,5 @@
 class VideosController < ApplicationController
+  skip_before_action :hold_until_launch, only: :sitemap
 	before_action :set_base_url
   before_action :set_video, only: :show
 

@@ -1,24 +1,22 @@
 class Video < ApplicationRecord
-	before_save :set_slug
-    validates :title, length: { maximum: 160 }, uniqueness: { case_sensitive: true }, presence: true
+  before_validation :set_slug
+  validates :title, length: { maximum: 160 }, uniqueness: { case_sensitive: true }, presence: true
 
-    mount_uploader :file, VideoUploader
+  mount_uploader :file, VideoUploader
 
-    validate :video_is_present?
-	
-    private
+  validate :video_is_present?
 
-    def set_slug
-		if self.slug.blank?
-			_title = ActiveSupport::Inflector.transliterate(title.downcase).gsub(/\W+/, "-")
-			self.slug = _title.strip.squeeze(' ').gsub(/[^0-9A-Za-z]/, '-')
-		end
-	end
+  def in_use?
+    Block.exists?(category: "video", content: id)
+  end
 
-	def video_is_present?
-		if self.title.present? && !self.file.present?
-			errors.add(:file, "El video es requerido")
-		end
-	end
-    
+  def set_slug
+    self.slug = title.to_s.parameterize if slug.blank?
+  end
+
+  private
+
+  def video_is_present?
+    errors.add(:file, "is required") if title.present? && file.blank?
+  end
 end

@@ -1,19 +1,15 @@
-<%= render "devise/shared/header", title: "Login" %>
-<section class="text-white mx-auto max-w-7xl p-4 lg:p-8">
-
-  <%= form_for(resource, as: resource_name, url: session_path(resource_name), class: 'grid grid-cols-1 gap-6 mt-8 space-y-6') do |f| %>
+<% provide(:title, "Sign in") %>
+<h1 class="headline mb-8">Sign in</h1>
+<%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "grid gap-5" }) do |f| %>
   <%= render "devise/shared/error_messages", resource: resource %>
-  <%= f.hidden_field :email, autofocus: true, required: true, placeholder: "input@juanfuent.es", value: "input@juanfuent.es", autocomplete: "email", :class => "", readonly: true %>
-
-  <%= f.label :password, class: '' do %>
-  <h1 class="font-medium">Password Login</h1>
-  <%= f.password_field :password, required: true, placeholder: "********", autocomplete: "current-password", :class => "bg-black-900" %>
-  <% end %>
-
-  <footer>
-    <%= f.submit "Enter", class: "" %>
-  </footer>
-
-
-  <% end %>
-</section>
+  <div class="field">
+    <%= f.label :email, "Email" %>
+    <%= f.email_field :email, class: "input", required: true, autofocus: true, autocomplete: "email" %>
+  </div>
+  <div class="field">
+    <%= f.label :password, "Password" %>
+    <%= f.password_field :password, class: "input", required: true, autocomplete: "current-password" %>
+  </div>
+  <label class="flex items-center gap-3"><%= f.check_box :remember_me, class: "size-5 accent-violet" %> Remember me</label>
+  <%= f.submit "Sign in", class: "btn" %>
+<% end %>

@@ -1,0 +1,30 @@
+<% provide(:theme, "day") %>
+<article>
+  <header class="gutter pb-10 pt-12 md:pt-20">
+    <h1 class="display max-w-[14ch]"><%= @page.title %></h1>
+    <% if @page.og_description.present? %><p class="subhead mt-8 max-w-[40ch]"><%= @page.og_description %></p><% end %>
+  </header>
+  <% if @page.cover? %><%= image_tag @page.og_image.url, alt: "", class: "max-h-[90vh] w-full object-cover", fetchpriority: "high" %><% end %>
+
+  <div class="gutter">
+    <% if @page.facts.any? %>
+      <dl class="grid grid-cols-2 gap-x-6 gap-y-8 py-10 md:grid-cols-4">
+        <% @page.facts.each do |fact| %><div class="flex flex-col-reverse justify-end"><dt class="text-base text-[var(--text-muted)]"><%= fact.title %></dt><dd class="title"><%= fact.content %></dd></div><% end %>
+      </dl>
+    <% end %>
+    <% if @page.content.present? %><div class="prose-house subhead max-w-[46ch] py-10"><%= paragraphs @page.content %></div><% end %>
+    <%= render "content/story", page: @page %>
+    <% if @page.metrics.any? %>
+      <section class="py-16" aria-labelledby="results">
+        <h2 class="headline mb-8" id="results">Results</h2>
+        <dl class="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-4">
+          <% @page.metrics.each do |metric| %><div class="rule flex flex-col-reverse justify-end"><dt class="text-base text-[var(--text-muted)]"><%= metric.title %></dt><dd class="headline"><%= metric.content %></dd></div><% end %>
+        </dl>
+      </section>
+    <% end %>
+    <% if @page.tags.any? %><p class="flex flex-wrap gap-2 py-6"><% @page.tags.each do |tag| %><span class="tag"><%= tag.name %></span><% end %></p><% end %>
+  </div>
+</article>
+<% if @next %>
+  <nav class="gutter pt-16" aria-label="Next project"><div class="rule"><%= link_to @next.public_path, class: "group block" do %><span class="text-base text-[var(--text-muted)]">Next project</span><span class="headline mt-2 block group-hover:text-[var(--accent)]"><%= @next.title %></span><% end %></div></nav>
+<% end %>

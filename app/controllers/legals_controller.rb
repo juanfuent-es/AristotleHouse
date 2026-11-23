@@ -1,11 +1,9 @@
 class LegalsController < ApplicationController
-  
-  def terms
-  end
+  before_action { @page = Page.static.find_by(slug: action_name) }
 
-  def privacy
-  end
+  def terms = render(:show)
 
-  def cookies
-  end
+  def privacy = render(:show)
+
+  def cookies = render(:show)
 end

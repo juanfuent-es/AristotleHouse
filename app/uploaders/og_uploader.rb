@@ -22,16 +22,11 @@ class OgUploader < CarrierWave::Uploader::Base
   
   private
 
+  # Only once, on the original version. Audio and video have no size to read.
   def capture_size(file)
-    if version_name.blank? # Only do this once, to the original version
-      if file.path.nil? # file sometimes is in memory
-        img = ::MiniMagick::Image::read(file.file)
-        model.width = img[:width]
-        model.height = img[:height]
-      else
-        model.width, model.height = `identify -format "%wx %h" #{file.path}`.split(/x/).map{|dim| dim.to_i }
-      end
-    end
+    return unless version_name.blank? && file.content_type.to_s.start_with?("image/")
+    img = ::MiniMagick::Image.read(file.read)
+    model.width = img[:width]
+    model.height = img[:height]
   end
-
 end

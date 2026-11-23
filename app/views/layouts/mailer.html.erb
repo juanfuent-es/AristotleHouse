@@ -1,13 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <style>
-      /* Email styles need to be inline */
-    </style>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
-
-  <body>
-    <%= yield %>
+  <body style="margin:0;padding:0;background:#F2EFE8;color:#0B0A0F;font-family:Inter,Helvetica,Arial,sans-serif;font-size:16px;line-height:1.5;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F2EFE8;">
+      <tr><td align="center" style="padding:32px 16px;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;">
+          <tr><td style="padding-bottom:32px;font-family:'Zalando Sans Expanded','Arial Black',Arial,sans-serif;font-weight:800;font-size:22px;letter-spacing:-0.04em;">Aristotle House</td></tr>
+          <tr><td style="border-top:1px solid #CFCAC0;padding:32px 0;"><%= yield %></td></tr>
+          <tr><td style="border-top:1px solid #CFCAC0;padding-top:16px;font-size:13px;color:#625D55;">Aristotle House, Dubai, UAE</td></tr>
+        </table>
+      </td></tr>
+    </table>
   </body>
 </html>

@@ -1,35 +1,13 @@
 <!DOCTYPE html>
-<html lang="<%= @lang %>" dir="ltr" xmlns="https://www.w3.org/1999/xhtml" xmlns:og="https://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml" class="overflow-x-hidden w-full">
-  <head>
-    <meta charset="utf-8">
-    <%= render "shared/fonts" %>
-    <%= render "shared/tag_manager" %>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-    <%= render "shared/metadata" %>
-    <%= render "shared/favicons" %>
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
-    <link rel="stylesheet" href="https://unpkg.com/balloon-css/balloon.min.css">
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    <script type="application/ld+json">
-    {
-    "@context": "http://schema.org",
-    <%= render "json_ld/page" %>,
-    <%= render "json_ld/publisher" %>,
-    <%= render "json_ld/provider" %>
-    }
-    </script>
-  </head>
-  <body class="min-h-dvh flex flex-col text-sm overflow-x-hidden w-full">
-    <!-- <div class="bg-gl w-full h-full absolute left-0 top-0 bg-yellow-800 pointer-events-none"></div> -->
-    <%= render "shared/tag_manager_ns" %>
-    <%= render "shared/preloader" %>
+<html lang="<%= @lang %>" class="<%= content_for(:theme).presence || "night" %>">
+  <head><%= render "shared/head" %></head>
+  <body class="flex min-h-dvh flex-col">
+    <a href="#app" class="sr-only focus:not-sr-only">Skip to content</a>
+    <%= render "shared/admin_bar" %>
     <%= render "shared/header" %>
-    <main id="app" class="flex-1 w-full px-4 flex flex-col"><%= yield %></main>
+    <main id="app" class="flex-1"><%= yield %></main>
     <%= render "shared/footer" %>
-    <% render "pwa/sw" %>
     <%= vite_client_tag %>
-    <%= vite_javascript_tag 'application', "data-turbo-track": "reload" %>
+    <%= vite_javascript_tag "application" %>
   </body>
 </html>

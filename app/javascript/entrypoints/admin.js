@@ -1,24 +1,39 @@
-import Rails from "@rails/ujs"
-import Forms from "../admin/forms"
+import Rails from '@rails/ujs'
+import Credits from '../components/credits'
+import Blocks from '../admin/blocks'
 
-class Admin {
-    constructor() {
-        Rails.start()
-        this.events()
-        // 
-        this.forms = new Forms()
-    }
+Rails.start()
+new Credits()
 
-    events() {
-        
-    }
+document.querySelectorAll('[data-blocks]').forEach((el) => new Blocks(el))
 
-    loaded() {
-        console.log("load")
-    }
-}
+// Live counters for limited fields
+document.querySelectorAll('[data-count]').forEach((input) => {
+    const output = document.getElementById(input.dataset.count)
+    const update = () => { output.textContent = `${input.value.length} / ${input.maxLength}` }
+    input.addEventListener('input', update)
+    update()
+})
 
-window["app"] = new Admin()
-window.addEventListener("load", () => {
-    window["app"].loaded()
+// Local preview of a chosen file, before it is uploaded
+document.querySelectorAll('input[type=file][data-preview]').forEach((input) => {
+    const image = document.getElementById(input.dataset.preview)
+    let url
+    input.addEventListener('change', () => {
+        const [file] = input.files
+        if (url) URL.revokeObjectURL(url)
+        if (!file || !file.type.startsWith('image/')) return
+        url = URL.createObjectURL(file)
+        image.src = url
+        image.hidden = false
+    })
+})
+
+// Warn before leaving with unsaved changes
+document.querySelectorAll('form[data-guard]').forEach((form) => {
+    let dirty = form.dataset.guard === 'dirty'
+    form.addEventListener('input', () => { dirty = true })
+    form.addEventListener('blocks:change', () => { dirty = true })
+    form.addEventListener('submit', () => { dirty = false })
+    window.addEventListener('beforeunload', (e) => { if (dirty) e.preventDefault() })
 })

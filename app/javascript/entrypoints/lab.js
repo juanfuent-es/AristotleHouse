@@ -6,18 +6,12 @@ import Editor from "../editor/index"
 class Lab extends Editor {
     constructor() {
         super()
-        this.preloader = document.querySelector("#preloader")
-        this.credits = new Credits("🕴️ Hello Friend!")
-    }
-
-    loaded() {
-        this.preloader.classList.add("loaded")
+        this.credits = new Credits()
     }
 
 }
 
 window.web = new Lab()
-window.onload = window.web.loaded()
 window.onpopstate = (event) => {
     window.location.reload()
 }

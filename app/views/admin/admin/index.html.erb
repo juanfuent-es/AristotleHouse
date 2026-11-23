@@ -1,0 +1,9 @@
+<%= render "admin/shared/heading", title: "Overview", action: ["New project", new_admin_project_path] %>
+<p class="notice mb-8"><% if site.coming_soon %>The site is closed. Visitors see the holding screen; you can browse everything while signed in.<% else %>The site is open to visitors.<% end %></p>
+<dl class="mb-10 grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-4">
+  <% { "Projects" => :projects, "Articles" => :articles, "Drafts" => :drafts, "Images" => :images }.each do |label, key| %>
+    <div class="rule flex flex-col-reverse"><dt class="text-base text-[var(--text-muted)]"><%= label %></dt><dd class="title !text-4xl"><%= @counts[key] %></dd></div>
+  <% end %>
+</dl>
+<h2 class="title mb-3">Recently edited</h2>
+<%= render "admin/content/table", pages: @recent, mixed: true %>

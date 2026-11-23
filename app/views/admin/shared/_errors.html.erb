@@ -1,0 +1,6 @@
+<% if object.errors.any? %>
+  <div class="notice notice--error mb-6" role="alert">
+    <p class="font-medium">This could not be saved.</p>
+    <ul class="mt-1 list-disc pl-5"><% object.errors.full_messages.uniq.each do |message| %><li><%= message %></li><% end %></ul>
+  </div>
+<% end %>

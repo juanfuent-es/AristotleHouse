@@ -1,0 +1,10 @@
+<%= render "admin/shared/heading", title: "New image" %>
+<%= render "admin/shared/errors", object: @image %>
+<%= form_with model: [:admin, @image], multipart: true, class: "panel grid max-w-2xl gap-5" do |f| %>
+  <div class="field"><%= f.label :title %><%= f.text_field :title, class: "input", required: true, maxlength: 160 %></div>
+  <div class="field"><%= f.label :alt, "Alternative text" %><%= f.text_field :alt, class: "input", maxlength: 255 %><p class="field__hint">What someone who cannot see the image should know.</p></div>
+  <img id="file-preview" alt="Preview" class="max-h-80 w-auto" hidden>
+  <div class="field"><%= f.label :file, "File" %><%= f.file_field :file, class: "input", required: true, accept: "image/jpeg,image/png,image/webp,image/gif", data: { preview: "file-preview" } %></div>
+
+  <p><%= f.submit "Add to library", class: "btn" %></p>
+<% end %>

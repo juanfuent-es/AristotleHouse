@@ -1,0 +1,11 @@
+<% label = { "project" => "Projects", "article" => "Articles", "static" => "Pages" }[kind] %>
+<% action = kind == "static" ? nil : ["New #{kind}", url_for(action: :new)] %>
+<%= render "admin/shared/heading", title: label, action: action %>
+<% if @pages.any? %>
+  <%= render "admin/content/table", pages: @pages %>
+<% else %>
+  <div class="panel">
+    <p class="title">No <%= label.downcase %> yet</p>
+    <p class="mt-2"><%= kind == "project" ? "A project starts as a draft. It reaches visitors when you publish it." : "Write the first one. It stays a draft until you publish it." %></p>
+  </div>
+<% end %>

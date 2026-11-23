@@ -1,56 +1,28 @@
+# Page covers. The original also works as the share image.
 class PageUploader < CarrierWave::Uploader::Base
+  include CarrierWave::MiniMagick
 
   storage :file
 
-  # Override the directory where uploaded files will be stored.
-  # This is a sensible default for uploaders that are meant to be mounted:
   def store_dir
     "uploads/meta-images/#{mounted_as}/#{model.id}"
   end
 
-  # Provide a default URL as a default if there hasn't been a file uploaded:
-  def default_url(*args)
-    "/static/honey-comb-share-default.png"
+  def cache_dir
+    "#{Rails.root}/tmp/uploads"
   end
 
-  # Process files as they are uploaded:
-  # process scale: [200, 300]
-  #
-  # def scale(width, height)
-  #   # do something
-  # end
+  def default_url(*)
+    "/brand/share.jpg"
+  end
 
-  # version :jpg do
-  #   process convert: :jpg
-  #   process resize_to_limit: [600, 777]
-  #   process optimize: [{ quality: 70 }] if RUBY_PLATFORM =~ /x86_64-linux/
-  #   def full_filename (for_file = model.source.file)
-  #     "#{model.slug}.jpg"
-  #   end
-  # end
+  process resize_to_limit: [2560, 2560]
 
-  # version :webp, from_version: :jpg do
-  #   process convert_to_webp: [{ quality: 80, method: 6 }] if RUBY_PLATFORM =~ /x86_64-linux/
-  #   def full_filename (for_file = model.source.file)
-  #     "#{model.slug}.webp"
-  #   end
-  # end
+  version :card do
+    process resize_to_limit: [1280, 1280]
+  end
 
-  # Create different versions of your uploaded files:
-  # version :thumb do
-  #   process resize_to_fit: [50, 50]
-  # end
-
-  # Add an allowlist of extensions which are allowed to be uploaded.
-  # For images you might use something like this:
   def extension_allowlist
-    %w(jpg jpeg gif png)
+    %w[jpg jpeg gif png webp]
   end
-
-  # Override the filename of the uploaded files:
-  # Avoid using model.id or version_name here, see uploader/store.rb for details.
-  # def filename
-  #   "something.jpg" if original_filename
-  # end
-
 end

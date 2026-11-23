@@ -13,7 +13,7 @@ class VideoUploader < CarrierWave::Uploader::Base
   end
 
   version :v_1080 do
-    process encode_video: [:mp4, :custom => %w(-c:a copy -crf 22 -speed ultrafast), resolution: "1920×1080"]
+    process encode_video: [:mp4, :custom => %w(-c:a copy -crf 22 -speed ultrafast), resolution: "1920x1080"]
     def full_filename (for_file = model.source.file)
       "#{model.slug}.1080p.mp4"
     end

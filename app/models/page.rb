@@ -1,73 +1,124 @@
+# Projects (Work), articles (Thinking) and static pages share this table.
+# The editorial state lives in `category`: "project" is published, "project_draft"
+# is not. Static pages are always published.
 class Page < ApplicationRecord
-	before_save :set_slug
-    # attrs obligatorios
-    validates_uniqueness_of :slug
-    # validaciones de longitud
-    validates :title, length: { maximum: 70 }, presence: true
-    validates :og_description, length: { maximum: 200 }
-    validates :og_title, length: { maximum: 70 }
+  KINDS = %w[project article static].freeze
+  DRAFT_SUFFIX = "_draft".freeze
+  STATUSES = %w[draft published].freeze
 
-    #relations
-	has_many :likes, inverse_of: :page
-	has_many :visits, inverse_of: :page
-	has_many :visitors, through: :visits
-	has_many :comments, :as => :commentable, inverse_of: :page
-	accepts_nested_attributes_for :visits, allow_destroy: true
+  attribute :lang, default: "en"
 
-    belongs_to :versionable, polymorphic: true, optional: true
-    belongs_to :author, class_name: 'User', inverse_of: :pages, optional: true
+  before_validation :set_defaults
+  before_validation :set_slug
 
-	# tags
-	has_many :taggings, inverse_of: :page
-	has_many :tags, through: :taggings
+  validates :title, length: { maximum: 70 }, presence: true
+  validates :slug, presence: true, uniqueness: true, format: { with: /\A[a-z0-9]+(-[a-z0-9]+)*\z/, message: "can only use lowercase letters, numbers and hyphens" }
+  validates :og_title, length: { maximum: 70 }
+  validates :og_description, length: { maximum: 200 }
+  validates :category, inclusion: { in: ->(_) { CATEGORIES } }
+  # A draft can be incomplete. What visitors see cannot.
+  validates :og_description, presence: true, if: -> { published? && kind != "static" }
 
-	mount_uploader :og_image, PageUploader
+  CATEGORIES = %w[project project_draft article article_draft static web-lab].freeze
 
-	has_many :blocks, inverse_of: :page, dependent: :destroy
-	accepts_nested_attributes_for :blocks, allow_destroy: true, reject_if: proc { |attributes| attributes["content"].blank? }
+  #relations
+  has_many :likes, inverse_of: :page
+  has_many :visits, inverse_of: :page
+  has_many :visitors, through: :visits
+  has_many :comments, as: :commentable, inverse_of: :commentable
+  accepts_nested_attributes_for :visits, allow_destroy: true
 
-    def full_url
-        return ['', self.lang, self.slug].join("/")
+  belongs_to :versionable, polymorphic: true, optional: true
+  belongs_to :author, class_name: "User", inverse_of: :pages, optional: true
+
+  # tags
+  has_many :taggings, inverse_of: :page, dependent: :destroy
+  has_many :tags, through: :taggings
+
+  mount_uploader :og_image, PageUploader
+
+  has_many :blocks, -> { order(:number) }, inverse_of: :page, dependent: :destroy
+  accepts_nested_attributes_for :blocks, allow_destroy: true, reject_if: proc { |attributes| attributes["id"].blank? && attributes["content"].blank? }
+
+  scope :projects, -> { where(category: %w[project project_draft]) }
+  scope :articles, -> { where(category: %w[article article_draft]) }
+  scope :static, -> { where(category: "static") }
+  scope :published, -> { where(category: KINDS) }
+  scope :drafts, -> { where(category: %w[project_draft article_draft]) }
+  scope :recent, -> { order(created_at: :desc) }
+
+  def kind
+    category.to_s.delete_suffix(DRAFT_SUFFIX)
+  end
+
+  def published?
+    KINDS.include?(category)
+  end
+
+  def status
+    published? ? "published" : "draft"
+  end
+
+  def status=(value)
+    return unless STATUSES.include?(value.to_s) && kind != "static"
+    self.category = value.to_s == "draft" ? "#{kind}#{DRAFT_SUFFIX}" : kind
+  end
+
+  def public_path
+    case kind
+    when "project" then "/work/#{slug}"
+    when "article" then "/thinking/#{slug}"
+    else "/#{slug}"
     end
+  end
 
-    # views, likes
+  def cover?
+    self[:og_image].present?
+  end
 
-    def total_views
-		views = 0
-		self.visits.each { |l| views += l.counter }
-		return views
-	end
+  # Grouped blocks. Reads from the loaded association so lists do not query per row.
+  def blocks_of(*categories)
+    blocks.select { |block| categories.include?(block.category) }
+  end
 
-	def total_likes
-		counter = 0
-		self.likes.each { |l| counter += l.count }
-		return counter
-	end
+  def facts = blocks_of("fact")
 
-	#tagging methods
-	def self.tag_counts
-		Tag.select("tags.*, count(taggings.tag_id) as count").joins(:taggings).group("taggings.tag_id")
-	end
+  def metrics = blocks_of("metric")
 
-	def self.tagged_with(name)
-		Tag.find_by_name!(name).posts
-	end
+  def story = blocks_of(*Block::STORY)
 
-	def tag_list
-		tags.map(&:name).join(", ")
-	end
+  def fact(label)
+    facts.find { |block| block.title.casecmp?(label) }&.content
+  end
 
-	def tag_list=(names)
-		self.tags = names.gsub(/\s+/, "").split(",").map do |n|
-			Tag.where(name: n.strip).first_or_create!
-		end
-	end
+  # views, likes
 
-	def set_slug
-		if self.slug.blank?
-			_title = ActiveSupport::Inflector.transliterate(og_title.downcase).gsub(/\W+/, "-")
-			self.slug = _title.strip.squeeze(' ').gsub(/[^0-9A-Za-z]/, '-')
-		end
-	end
+  def total_views
+    visits.sum(&:counter)
+  end
 
+  def total_likes
+    likes.sum(&:count)
+  end
+
+  #tagging methods
+  def tag_list
+    tags.map(&:name).join(", ")
+  end
+
+  def tag_list=(names)
+    self.tags = names.to_s.split(",").map(&:strip).reject(&:blank?).uniq(&:downcase).map do |name|
+      Tag.where("lower(name) = ?", name.downcase).first || Tag.create!(name: name.first(20))
+    end
+  end
+
+  private
+
+  def set_defaults
+    self.og_title = title.to_s if og_title.blank?
+  end
+
+  def set_slug
+    self.slug = (slug.presence || og_title.presence || title).to_s.parameterize if slug.blank? || slug_changed?
+  end
 end

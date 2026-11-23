@@ -1,0 +1,23 @@
+<% provide(:title, "") %>
+<section class="relative isolate gutter flex min-h-[calc(100dvh-5rem)] flex-col justify-between overflow-hidden pb-6">
+  <img src="/brand/img/head.webp" alt="Bust of Aristotle read as a heat map" width="1200" height="1200" fetchpriority="high" class="reading-cut absolute -z-10 bottom-0 right-0 h-[70%] w-auto max-w-none object-contain translate-x-1/4 md:h-full md:translate-x-0">
+  <h1 class="display mt-8 max-w-[11ch] !text-[clamp(2.5rem,0.8rem+5.6vw,7rem)] md:my-auto">We read people before we build for them.</h1>
+  <p class="micro flex flex-wrap justify-between gap-x-10 gap-y-1"><span><%= site.coordinates.join("  ") %></span><span><%= site.tagline %></span></p>
+</section>
+
+<section class="gutter grid gap-10 pt-24 md:grid-cols-2 md:pt-36">
+  <h2 class="headline">Every project makes the next one smarter.</h2>
+  <p class="subhead max-w-[36ch] text-soft">We build worlds for brands, then study how people move through them: where they stop, what they reach for and what they remember. The findings shape the next world.</p>
+</section>
+
+<section class="gutter pt-24 md:pt-36" aria-labelledby="work">
+  <div class="mb-8 flex items-baseline justify-between gap-6"><h2 class="headline" id="work">Work</h2><%= link_to "All work", projects_path, class: "link" %></div>
+  <%= render "projects/grid", projects: @projects %>
+</section>
+
+<% if @articles.any? %>
+  <section class="gutter pt-24 md:pt-36" aria-labelledby="thinking">
+    <div class="mb-8 flex items-baseline justify-between gap-6"><h2 class="headline" id="thinking">Thinking</h2><%= link_to "All thinking", articles_path, class: "link" %></div>
+    <%= render "articles/list", articles: @articles %>
+  </section>
+<% end %>

@@ -1,0 +1,8 @@
+<header class="gutter pb-16 pt-16 md:pt-24"><h1 class="display max-w-[14ch]">Tell us what you want people to feel.</h1></header>
+<div class="gutter grid gap-10 md:grid-cols-2">
+  <div class="rule">
+    <% if site.contact_email %><p class="subhead"><%= mail_to site.contact_email, site.contact_email, class: "link" %></p><% else %><p class="subhead text-soft">Our contact details will be here soon.</p><% end %>
+    <% if @page&.content.present? %><div class="prose-house mt-8 max-w-[60ch]"><%= paragraphs @page.content %></div><% end %>
+  </div>
+  <div class="rule"><p class="subhead"><%= site.city %>, <%= site.country %></p><p class="micro mt-3 text-soft"><%= site.coordinates.join("  ") %></p></div>
+</div>

@@ -1,52 +1,54 @@
 class ApplicationController < ActionController::Base
+  before_action :redirect_nonwww, if: -> { Rails.env.production? }
+  before_action :hold_until_launch
 
-	before_action :redirect_nonwww, if: -> { Rails.env.production? }
-	# before_filter :redirect_nonwww
+  after_action :set_vary_header
+  around_action :switch_lang
 
-	after_action :set_vary_header
-	around_action :switch_lang
+  helper_method :site, :admin?
 
-    # ¿Hay un administrador logueado?
-    def authenticate_admin!
-		if signed_in?
-        	redirect_to root_path if !current_user.admin?
-		else
-			authenticate_user!
-		end
-    end
+  def site
+    Rails.configuration.x.site
+  end
 
-	def switch_lang(&action)
-		@lang = "es"
-		# Evaluamos si existe el idioma en parámtro
-		if params[:lang]
-			# Si el idioma es válido se asigna como idioma de sitio
-			if locale_valid?(params[:lang])
-				@lang = params[:lang].to_s.downcase
-			else
-				render_not_found
-			end
-		end
-		I18n.with_locale(@lang, &action)
-	end
+  def admin?
+    user_signed_in? && current_user.admin? && !current_user.banned?
+  end
 
-	def render_not_found
-		render template: 'errors/not_found', status: 404, layout: "errors"
-	end
+  # Is there an administrator signed in?
+  def authenticate_admin!
+    return authenticate_user! unless signed_in?
+    redirect_to root_path unless admin?
+  end
 
-    private 
+  def switch_lang(&action)
+    @lang = I18n.default_locale.to_s
+    I18n.with_locale(@lang, &action)
+  end
 
-	def redirect_nonwww
-		if (request.host.include? 'www')
-			redirect_to 'https://juanfuent.es' + request.fullpath, :status => 301, allow_other_host: true
-		end
-	end
+  def render_not_found
+    render template: "errors/not_found", status: :not_found, layout: "errors"
+  end
 
-	def locale_valid?(locale)
-		I18n.available_locales.map(&:to_s).include?(locale)
-	end
+  private
 
-    def set_vary_header
-		response.headers["Vary"] = "accept" if request.xhr?
-	end
+  def after_sign_in_path_for(resource)
+    stored_location_for(resource) || (admin? ? admin_path : root_path)
+  end
 
+  # Visitors only reach the holding screen until launch. Controllers that must
+  # answer before launch (login, errors, robots...) skip this filter.
+  def hold_until_launch
+    return if !site.coming_soon || admin? || devise_controller?
+    redirect_to root_path
+  end
+
+  def redirect_nonwww
+    return unless request.host.start_with?("www.")
+    redirect_to "#{request.protocol}#{request.host.delete_prefix("www.")}#{request.fullpath}", status: :moved_permanently, allow_other_host: true
+  end
+
+  def set_vary_header
+    response.headers["Vary"] = "accept" if request.xhr?
+  end
 end

@@ -1,0 +1,7 @@
+<%= render "admin/shared/heading", title: "Images", action: ["New image", new_admin_image_path] %>
+<% if @images.empty? %><div class="panel"><p class="title">The library is empty</p><p class="mt-2">Add images here, then place them in projects and articles.</p></div><% end %>
+<ul class="grid grid-cols-2 gap-6 md:grid-cols-3 xl:grid-cols-4">
+  <% @images.each do |image| %>
+    <li><%= link_to admin_image_path(image), class: "block" do %><%= image_tag image.file.thumb.url, alt: "", loading: "lazy", class: "aspect-square w-full object-cover" %><span class="mt-2 block text-base font-medium"><%= image.title %></span><% end %></li>
+  <% end %>
+</ul>

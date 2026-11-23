@@ -127,7 +127,5 @@ rake secret
 sudo EDITOR=nano rails credentials:edit
 
 git config --global color.ui true
-git config --global user.name "JuanFuent.es"
-git config --global user.email "input@juanfuent.es"
 ssh-keygen
 cat ~/.ssh/id_rsa.pub

@@ -1,18 +1,15 @@
 class SitemapsController < ApplicationController
+  skip_before_action :hold_until_launch
+  before_action { @base_url = request.base_url }
+  before_action { request.format = :xml }
 
-	before_action :set_base_url
+  def index
+  end
 
-	def index
-	end
+  def static
+    @pages = site.coming_soon ? [] : Page.published
+  end
 
-	def static
-        @pages = Page.where(restricted: true)
-	end
-
-	private 
-
-	def set_base_url
-		@base_url = "#{request.protocol}#{request.host_with_port}"
-	end
-
+  def images
+  end
 end

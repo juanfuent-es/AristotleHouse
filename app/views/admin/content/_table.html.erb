@@ -1,0 +1,17 @@
+<% paths = { "project" => :edit_admin_project_path, "article" => :edit_admin_article_path, "static" => :edit_admin_page_path } %>
+<div class="overflow-x-auto">
+  <table class="table">
+    <thead><tr><th>Title</th><% if local_assigns[:mixed] %><th>Type</th><% end %><th>Status</th><th>Updated</th><th><span class="sr-only">Actions</span></th></tr></thead>
+    <tbody>
+      <% pages.each do |page| %>
+        <tr>
+          <td><%= link_to page.title, public_send(paths.fetch(page.kind), page), class: "link font-medium" %></td>
+          <% if local_assigns[:mixed] %><td><%= { "static" => "Page" }.fetch(page.kind, page.kind.capitalize) %></td><% end %>
+          <td><span class="tag <%= "tag--on" if page.published? %>"><%= page.published? ? "Published" : "Draft" %></span></td>
+          <td class="whitespace-nowrap"><%= l page.updated_at.to_date, format: :long %></td>
+          <td class="whitespace-nowrap text-right"><%= link_to page.published? ? "View" : "Preview", page.public_path, class: "link" %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
