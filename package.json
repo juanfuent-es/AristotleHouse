@@ -26,6 +26,7 @@
     "vite-plugin-glsl": "^1.6.3"
   },
   "scripts": {
+    "brand:icons": "node bin/build-icons.mjs",
     "start": "npm run css",
     "build": "npm run build:css",
     "css": "npm run build:css -- --watch=always",

@@ -111,9 +111,11 @@ The WebGL scene reads them from `app/javascript/scene/spectra.js`.
 
 ## Marks
 - **The gaze** has two masters: light shapes on dark grounds, dark shapes on light grounds. Never inverted, outlined or recoloured inside.
-- **The seal** takes over below 40 px, down to 16 px. Favicons and app icons use it.
+- **The gaze** also signs favicons and app icons. Browser tabs use the dark master on a light browser theme and the light master on a dark theme; raster fallbacks and app icons use the dark master on bone.
+- **The seal** is available as a secondary compact mark.
 - As space shrinks the brand drops a layer: wordmark and icon, icon alone, seal.
 - Files live in `public/brand`. They were extracted from the presentation; replace them with the master artwork when the studio delivers it.
+- The default social image is `public/brand/share.jpg`, 1280 × 640. Its editable composition is `design/share.html`, using the self-hosted Zalando Sans Expanded and Inter fonts. Capture it at that viewport after fonts load; page covers still override it.
 
 ## Layout & Elevation
 - Square corners, 1px rules, no shadows. Depth comes from light and from tone.

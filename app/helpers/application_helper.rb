@@ -20,7 +20,7 @@ module ApplicationHelper
     description.presence || site.description
   end
 
-  # Gaze and wordmark from 40 px up. Below that the seal signs alone.
+  # Use the supplied gaze and wordmark masters together.
   def lockup(tone: :light, **options)
     image_tag "/brand/lockup-#{tone}.svg", alt: site.name, width: 720, height: 78, **options
   end

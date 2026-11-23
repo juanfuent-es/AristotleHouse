@@ -34,6 +34,12 @@ Projects (`/work`), articles (`/thinking`) and static pages are stored in `pages
 
 [DESIGN.md](DESIGN.md) is the design contract. Source material is in `design/toolkit`.
 
+Favicons follow the browser colour scheme using the two gaze masters. Run
+`npm run brand:icons` after changing those masters to rebuild the SVG, ICO and app
+icons (requires ImageMagick). The social preview source is `design/share.html`;
+capture it at 1280 × 640 after `document.fonts.ready` and export it as
+`public/brand/share.jpg`.
+
 ## Test
 
     bin/rails test
