@@ -7,21 +7,54 @@
   <canvas class="holding__canvas" aria-hidden="true" data-model="/models/aristotle_2k_webp.glb" data-model-small="/models/aristotle_1k_webp.glb"></canvas>
 
   <header class="gutter micro flex items-start justify-between gap-6 pt-6">
-    <%= lockup(class: "w-52 h-auto md:w-72") %>
-    <p class="text-right"><%= site.tagline %><br><span class="text-soft">Est. <%= site.established %></span></p>
+    <div>
+      <%= lockup(class: "only-night w-52 h-auto md:w-72") %>
+      <%= lockup(tone: :dark, class: "only-day w-52 h-auto md:w-72") %>
+    </div>
+    <div class="flex items-start gap-4 text-right">
+      <p><%= site.tagline %><br><span class="text-[var(--text-soft)]">Est. <%= site.established %> · DXB</span></p>
+      <%= micrograph :crosshair, class: "hidden size-10 shrink-0 md:block" %>
+    </div>
   </header>
+
+  <div class="holding__side holding__live gutter micro hidden md:flex" role="group" aria-label="View of the bust">
+    <div class="flex flex-col gap-1">
+      <% [["left", "head-left", "Left profile"], ["front", "head-front", "Front"], ["right", "head-right", "Right profile"]].each_with_index do |(view, symbol, label), i| %>
+        <button type="button" class="holding__view" data-view="<%= view %>" data-round="0<%= i + 1 %>" aria-pressed="<%= view == "front" %>" aria-label="<%= label %>"><%= micrograph symbol, class: "size-9" %></button>
+      <% end %>
+      <span class="mt-1" data-ui="round">RD 02/03</span>
+    </div>
+    <div class="ml-auto flex flex-col items-end gap-1.5" aria-hidden="true">
+      <%= micrograph :barcode, class: "h-7 w-36" %>
+      <span>N° 001&ensp;AH/27&ensp;<span data-ui="observation">OBS.</span></span>
+    </div>
+  </div>
 
   <div class="holding__word">
     <h1><span data-glass>Coming</span> <span data-glass>soon</span></h1>
   </div>
 
   <footer class="gutter micro grid grid-cols-2 items-end gap-x-6 gap-y-3 pb-5 md:grid-cols-3">
-    <p><%= site.city %>, <%= site.country %><br><span class="text-soft"><%= site.coordinates.first %>&ensp;<%= site.coordinates.last %></span></p>
-    <div class="holding__live holding__spectra order-last col-span-2 flex justify-center gap-2 md:order-none md:col-span-1" role="group" aria-label="Reading">
-      <button type="button" class="micro" data-spectrum="lyceum" aria-pressed="true">Lyceum</button>
+    <div class="flex items-end gap-4">
+      <%= micrograph :globe, class: "hidden h-10 w-16 shrink-0 md:block" %>
+      <p><%= site.city %>, <%= site.country %> <span data-ui="clock"></span><br><span class="text-[var(--text-soft)]"><%= site.coordinates.first %>&ensp;<%= site.coordinates.last %></span></p>
+    </div>
+    <div class="holding__live holding__spectra order-last col-span-2 flex justify-center gap-1 md:order-none md:col-span-1" role="group" aria-label="Reading">
+      <button type="button" class="micro" data-spectrum="live" aria-pressed="true">Live</button>
+      <button type="button" class="micro" data-spectrum="lyceum" aria-pressed="false">Lyceum</button>
       <button type="button" class="micro" data-spectrum="ring" aria-pressed="false">Isotherm</button>
       <button type="button" class="micro" data-spectrum="ultra" aria-pressed="false">Ultra</button>
     </div>
-    <p class="holding__live text-right" aria-hidden="true"><span class="holding__state" data-state><span class="dot"></span>Perceived</span><br><span class="text-soft" data-temperature>36.4°C</span></p>
+    <div class="holding__weather flex flex-col items-end gap-2 text-right">
+      <div class="flex flex-wrap items-center justify-end gap-x-3 gap-y-1"><span class="pill" data-ui="state"><span class="dot"></span>Perceived</span><span data-ui="perceived"></span></div>
+      <div class="holding__ruler" aria-hidden="true">
+        <span class="holding__walker" data-ui="walker"><%= micrograph :peripatetic, class: "h-9 w-6" %></span>
+        <%= micrograph :ruler, class: "block h-3 w-full" %>
+        <span class="flex justify-between"><span>0</span><span>50°C</span></span>
+      </div>
+      <p class="hidden text-[var(--text-soft)] md:block">Air <span data-ui="air"></span>&ensp;RH <span data-ui="humidity"></span>&ensp;Wind <span data-ui="wind" class="normal-case"></span><br><span data-ui="phase"></span>, sun <span data-ui="sun"></span>&ensp;<a class="link" data-ui="source" href="https://www.met.no/en" rel="noopener">MET Norway</a></p>
+    </div>
   </footer>
+
+  <div class="holding__sight micro" data-ui="sight" aria-hidden="true"><%= micrograph :crosshair, class: "size-14" %><span class="box" data-ui="reading">Field read</span></div>
 </main>

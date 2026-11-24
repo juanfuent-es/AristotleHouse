@@ -4,5 +4,5 @@
     <% if site.contact_email %><p class="subhead"><%= mail_to site.contact_email, site.contact_email, class: "link" %></p><% else %><p class="subhead text-soft">Our contact details will be here soon.</p><% end %>
     <% if @page&.content.present? %><div class="prose-house mt-8 max-w-[60ch]"><%= paragraphs @page.content %></div><% end %>
   </div>
-  <div class="rule"><p class="subhead"><%= site.city %>, <%= site.country %></p><p class="micro mt-3 text-soft"><%= site.coordinates.join("  ") %></p></div>
+  <div class="rule"><p class="subhead"><%= site.city %>, <%= site.country %></p><p class="micro mt-4 flex items-center gap-4 text-soft"><%= micrograph :globe, class: "h-10 w-16" %><%= site.coordinates.join("  ") %></p></div>
 </div>

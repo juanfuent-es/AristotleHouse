@@ -20,6 +20,34 @@
         vertical-align: 0.08em;
     }
 
+    /* Micrographic labels */
+    .pill,
+    .box {
+        display: inline-flex;
+        align-items: center;
+        border: 1.3px solid currentColor;
+        padding: 0.125rem 0.5rem;
+        white-space: nowrap;
+    }
+
+    .pill {
+        border-radius: 99px;
+        padding-inline: 0.75rem;
+    }
+
+    .night .only-day,
+    .day .only-night {
+        display: none;
+    }
+
+    .bracket::before {
+        content: "[\2002";
+    }
+
+    .bracket::after {
+        content: "\2002]";
+    }
+
     .gutter {
         padding-inline: clamp(1rem, 4vw, 4rem);
     }

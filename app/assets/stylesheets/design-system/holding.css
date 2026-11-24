@@ -32,7 +32,7 @@
 
     .holding__word {
         align-self: end;
-        padding-bottom: clamp(1.5rem, 7vh, 6rem);
+        padding-bottom: clamp(0.5rem, 1.5vh, 1.5rem);
         text-align: center;
         user-select: none;
     }
@@ -59,7 +59,7 @@
     }
 
     .holding__spectra button[aria-pressed="true"] {
-        color: var(--color-bone);
+        color: var(--text);
         text-decoration: underline;
         text-decoration-color: var(--color-pink);
         text-decoration-thickness: 2px;
@@ -70,12 +70,98 @@
         visibility: hidden;
     }
 
-    .holding__state {
+    /* Weather appears when there is weather. */
+    .holding__weather {
+        visibility: hidden;
+    }
+
+    .has-weather .holding__weather {
+        visibility: visible;
+    }
+
+    .holding .pill {
         transition: color 0.4s;
     }
 
-    .holding__state.is-on {
-        color: var(--color-pink);
+    .holding .pill.is-on .dot {
+        background: var(--color-pink);
+    }
+
+    .holding__side {
+        position: absolute;
+        inset: 0;
+        align-items: center;
+        padding-bottom: 16vh;
+        pointer-events: none;
+    }
+
+    .holding__view {
+        display: grid;
+        place-items: center;
+        width: 2.75rem;
+        height: 2.75rem;
+        margin-left: -0.25rem;
+        cursor: pointer;
+        pointer-events: auto;
+        opacity: 0.55;
+        transition: opacity 0.2s;
+    }
+
+    .holding__view:hover,
+    .holding__view[aria-pressed="true"] {
+        opacity: 1;
+    }
+
+    .holding__ruler {
+        width: 10rem;
+    }
+
+    /* The peripatetic walks to the temperature. */
+    .holding__walker {
+        display: block;
+        width: 1.5rem;
+        margin-left: -0.5rem;
+        transform: translateX(calc(var(--at, 0) * 10rem));
+        transition: transform 4s cubic-bezier(0.3, 0, 0.2, 1);
+    }
+
+    .holding__sight {
+        position: fixed;
+        z-index: 2;
+        left: 0;
+        top: 0;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.3s;
+        will-change: transform;
+    }
+
+    .holding__sight.is-on {
+        opacity: 1;
+    }
+
+    .holding__sight svg {
+        position: absolute;
+        left: -1.75rem;
+        top: -1.75rem;
+        transition: transform 0.35s;
+    }
+
+    .holding__sight.is-locked svg {
+        transform: scale(1.7);
+    }
+
+    .holding__sight .box {
+        position: absolute;
+        left: 2.25rem;
+        top: 1.5rem;
+        white-space: nowrap;
+        background: var(--canvas);
+    }
+
+    .holding__sight.is-locked .box {
+        left: 3.4rem;
+        top: 2.6rem;
     }
 
     .is-live .holding__live {

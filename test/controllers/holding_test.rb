@@ -2,6 +2,8 @@ require "test_helper"
 
 class HoldingTest < ActionDispatch::IntegrationTest
   setup do
+    # No network in tests
+    Climate::STORE.write(Climate::KEY, Climate::Forecast.new(series: [], expires_at: 1.hour.from_now))
     Page.create!(title: "Open case", category: "project", og_description: "Public.")
     Page.create!(title: "Hidden case", category: "project_draft")
   end
@@ -20,7 +22,7 @@ class HoldingTest < ActionDispatch::IntegrationTest
 
   test "login, robots, manifest and sitemap answer before launch" do
     with_coming_soon(true) do
-      [new_user_session_path, "/robots", "/humans", "/manifest.json", "/sitemap", "/sitemap-static", "/offline"].each do |path|
+      [new_user_session_path, "/robots", "/humans", "/manifest.json", "/sitemap", "/sitemap-static", "/offline", "/climate.json"].each do |path|
         get path
         assert_response :success, path
       end

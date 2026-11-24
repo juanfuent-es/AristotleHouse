@@ -29,6 +29,12 @@ module ApplicationHelper
     image_tag "/brand/seal-#{tone}.svg", alt: site.name, width: 40, height: 40, **options
   end
 
+  # Micrographic symbols, drawn in the text colour. Decorative unless labelled.
+  def micrograph(name, label: nil, **options)
+    aria = label ? { role: "img", "aria-label": label } : { "aria-hidden": true }
+    tag.svg(tag.use(href: "/brand/micro.svg##{name}"), **aria, **options, fill: "currentColor")
+  end
+
   def nav_item(label, path, **options)
     active = request.path == path || request.path.start_with?("#{path}/")
     link_to label, path, **options, "aria-current": (active ? "page" : nil)

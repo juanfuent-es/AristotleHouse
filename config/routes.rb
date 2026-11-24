@@ -24,6 +24,7 @@ Rails.application.routes.draw do
 
   # data
   get "manifest.json" => "site_info#manifest", as: :manifest, defaults: { format: :json }
+  get "climate" => "climate#show", as: :climate, defaults: { format: :json }
   get "robots" => "site_info#robots"
   get "humans" => "site_info#humans"
   # sitemaps

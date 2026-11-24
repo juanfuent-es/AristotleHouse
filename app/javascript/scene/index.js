@@ -9,7 +9,7 @@ import {
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module'
 import { gsap } from 'gsap'
-import { ramp } from './spectra'
+import { Ramp } from './spectra'
 import Glass from './glass'
 import screenVert from './glsl/screen.vert.glsl'
 import fieldFrag from './glsl/field.frag.glsl'
@@ -23,12 +23,14 @@ const DISTANCE = 10
 const WORD_Z = 1.7
 
 export default class HoldingScene {
-    constructor({ canvas, lines, model, reduced, onHeat }) {
+    constructor({ canvas, lines, model, reduced, onFrame, onPaper }) {
         this.canvas = canvas
         this.model = model
         this.reduced = reduced
-        this.onHeat = onHeat || (() => {})
+        this.onFrame = onFrame || (() => {})
+        this.onPaper = onPaper || (() => {})
         this.time = 0
+        this.heading = 0
         this.frame = 0
         this.slow = 0
         this.pointer = new Vector2()
@@ -41,11 +43,18 @@ export default class HoldingScene {
         this.renderer.autoClear = false
         this.maxRatio = Math.min(window.devicePixelRatio || 1, window.innerWidth < 768 ? 1.75 : 1.6)
 
-        this.ramps = { lyceum: ramp('lyceum'), ring: ramp('ring'), ultra: ramp('ultra') }
+        this.ramp = new Ramp()
+        this.mode = 'live'
+        this.air = { day: 0, horizon: 0, warmth: .4, wind: .2, haze: .4, cloud: 0 }
         this.shared = {
-            uRampA: { value: this.ramps.lyceum },
-            uRampB: { value: this.ramps.lyceum },
-            uRampMix: { value: 0 },
+            uRamp: { value: this.ramp.texture },
+            uPaper: { value: 0 },
+            uHorizon: { value: 0 },
+            uWarmth: { value: .4 },
+            uWind: { value: .2 },
+            uHaze: { value: .4 },
+            uCloud: { value: 0 },
+            uDrift: { value: 0 },
             uIso: { value: 0 },
             uTime: { value: 0 },
             uHeat: { value: 0 },
@@ -83,7 +92,7 @@ export default class HoldingScene {
         this.focus = new Vector2(0, .05)
         this.field = this.screen(fieldFrag, { ...this.shared, uFocus: { value: this.focus } })
         this.copy = this.screen('varying vec2 vUv; uniform sampler2D uScene; void main() { gl_FragColor = texture2D(uScene, vUv); }', { uScene: { value: this.sceneTarget.texture } })
-        this.final = this.screen(finalFrag, { uScene: { value: this.finalTarget.texture }, uTime: this.shared.uTime, uResolution: this.shared.uResolution })
+        this.final = this.screen(finalFrag, { uScene: { value: this.finalTarget.texture }, uTime: this.shared.uTime, uPaper: this.shared.uPaper, uResolution: this.shared.uResolution })
         this.stage = new Scene()
         this.bust = new Group()
         this.toHead = new Matrix4()
@@ -97,7 +106,8 @@ export default class HoldingScene {
             uBack: { value: this.backTarget.texture },
             uResolution: this.shared.uResolution,
             uPointer: this.shared.uPointer,
-            uTime: this.shared.uTime
+            uTime: this.shared.uTime,
+            uPaper: this.shared.uPaper
         })
         this.glass.group.position.z = WORD_Z
         this.wordScene.add(this.glass.group)
@@ -151,24 +161,63 @@ export default class HoldingScene {
         this.loop(this.last)
     }
 
-    // spectrum: lyceum | ring | ultra. Isotherms belong to the ring reading.
-    read(name) {
-        const next = this.ramps[name]
-        if (!next || next === this.current) return
-        const { uRampA, uRampB, uRampMix, uIso } = this.shared
-        gsap.killTweensOf([uRampMix, uIso])
-        uRampA.value = this.current || this.ramps.lyceum
-        uRampB.value = next
-        uRampMix.value = 0
-        this.current = next
-        const iso = name === 'ring' ? 1 : 0
+    /**
+     * The air, from /climate.json. Sun picks the spectrum and the page, felt heat
+     * the stone and the glow, wind the drift, humidity the halo, cloud the light.
+     */
+    climate(air) {
+        this.air = air
+        const { uHorizon, uWarmth, uWind, uHaze, uCloud } = this.shared
+        const to = [[uHorizon, 'horizon'], [uWarmth, 'warmth'], [uWind, 'wind'], [uHaze, 'haze'], [uCloud, 'cloud']]
+        to.forEach(([uniform, key]) => this.ease(uniform, { value: key === 'horizon' && this.mode !== 'live' ? 0 : air[key] }, 2.4))
+        this.travel(2.4)
+    }
+
+    // live | lyceum | ring | ultra. Isotherms belong to the ring reading.
+    read(mode) {
+        this.mode = mode
+        this.ease(this.shared.uIso, { value: mode === 'ring' ? 1 : 0 }, .9)
+        this.ease(this.shared.uHorizon, { value: mode === 'live' ? this.air.horizon : 0 }, .9)
+        this.travel(.9)
+    }
+
+    // The three drawings of the head: left, front, right.
+    turn(view) {
+        const value = { left: -1, front: 0, right: 1 }[view] * 1.25
+        if (!this.reduced) return gsap.to(this, { heading: value, duration: 1.8, ease: 'power3.inOut', overwrite: 'auto' })
+        this.heading = value
+        this.bust.rotation.y = value
+        this.render()
+    }
+
+    travel(duration) {
+        const live = this.mode === 'live'
+        const paper = live ? this.air.day : 0
+        if (live) this.ramp.aim('lyceum', 'lday', this.air.day)
+        else this.ramp.aim(this.mode)
+        this.rampTween?.kill()
+        if (this.reduced) this.ramp.progress = 1
+        else this.rampTween = gsap.fromTo(this.ramp, { step: 0 }, { step: 1, duration, ease: 'power2.inOut', onUpdate: () => { this.ramp.progress = this.ramp.step } })
+        this.ease(this.shared.uPaper, { value: paper, onUpdate: () => this.page() }, duration)
+        this.page()
+    }
+
+    // The type around the canvas turns to ink when the ground turns to bone.
+    page() {
+        const day = this.shared.uPaper.value > .5
+        if (day === this.dayPage) return
+        this.dayPage = day
+        this.onPaper(day)
+    }
+
+    ease(target, { onUpdate, ...to }, duration) {
+        gsap.killTweensOf(target)
         if (this.reduced) {
-            uRampMix.value = 1
-            uIso.value = iso
+            Object.assign(target, to)
+            onUpdate?.()
             return this.render()
         }
-        gsap.to(uRampMix, { value: 1, duration: .9, ease: 'power2.inOut' })
-        gsap.to(uIso, { value: iso, duration: .9, ease: 'power2.inOut' })
+        gsap.to(target, { ...to, duration, ease: 'power2.inOut', onUpdate })
     }
 
     events() {
@@ -273,7 +322,7 @@ export default class HoldingScene {
         this.pointer.y += (goalY - this.pointer.y) * ease
 
         // He turns to study whoever is there.
-        this.bust.rotation.y = this.pointer.x * .42
+        this.bust.rotation.y = this.heading + this.pointer.x * .42
         this.bust.rotation.x = -this.pointer.y * .12
         this.glass.group.rotation.y = this.pointer.x * .035
         this.glass.group.rotation.x = -this.pointer.y * .03
@@ -285,7 +334,8 @@ export default class HoldingScene {
             point.z *= Math.exp(-delta * 1.15)
             heat = Math.max(heat, point.z)
         })
-        this.onHeat(heat, this.pointer)
+        this.shared.uDrift.value += delta * (.05 + this.shared.uWind.value * .5)
+        this.onFrame({ heat, cursor: idle ? null : this.cursor, letter: this.glass.nearest })
     }
 
     render() {

@@ -1,4 +1,4 @@
 <% provide(:title, "Thinking") %>
 <% provide(:description, "What we learn from watching people closely.") %>
 <header class="gutter pb-14 pt-16 md:pt-24"><h1 class="display">Thinking</h1></header>
-<section class="gutter"><% if @articles.any? %><%= render "articles/list", articles: @articles %><% else %><p class="subhead max-w-[36ch] text-soft">We are still observing. The first notes will appear here.</p><% end %></section>
+<section class="gutter"><% if @articles.any? %><%= render "articles/list", articles: @articles %><% else %><%= micrograph :seated, class: "mb-8 h-40 w-52" %><p class="subhead max-w-[36ch] text-soft">We are still observing. The first notes will appear here.</p><% end %></section>

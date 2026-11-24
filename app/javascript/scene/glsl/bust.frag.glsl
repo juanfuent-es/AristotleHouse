@@ -34,17 +34,21 @@ void main() {
     float lit = max(dot(n, key), 0.);
     float stone = dot(texture2D(uAlbedo, vMap).rgb, vec3(.299, .587, .114));
 
-    float q = .17 + .47 * pow(facing, 1.5) + .24 * pow(lit, 2.2) + (stone - .6) * .45;
+    float q = .17 + .47 * pow(facing, 1.5) + .24 * mix(pow(lit, 2.2), .5, uCloud * .6) + (stone - .6) * .45;
     q = mix(.26, q, smoothstep(.02, .5, rim));
     // Warmest at the brow, where the thinking happens.
     vec2 brow = (vHead - vec2(0., .2)) * vec2(2.6, 2.2);
     q += .12 * exp(-dot(brow, brow)) * facing;
+    // The stone takes the temperature of the air.
+    q += (uWarmth - .35) * .2;
+    // On paper the shadows still have to hold the form.
+    q = mix(q, .3 + q * .74, uPaper);
     q += touch(uv) * .22;
     q += (hash(gl_FragCoord.xy + fract(uTime)) - .5) * .02 * (1. - uIso);
 
     // The reading arrives.
     q *= uHeat;
     // Cold floor, so the readouts stay legible.
-    q *= mix(.32, 1., smoothstep(.02, uFloor, uv.y));
+    q *= mix(mix(.32, .5, uPaper), 1., smoothstep(.02, uFloor, uv.y));
     gl_FragColor = vec4(read(q), 1.);
 }

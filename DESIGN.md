@@ -117,6 +117,16 @@ The WebGL scene reads them from `app/javascript/scene/spectra.js`.
 - Files live in `public/brand`. They were extracted from the presentation; replace them with the master artwork when the studio delivers it.
 - The default social image is `public/brand/share.jpg`, 1280 × 640. Its editable composition is `design/share.html`, using the self-hosted Zalando Sans Expanded and Inter fonts. Capture it at that viewport after fonts load; page covers still override it.
 
+## Micrographics
+- The set lives in one sprite, `public/brand/micro.svg`, and is drawn in the text colour with the `micrograph` helper: crosshair, globe, barcode, ruler, peripatetic, portrait, seated, head-left, head-front, head-right. Labels use `.pill`, `.box` and `.bracket`.
+- They carry facts or do something: the heads turn the bust, the peripatetic stands at the temperature on the ruler, the sight says which weight it is over. Never publish the presentation's sample readings.
+
+## Climate
+- `/climate.json` describes the air over Dubai; the holding screen moves with it. Sun above 4° turns the page to bone and the spectrum to Lyceum day; below, ink and Lyceum. Never a mix of both. Near the horizon a band of heat rises.
+- Felt temperature warms the stone and the glow, wind drives the drift, humidity the halo, cloud flattens the light.
+- `Perceived` is the apparent temperature (Steadman) from MET Norway's forecast, credited on screen. With no data, the reading is hidden, not invented.
+- `/?at=13:00` previews any hour.
+
 ## Layout & Elevation
 - Square corners, 1px rules, no shadows. Depth comes from light and from tone.
 - Corners carry the facts; the centre carries the feeling.

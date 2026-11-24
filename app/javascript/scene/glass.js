@@ -107,6 +107,8 @@ export default class Glass {
     update(delta, time, pointer) {
         const ease = 1 - Math.exp(-delta * 5.5)
         let index = 0
+        let closest = .45
+        this.nearest = null
         this.rows.forEach((row) => {
             const { letters, em, center, middle } = row.userData
             letters.forEach((letter) => {
@@ -115,6 +117,10 @@ export default class Glass {
                     const dx = (pointer.x - (center + userData.x * em)) / (em * 1.55)
                     const dy = (pointer.y - middle) / (em * 2.1)
                     const near = Math.exp(-(dx * dx + dy * dy))
+                    if (near > closest) {
+                        closest = near
+                        this.nearest = userData
+                    }
                     // Away from the word the weight settles instead of thinning out.
                     const reach = Math.exp(-dy * dy * .6)
                     userData.goal = REST + (THIN + (BLACK - THIN) * near - REST) * reach

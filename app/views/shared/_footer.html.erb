@@ -1,7 +1,11 @@
 <footer class="gutter micro mt-auto pt-24 pb-6">
+  <div class="mb-6 flex flex-wrap items-end justify-between gap-6">
+    <p class="display !text-[clamp(2rem,0.8rem+4vw,4.5rem)] [word-spacing:-0.12em]" aria-hidden="true">ARSTTL HSE<sup class="align-top text-[0.3em] font-body">®</sup></p>
+    <div class="flex flex-col gap-1.5" aria-hidden="true"><%= micrograph :barcode, class: "h-8 w-44" %><span>N° 001&ensp;AH/27</span></div>
+  </div>
   <div class="rule flex flex-wrap items-center gap-x-8 gap-y-3">
     <span><%= site.name %>®</span>
-    <span><%= site.coordinates.join("  ") %></span>
+    <span class="flex items-center gap-3"><%= micrograph :globe, class: "h-6 w-10" %><%= site.coordinates.join("  ") %></span>
     <span><%= site.city %>, <%= site.country %></span>
     <nav class="flex flex-wrap gap-x-6 gap-y-1 md:ml-auto" aria-label="Legal and social">
       <% if site.instagram_url %><%= link_to "Instagram", site.instagram_url, class: "nav-link", rel: "noopener" %><% end %>

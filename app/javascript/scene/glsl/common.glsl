@@ -1,11 +1,15 @@
 #define TRAIL 14
-uniform sampler2D uRampA;
-uniform sampler2D uRampB;
-uniform float uRampMix;
+uniform sampler2D uRamp;
 uniform float uIso;
 uniform float uTime;
 uniform vec2 uResolution;
 uniform vec3 uTrail[TRAIL];
+// The air over Dubai, 0 to 1 each.
+uniform float uPaper;   // how much of the page is day
+uniform float uHorizon; // sun near the horizon
+uniform float uWarmth;
+uniform float uHaze;
+uniform float uCloud;
 
 float hash(vec2 p) {
     vec3 q = fract(vec3(p.xyx) * .1031);
@@ -35,6 +39,6 @@ vec3 read(float q) {
     float width = fwidth(q * steps);
     float line = 1. - smoothstep(0., max(width * 1.4, .0001), min(f, 1. - f));
     vec2 at = vec2(clamp(stepped, .002, .998), .5);
-    vec3 color = mix(texture2D(uRampA, at).rgb, texture2D(uRampB, at).rgb, uRampMix);
+    vec3 color = texture2D(uRamp, at).rgb;
     return color * (1. - line * uIso * .5 * step(.04, q));
 }

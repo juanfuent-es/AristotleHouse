@@ -25,6 +25,14 @@ The scene is in `app/javascript/scene`: the bust read for heat (`bust.*.glsl`), 
 (`field.frag.glsl`) and the glass word (`glass.js`, `variable_glyph.js`), a variable-weight extrusion that follows the real `h1` of the
 page. Without WebGL, the poster in `public/brand` and the text remain.
 
+## Climate
+
+`Climate` (`app/models/climate.rb`) keeps one MET Norway forecast on disk for all
+visitors and renews it when it expires, at most every 15 minutes. If the service fails,
+the last forecast stays for up to 24 hours. The sun is calculated locally. In production
+set `WEATHER_USER_AGENT`: without it no request is made and only the sun drives the
+scene. Preview any hour with `/?at=17:30`.
+
 ## Content
 
 Projects (`/work`), articles (`/thinking`) and static pages are stored in `pages` and

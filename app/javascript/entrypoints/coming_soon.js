@@ -1,4 +1,6 @@
 import Credits from '../components/credits'
+import Climate from '../climate'
+import Interface from '../holding/interface'
 
 /**
  * The page works without this file: poster image and real text are in the HTML.
@@ -9,6 +11,15 @@ new Credits()
 const root = document.querySelector('[data-holding]')
 const canvas = root.querySelector('canvas')
 const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+const ui = new Interface(root, { reduced })
+let scene
+let air
+
+new Climate((reading, live) => {
+    ui.climate(reading, live)
+    air = reading.drive
+    scene?.climate(air)
+})
 
 function supported() {
     try {
@@ -18,44 +29,35 @@ function supported() {
     }
 }
 
-function readout() {
-    const temperature = root.querySelector('[data-temperature]')
-    const state = root.querySelector('[data-state]')
-    let shown = ''
-    return (heat, pointer) => {
-        const value = `${(36.2 + heat * 1.4 + Math.abs(pointer.x) * .3).toFixed(1)}°C`
-        if (value === shown) return
-        shown = value
-        temperature.textContent = value
-        state.classList.toggle('is-on', heat > .12)
-    }
+// Without the scene the poster is a night picture, so the page goes back to night.
+function still() {
+    root.classList.remove('is-live')
+    ui.paper(false)
 }
 
 async function start() {
     const { default: HoldingScene } = await import('../scene')
     const small = window.innerWidth < 768
-    const scene = new HoldingScene({
+    const holding = new HoldingScene({
         canvas,
         lines: root.querySelectorAll('[data-glass]'),
         model: small ? canvas.dataset.modelSmall : canvas.dataset.model,
         reduced,
-        onHeat: readout()
+        onFrame: (frame) => ui.frame(frame),
+        onPaper: (day) => ui.paper(day)
     })
-    await scene.load()
+    await holding.load()
+    scene = holding
     root.classList.add('is-live')
     scene.start()
-
-    root.querySelectorAll('[data-spectrum]').forEach((button) => {
-        button.addEventListener('click', () => {
-            root.querySelectorAll('[data-spectrum]').forEach((b) => b.setAttribute('aria-pressed', b === button))
-            scene.read(button.dataset.spectrum)
-        })
-    })
-    canvas.addEventListener('scene:lost', () => root.classList.remove('is-live'))
+    if (air) scene.climate(air)
+    ui.onRead = (mode) => scene.read(mode)
+    ui.onTurn = (view) => scene.turn(view)
+    canvas.addEventListener('scene:lost', still)
     if (import.meta.env.MODE !== 'production') window.holding = scene
 }
 
 if (supported()) start().catch((error) => {
     console.error(error)
-    root.classList.remove('is-live')
+    still()
 })

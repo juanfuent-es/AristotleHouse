@@ -9,6 +9,7 @@ uniform vec2 uPointer;
 uniform float uTime;
 uniform float uReveal;
 uniform float uWeight;
+uniform float uPaper;
 
 vec3 at(vec2 uv) {
     return texture2D(uScene, clamp(uv, .001, .999)).rgb;
@@ -59,6 +60,9 @@ void main() {
     // The thinner the stroke, the more light it carries.
     float thin = smoothstep(.75, -.6, uWeight);
     vec3 body = color * mix(1.28, 1.1, thin) + vec3(.95, .937, .91) * mix(.22, .44, thin);
-    vec3 glass = body + iris * (fresnel * .95 + sheen * .26 + mix(.12, .26, thin)) + vec3(1., .985, .95) * spec * .9;
+    // On paper, glass is seen by the light it takes away.
+    vec3 tint = mix(vec3(.46, .4, .9), vec3(.1, .08, .2), thin);
+    body = mix(body, color * tint + iris * .05, uPaper);
+    vec3 glass = body + iris * (fresnel * .95 + sheen * .26 + mix(.12, .26, thin)) * mix(1., .34, uPaper) + vec3(1., .985, .95) * spec * .9;
     gl_FragColor = vec4(mix(at(uv), glass, uReveal), 1.);
 }
