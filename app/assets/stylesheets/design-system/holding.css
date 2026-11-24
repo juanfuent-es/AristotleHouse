@@ -32,7 +32,7 @@
 
     .holding__word {
         align-self: end;
-        padding-bottom: clamp(0.5rem, 1.5vh, 1.5rem);
+        padding-bottom: clamp(0.5rem, 6vh, 5rem);
         text-align: center;
         user-select: none;
     }
@@ -51,14 +51,14 @@
         white-space: nowrap;
     }
 
-    .holding__spectra button {
+    .holding__hours button {
         min-height: 2.75rem;
         padding-inline: 0.5rem;
         cursor: pointer;
         color: var(--text-soft);
     }
 
-    .holding__spectra button[aria-pressed="true"] {
+    .holding__hours button[aria-pressed="true"] {
         color: var(--text);
         text-decoration: underline;
         text-decoration-color: var(--color-pink);
@@ -72,57 +72,36 @@
 
     /* Weather appears when there is weather. */
     .holding__weather {
-        visibility: hidden;
+        display: none;
     }
 
     .has-weather .holding__weather {
-        visibility: visible;
-    }
-
-    .holding .pill {
-        transition: color 0.4s;
-    }
-
-    .holding .pill.is-on .dot {
-        background: var(--color-pink);
+        display: inline;
     }
 
     .holding__side {
         position: absolute;
-        inset: 0;
-        align-items: center;
-        padding-bottom: 16vh;
-        pointer-events: none;
+        top: 50%;
+        left: 0;
+        display: flex;
+        flex-direction: column;
+        transform: translateY(-50%);
+        margin-left: -0.5rem;
     }
 
     .holding__view {
         display: grid;
         place-items: center;
-        width: 2.75rem;
-        height: 2.75rem;
-        margin-left: -0.25rem;
+        width: 2.5rem;
+        height: 2.5rem;
         cursor: pointer;
-        pointer-events: auto;
-        opacity: 0.55;
+        opacity: 0.45;
         transition: opacity 0.2s;
     }
 
     .holding__view:hover,
     .holding__view[aria-pressed="true"] {
         opacity: 1;
-    }
-
-    .holding__ruler {
-        width: 10rem;
-    }
-
-    /* The peripatetic walks to the temperature. */
-    .holding__walker {
-        display: block;
-        width: 1.5rem;
-        margin-left: -0.5rem;
-        transform: translateX(calc(var(--at, 0) * 10rem));
-        transition: transform 4s cubic-bezier(0.3, 0, 0.2, 1);
     }
 
     .holding__sight {
@@ -137,31 +116,13 @@
     }
 
     .holding__sight.is-on {
-        opacity: 1;
+        opacity: 0.75;
     }
 
     .holding__sight svg {
         position: absolute;
-        left: -1.75rem;
-        top: -1.75rem;
-        transition: transform 0.35s;
-    }
-
-    .holding__sight.is-locked svg {
-        transform: scale(1.7);
-    }
-
-    .holding__sight .box {
-        position: absolute;
-        left: 2.25rem;
-        top: 1.5rem;
-        white-space: nowrap;
-        background: var(--canvas);
-    }
-
-    .holding__sight.is-locked .box {
-        left: 3.4rem;
-        top: 2.6rem;
+        left: -0.625rem;
+        top: -0.625rem;
     }
 
     .is-live .holding__live {
@@ -179,6 +140,11 @@
     }
 
     @media (max-aspect-ratio: 4/5) {
+        /* Over the face there is no room for a side menu. */
+        .holding__side {
+            display: none;
+        }
+
         .holding__word h1 {
             font-size: 16.6vw;
             line-height: 0.86;

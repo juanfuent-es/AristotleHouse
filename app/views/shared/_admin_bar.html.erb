@@ -1,11 +1,9 @@
 <% if admin? %>
-  <div class="day micro gutter flex flex-wrap items-center gap-x-6 bg-bone text-ink">
-    <span><%= site.coming_soon ? "Preview · visitors see the holding screen" : "Signed in" %></span>
-    <% if @page %>
-      <% edit = { "project" => edit_admin_project_path(@page), "article" => edit_admin_article_path(@page), "static" => edit_admin_page_path(@page) }[@page.kind] %>
-      <% unless @page.published? %><span>Draft</span><% end %>
-      <%= link_to "Edit this page", edit, class: "nav-link link" if edit %>
-    <% end %>
-    <%= link_to "Admin", admin_path, class: "nav-link link ml-auto" %>
+  <div class="admin-bar day micro gutter flex flex-wrap items-center gap-x-6 bg-bone text-ink">
+    <span><%= @preview ? "Draft preview" : site.coming_soon ? "Visitors see the holding screen" : "Signed in" %></span>
+    <% current = @draft || @page %>
+    <% if current&.id && !@editing && Page.editorial.exists?(current.id) %><%= link_to @preview ? "Back to editing" : "Edit this page", content_edit_path(current), class: "nav-link link" %><% end %>
+    <%= link_to "Projects", projects_path, class: "nav-link link ml-auto" %>
+    <%= link_to "Admin", admin_path, class: "nav-link link" %>
   </div>
 <% end %>

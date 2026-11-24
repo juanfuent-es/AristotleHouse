@@ -19,13 +19,13 @@
   body { background: #0B0A0F; color: #F2EFE8; font-family: Inter, sans-serif; }
   .poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
   main { position: relative; width: 100%; height: 100%; padding: 32px 48px; }
-  header, footer { display: flex; justify-content: space-between; align-items: flex-start; }
+  header { display: flex; justify-content: space-between; align-items: flex-start; }
   .lockup { width: 360px; height: auto; }
   p { margin: 0; font-size: 13px; line-height: 1.5; font-weight: 500; letter-spacing: .04em; text-transform: uppercase; }
   .right { text-align: right; }
   .soft { color: #C9C4D4; }
   h1 {
-    position: absolute; left: 48px; right: 48px; bottom: 112px; margin: 0;
+    position: absolute; left: 48px; right: 48px; bottom: 72px; margin: 0;
     font-family: "Zalando Sans Expanded", sans-serif;
     font-size: 112px; font-weight: 800; line-height: 1; letter-spacing: -.012em;
     text-align: center; white-space: nowrap;
@@ -34,21 +34,15 @@
     background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     filter: drop-shadow(0 -1px 0 #F2EFE8) drop-shadow(0 3px 0 #6B54B1) drop-shadow(0 5px 0 #3D286F);
   }
-  footer { position: absolute; left: 48px; right: 48px; bottom: 28px; align-items: flex-end; }
-  .dot { display: inline-block; width: 6px; height: 6px; background: #F2EFE8; border-radius: 50%; margin-right: 6px; vertical-align: 2px; }
 </style>
 <body>
   <img class="poster" src="../public/brand/poster.webp" alt="">
   <main>
     <header>
       <img class="lockup" src="../public/brand/lockup-light.svg" alt="Aristotle House">
-      <p class="right">Experiential intelligence<br><span class="soft">Est. 2027</span></p>
+      <p class="right">Experiential agency<br><span class="soft">Dubai, UAE</span></p>
     </header>
     <h1>COMING SOON</h1>
-    <footer>
-      <p>Dubai, UAE<br><span class="soft">25.2048° N&nbsp; 55.2708° E</span></p>
-      <p class="right"><span class="dot"></span>Perceived<br><span class="soft">36.4°C</span></p>
-    </footer>
   </main>
 </body>
 </html>

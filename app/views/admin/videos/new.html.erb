@@ -1,8 +1,0 @@
-<%= render "admin/shared/heading", title: "New video" %>
-<%= render "admin/shared/errors", object: @video %>
-<%= form_with model: [:admin, @video], multipart: true, class: "panel grid max-w-2xl gap-5" do |f| %>
-  <div class="field"><%= f.label :title %><%= f.text_field :title, class: "input", required: true, maxlength: 160 %></div>
-
-  <div class="field"><%= f.label :file, "File" %><%= f.file_field :file, class: "input", required: true, accept: "video/mp4" %><p class="field__hint">MP4. Smaller versions are encoded when you save, which can take a while.</p></div>
-  <p><%= f.submit "Add to library", class: "btn" %></p>
-<% end %>

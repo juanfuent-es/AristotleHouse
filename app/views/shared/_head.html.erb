@@ -7,4 +7,4 @@
 <%= csp_meta_tag %>
 <%= stylesheet_link_tag "application" %>
 <%= render "shared/json_ld" %>
-<%= render "shared/tag_manager" %>
+<%= render "shared/tag_manager" unless @private %>

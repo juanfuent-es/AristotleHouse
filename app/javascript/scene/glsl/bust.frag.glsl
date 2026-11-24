@@ -40,7 +40,7 @@ void main() {
     vec2 brow = (vHead - vec2(0., .2)) * vec2(2.6, 2.2);
     q += .12 * exp(-dot(brow, brow)) * facing;
     // The stone takes the temperature of the air.
-    q += (uWarmth - .35) * .2;
+    q += (uWarmth - .5) * .5;
     // On paper the shadows still have to hold the form.
     q = mix(q, .3 + q * .74, uPaper);
     q += touch(uv) * .22;

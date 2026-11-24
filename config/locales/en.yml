@@ -2,8 +2,8 @@ en:
   site:
     nav:
       work: Work
-      thinking: Thinking
       house: House
+      technology: Technology
       contact: Contact
   errors_pages:
     not_found:

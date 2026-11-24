@@ -26,12 +26,6 @@ class ClimateTest < ActiveSupport::TestCase
     assert_in_delta 0.5, Climate.new(now).drive[:cloud], 0.01
   end
 
-  test "humid heat feels hotter than the air" do
-    now = Time.current
-    store [[now.to_i, 40.0, 60.0, 1.0, 0.0], [now.to_i + 3600, 40.0, 60.0, 1.0, 0.0]]
-    assert_operator Climate.new(now).perceived, :>, 45
-  end
-
   test "nothing is invented when there is no forecast" do
     store []
     json = Climate.now.as_json

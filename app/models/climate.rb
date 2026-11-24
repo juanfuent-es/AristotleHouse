@@ -2,7 +2,7 @@ require "net/http"
 
 # What the air over the House is doing right now, and how the scene should read it.
 #
-# Weather comes from MET Norway (CC BY 4.0, commercial use allowed). One forecast is
+# Weather comes from MET Norway (CC BY 4.0, commercial use allowed; credited in /humans). One forecast is
 # kept on disk and reused by every visitor: it is asked for again only when it expires,
 # by one request at a time, and an old one is better than none. The sun needs no service.
 class Climate
@@ -98,14 +98,6 @@ class Climate
     @weather = interpolate(self.class.forecast&.series || [])
   end
 
-  # How hot it feels: Steadman's apparent temperature, from heat, vapour and wind.
-  def perceived
-    return unless weather
-    t, humidity, wind = weather.values_at(:temperature, :humidity, :wind)
-    vapour = humidity / 100.0 * 6.105 * Math.exp(17.27 * t / (237.7 + t))
-    t + 0.33 * vapour - 0.7 * wind - 4.0
-  end
-
   # Degrees above the horizon (NOAA, short form).
   def sun
     @sun ||= begin
@@ -134,7 +126,7 @@ class Climate
       # Ink or bone, never in between: half of each is grey.
       day: sun > DAYBREAK ? 1.0 : 0.0,
       horizon: Math.exp(-((sun - 1) / 6.0)**2),
-      warmth: weather ? ramp(16, 46, perceived) : 0.4,
+      warmth: weather ? ramp(12, 46, weather[:temperature]) : 0.45,
       wind: weather ? ramp(0, 12, weather[:wind]) : 0.2,
       haze: weather ? ramp(30, 95, weather[:humidity]) : 0.4,
       cloud: weather ? ramp(0, 100, weather[:cloud]) : 0.0
@@ -146,7 +138,7 @@ class Climate
       clock: time.strftime("%H:%M"),
       phase: phase,
       sun: sun.round(1),
-      weather: weather && weather.transform_values { |value| value.round(1) }.merge(perceived: perceived.round(1)),
+      weather: weather&.transform_values { |value| value.round(1) },
       drive: drive,
       source: weather && SOURCE
     }

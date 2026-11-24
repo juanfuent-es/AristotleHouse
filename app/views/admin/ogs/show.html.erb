@@ -1,6 +1,0 @@
-<%= render "admin/shared/heading", title: "Share file" %>
-<p class="mb-4"><%= @og.category %>, <%= @og.mime_type %></p>
-<% if @og.image.present? %><%= image_tag @og.image.url, alt: "", class: "max-w-3xl w-full" %><% end %>
-<% if @og.video.present? %><%= video_tag @og.video.url, controls: true, class: "max-w-3xl w-full" %><% end %>
-<% if @og.audio.present? %><%= audio_tag @og.audio.url, controls: true %><% end %>
-<p class="mt-6"><%= link_to "Delete share file", admin_og_path(@og), method: :delete, data: { confirm: "Delete this share file? This cannot be undone." }, class: "btn btn--danger" %></p>

@@ -1,29 +1,16 @@
-# Admin login. The address is a placeholder used only to sign in.
-email = ENV.fetch("ADMIN_EMAIL", "admin@aristotlehouse.com")
-password = "password"
-abort "Set ADMIN_PASSWORD to seed the admin user in production." if password.blank?
+# Admin login. The address is a placeholder used only to sign in. In production the
+# password comes from ADMIN_PASSWORD; there is no default.
+email = ENV["ADMIN_EMAIL"].presence || "admin@aristotle-house.com"
+password = ENV["ADMIN_PASSWORD"].presence || ("password" unless Rails.env.production?)
 
-admin = User.find_or_initialize_by(email: email)
-if admin.new_record?
-  admin.update!(name: "Aristotle House", username: "aristotle", role: "admin", password: password, password_confirmation: password)
+admin = User.find_by(email: email)
+unless admin
+  abort "Set ADMIN_PASSWORD to create the admin user." unless password
+  admin = User.create!(email: email, name: "Aristotle House", username: "aristotle", role: "admin", password: password)
   puts "Admin created: #{email}"
 end
 
-# Clients belong to a country.
-[
-  ["United Arab Emirates", "Emiratos Árabes Unidos", "971", "ae", "are", "asia", "western asia"],
-  ["Saudi Arabia", "Arabia Saudita", "966", "sa", "sau", "asia", "western asia"],
-  ["Qatar", "Catar", "974", "qa", "qat", "asia", "western asia"],
-  ["Kuwait", "Kuwait", "965", "kw", "kwt", "asia", "western asia"],
-  ["Bahrain", "Baréin", "973", "bh", "bhr", "asia", "western asia"],
-  ["Oman", "Omán", "968", "om", "omn", "asia", "western asia"]
-].each do |name_en, name_es, code, alpha_2, alpha_3, continent, sub_continent|
-  Country.find_or_create_by!(alpha_2: alpha_2) do |c|
-    c.assign_attributes(name_en: name_en, name_es: name_es, code: code, alpha_3: alpha_3, continent: continent, sub_continent: sub_continent)
-  end
-end
-
-# Editable static pages. `restricted` keeps them from being deleted.
+# Fixed pages. Without text, house and contact show their designed layout.
 [
   ["house", "House", "Before he was a statue, he was an observer."],
   ["contact", "Contact", "Tell us what you want people to feel."],
@@ -31,7 +18,37 @@ end
   ["cookies", "Cookie policy", "How Aristotle House uses cookies."],
   ["terms", "Terms and conditions", "Terms of use for this website."]
 ].each do |slug, title, description|
-  Page.find_or_create_by!(slug: slug) do |page|
-    page.assign_attributes(title: title, og_title: title, og_description: description, category: "static", restricted: true, lang: "en")
+  Page.create_with(title: title, description: description, category: "static", publication_state: "published", published_at: Time.current).find_or_create_by!(slug: slug)
+end
+
+# The base case: a draft that shows what each part of a project is for. Duplicate its
+# structure, then archive it.
+unless Page.exists?(slug: "sample-project")
+  library = lambda do |file, title, alt|
+    Image.find_by(title: title) || File.open(Rails.public_path.join("brand/img", file)) do |tempfile|
+      Media::UploadImage.call(upload: ActionDispatch::Http::UploadedFile.new(tempfile: tempfile, filename: file), title: title, alt: alt)
+    end
   end
+  cover = library.call("isotherm.webp", "Sample cover", "Placeholder: a heat reading of the bust")
+  detail = library.call("head-profile.webp", "Sample detail", "Placeholder: the bust in profile")
+
+  Content::CreateDraft.call(author: admin, attributes: {
+    title: "Sample project",
+    description: "Placeholder. One sentence that says what was built, for whom, and what people did in it.",
+    cover_image_id: cover.id,
+    facts: { client: "Client name", location: "City, country", year: "Year", scope: "What the House did" },
+    tag_list: "Sample",
+    content: <<~HTML
+      <h2>The question</h2>
+      <p>Placeholder. What the brand wanted people to feel, and what nobody knew yet about how they would behave.</p>
+      <p>Two short paragraphs are enough. Say where the project started and what made it difficult.</p>
+      <img data-image-id="#{detail.id}" alt="">
+      <h2>What we built</h2>
+      <p>Placeholder. Describe the space, the sequence and the moments that mattered, in the order a visitor met them.</p>
+      <ul><li><p>A first decision and the reason behind it.</p></li><li><p>A material, a sound or a light people noticed.</p></li><li><p>What stayed after the event.</p></li></ul>
+      <blockquote><p>Placeholder for one line worth remembering.</p></blockquote>
+      <h2>What we learned</h2>
+      <p>Placeholder. Where people stopped, what they reached for and what they remembered. Use figures only when they were measured.</p>
+    HTML
+  })
 end

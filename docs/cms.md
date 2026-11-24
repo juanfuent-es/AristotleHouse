@@ -1,43 +1,31 @@
-# CMS
+# Content
 
-The database schema is the template's, unchanged. Content is organised by convention.
+Projects and fixed pages are edited on the page itself. `/admin` is an overview and the
+library of images and videos.
 
-| Content | Stored as |
+| Where | What |
 | --- | --- |
-| Project | `Page` with category `project` or `project_draft` |
-| Article | `Page` with category `article` or `article_draft` |
-| Site page (house, contact, legal) | `Page` with category `static` and `restricted` |
-| Cover and share image | `pages.og_image` |
-| Summary | `pages.og_description` |
-| Introduction or text | `pages.content`, plain text |
-| Tags | `Tag` through `Tagging` |
-| Language versions | `pages.versionable` (not used yet: the site is in English) |
+| `/projects` | The collection. Administrators also see drafts, archived projects and New project |
+| `/projects/:slug/edit` | The case, written in place |
+| `/projects/:slug/preview` | The draft as visitors would see it |
+| `/house/edit`, `/contact/edit`, `/privacy/edit`, `/cookies/edit`, `/terms/edit` | Fixed pages |
+| `/admin/images`, `/admin/videos` | The library |
 
-## Blocks
+## How it works
 
-`blocks.category` says how a block is read. Order is `blocks.number`.
+- `Page` holds projects and fixed pages. Its columns are what visitors see; `draft_content`
+  is the edit in progress. Only `Content::Publish` moves one to the other.
+- A draft can be incomplete. Publishing a project needs a title, a summary and text under
+  the headings.
+- `lock_version` stops one tab from overwriting another: the save answers 409 and keeps
+  what was typed.
+- `facts` is the line under the cover: client, location, year, scope.
+- The text is sanitised HTML. Images and videos carry their library id; their address is
+  worked out when the page renders.
+- Uploads are private (`storage/editorial`). Publishing copies what the page uses to
+  `public/media`. Keep both folders between deploys.
+- "Show on home" places a project on home when it is published, newest choice first.
+- Archiving hides a project and keeps its content.
+- `bin/rails editorial:prune_uploads` lists uploads unused for a week; `DRY_RUN=0` deletes them.
 
-| Category | `title` | `content` |
-| --- | --- | --- |
-| `text` | Heading | Paragraphs |
-| `quote` | Who said it | The line |
-| `fact` | Label: Client, Location, Year, Scope | Value |
-| `metric` | Label | Value |
-| `image` | Caption | Id of an `Image` |
-| `video` | Caption | Id of a `Video` |
-
-Everything is escaped when rendered. `css`, `js`, `html` and `glsl` blocks belong to the
-internal sandbox and never appear on a project or an article.
-
-## Publishing
-
-A draft can be incomplete. Publishing needs a title and a summary. Admins preview drafts
-at their final URL; visitors get a 404.
-
-## Limits of keeping the schema
-
-- A published project is edited live: there is no draft next to the published version.
-- A project names its client as a fact. `clients` is a separate address book with no link to projects.
-- Slugs are unique across every kind of page.
-- There is no manual order: the newest project goes first.
-- There is no publication date of its own: `created_at` is shown.
+The seed adds the draft "Sample project", with placeholder text that explains each part.

@@ -7,7 +7,7 @@ class SitemapsController < ApplicationController
   end
 
   def static
-    @pages = site.coming_soon ? [] : Page.published
+    @pages = site.coming_soon ? [] : Page.editorial.published
   end
 
   def images

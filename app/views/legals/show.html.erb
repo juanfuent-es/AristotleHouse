@@ -1,5 +1,5 @@
 <% provide(:theme, "day") %>
 <article class="gutter pt-16 md:pt-24">
   <h1 class="headline"><%= @page&.title %></h1>
-  <div class="prose-house mt-10 max-w-[65ch]"><% if @page&.content.present? %><%= paragraphs @page.content %><% else %><p>This text is being prepared.</p><% end %></div>
+  <div class="mt-10"><% if @page && Content::Html.meaningful?(@page.content) %><%= rich_text(@page, preview: @preview) %><% else %><p>This text is being prepared.</p><% end %></div>
 </article>

@@ -7,6 +7,6 @@
   <body class="gutter flex min-h-dvh flex-col justify-between py-6">
     <header><%= render "devise/shared/header" %></header>
     <main class="w-full max-w-md py-12"><%= yield %></main>
-    <footer class="micro rule flex flex-wrap justify-between gap-3"><span class="flex items-center gap-3"><%= micrograph :crosshair, class: "size-6" %><span class="bracket">Human first</span></span><span><%= site.city %>, <%= site.country %></span></footer>
+    <footer class="micro rule flex flex-wrap justify-between gap-3"><span class="flex items-center gap-3"><%= micrograph :crosshair, class: "size-4" %><span class="bracket">Human first</span></span><span><%= site.city %>, <%= site.country %></span></footer>
   </body>
 </html>

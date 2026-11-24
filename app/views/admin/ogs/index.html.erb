@@ -1,6 +1,0 @@
-<%= render "admin/shared/heading", title: "Share files", action: ["New share file", new_admin_og_path] %>
-<% if @ogs.empty? %><div class="panel"><p class="title">No share files yet</p><p class="mt-2">Project and article covers already work as share images. Use this for anything else.</p></div><% else %>
-<table class="table"><thead><tr><th>Category</th><th>Type</th></tr></thead><tbody>
-  <% @ogs.each do |og| %><tr><td><%= link_to og.category, admin_og_path(og), class: "link font-medium" %></td><td><%= og.mime_type %></td></tr><% end %>
-</tbody></table>
-<% end %>

@@ -1,124 +1,112 @@
-# Projects (Work), articles (Thinking) and static pages share this table.
-# The editorial state lives in `category`: "project" is published, "project_draft"
-# is not. Static pages are always published.
+# Projects and the fixed pages of the site (house, contact, legal texts).
+#
+# Columns hold what visitors see. `draft_content` holds the edit in progress and only
+# reaches the columns through Content::Publish.
 class Page < ApplicationRecord
-  KINDS = %w[project article static].freeze
-  DRAFT_SUFFIX = "_draft".freeze
-  STATUSES = %w[draft published].freeze
+  CATEGORIES = %w[project static web-lab].freeze
+  FACTS = %w[client location year scope].freeze
+  EDITABLE = %w[title description content cover_image_id facts tag_list featured_on_home home_position].freeze
+  RESERVED = %w[new edit preview].freeze
+  # A new project opens with this outline.
+  OUTLINE = "<h2>The question</h2><p></p><h2>What we built</h2><p></p><h2>What we learned</h2><p></p>".freeze
 
-  attribute :lang, default: "en"
-
-  before_validation :set_defaults
-  before_validation :set_slug
-
-  validates :title, length: { maximum: 70 }, presence: true
-  validates :slug, presence: true, uniqueness: true, format: { with: /\A[a-z0-9]+(-[a-z0-9]+)*\z/, message: "can only use lowercase letters, numbers and hyphens" }
-  validates :og_title, length: { maximum: 70 }
-  validates :og_description, length: { maximum: 200 }
-  validates :category, inclusion: { in: ->(_) { CATEGORIES } }
-  # A draft can be incomplete. What visitors see cannot.
-  validates :og_description, presence: true, if: -> { published? && kind != "static" }
-
-  CATEGORIES = %w[project project_draft article article_draft static web-lab].freeze
-
-  #relations
-  has_many :likes, inverse_of: :page
-  has_many :visits, inverse_of: :page
-  has_many :visitors, through: :visits
-  has_many :comments, as: :commentable, inverse_of: :commentable
-  accepts_nested_attributes_for :visits, allow_destroy: true
-
-  belongs_to :versionable, polymorphic: true, optional: true
-  belongs_to :author, class_name: "User", inverse_of: :pages, optional: true
-
-  # tags
+  belongs_to :author, class_name: "User", optional: true, inverse_of: :pages
+  belongs_to :cover_image, class_name: "Image", optional: true
   has_many :taggings, inverse_of: :page, dependent: :destroy
   has_many :tags, through: :taggings
 
-  mount_uploader :og_image, PageUploader
-
-  has_many :blocks, -> { order(:number) }, inverse_of: :page, dependent: :destroy
-  accepts_nested_attributes_for :blocks, allow_destroy: true, reject_if: proc { |attributes| attributes["id"].blank? && attributes["content"].blank? }
-
-  scope :projects, -> { where(category: %w[project project_draft]) }
-  scope :articles, -> { where(category: %w[article article_draft]) }
+  scope :projects, -> { where(category: "project") }
   scope :static, -> { where(category: "static") }
-  scope :published, -> { where(category: KINDS) }
-  scope :drafts, -> { where(category: %w[project_draft article_draft]) }
-  scope :recent, -> { order(created_at: :desc) }
+  scope :editorial, -> { where(category: %w[project static]) }
+  scope :published, -> { where(publication_state: "published", archived_at: nil) }
+  scope :recent, -> { order(published_at: :desc, id: :asc) }
 
-  def kind
-    category.to_s.delete_suffix(DRAFT_SUFFIX)
+  before_validation :set_slug, on: :create
+  after_save :persist_tags
+
+  validates :category, inclusion: { in: CATEGORIES }
+  validates :publication_state, inclusion: { in: %w[draft published] }
+  validates :title, presence: true, length: { maximum: 160 }
+  validates :description, length: { maximum: 300 }
+  validates :slug, presence: true, exclusion: { in: RESERVED }, format: { with: /\A[a-z0-9]+(-[a-z0-9]+)*\z/ }
+  validate :slug_is_free
+  validate :tags_are_short
+  validate :cover_exists
+  validate :facts_are_known
+  # A draft can be incomplete. What visitors see cannot.
+  validates :description, presence: true, on: :publication, if: :project?
+  validate :body_is_present, on: :publication, if: :project?
+
+  def project? = category == "project"
+
+  def archived? = archived_at.present?
+
+  def published? = publication_state == "published" && !archived?
+
+  def draft? = draft_content.present?
+
+  # The page as the editor sees it: the published version with the draft on top.
+  def editable_copy
+    draft = draft_content || {}
+    copy = dup
+    copy.id = id
+    copy.assign_attributes(draft.slice(*EDITABLE))
+    copy.tag_list = draft.fetch("tag_list", tag_list)
+    copy.lock_version = lock_version
+    copy
   end
 
-  def published?
-    KINDS.include?(category)
-  end
+  def fact(name) = facts.to_h[name].presence
 
-  def status
-    published? ? "published" : "draft"
-  end
-
-  def status=(value)
-    return unless STATUSES.include?(value.to_s) && kind != "static"
-    self.category = value.to_s == "draft" ? "#{kind}#{DRAFT_SUFFIX}" : kind
-  end
-
-  def public_path
-    case kind
-    when "project" then "/work/#{slug}"
-    when "article" then "/thinking/#{slug}"
-    else "/#{slug}"
-    end
-  end
-
-  def cover?
-    self[:og_image].present?
-  end
-
-  # Grouped blocks. Reads from the loaded association so lists do not query per row.
-  def blocks_of(*categories)
-    blocks.select { |block| categories.include?(block.category) }
-  end
-
-  def facts = blocks_of("fact")
-
-  def metrics = blocks_of("metric")
-
-  def story = blocks_of(*Block::STORY)
-
-  def fact(label)
-    facts.find { |block| block.title.casecmp?(label) }&.content
-  end
-
-  # views, likes
-
-  def total_views
-    visits.sum(&:counter)
-  end
-
-  def total_likes
-    likes.sum(&:count)
-  end
-
-  #tagging methods
   def tag_list
-    tags.map(&:name).join(", ")
+    @tag_list.nil? ? tags.map(&:name).sort.join(", ") : @tag_list
   end
 
-  def tag_list=(names)
-    self.tags = names.to_s.split(",").map(&:strip).reject(&:blank?).uniq(&:downcase).map do |name|
-      Tag.where("lower(name) = ?", name.downcase).first || Tag.create!(name: name.first(20))
-    end
+  def tag_list=(value)
+    @tag_list = value.to_s
+  end
+
+  def tag_names
+    tag_list.split(",").map(&:squish).reject(&:blank?).uniq(&:downcase)
   end
 
   private
 
-  def set_defaults
-    self.og_title = title.to_s if og_title.blank?
+  def set_slug
+    return if slug.present?
+    base = title.to_s.parameterize.presence || "project"
+    taken = RESERVED.include?(base) || self.class.exists?(slug: base)
+    self.slug = taken ? "#{base}-#{SecureRandom.hex(3)}" : base
   end
 
-  def set_slug
-    self.slug = (slug.presence || og_title.presence || title).to_s.parameterize if slug.blank? || slug_changed?
+  def slug_is_free
+    errors.add(:slug, :taken) if slug.present? && self.class.where(slug: slug).where.not(id: id).exists?
+  end
+
+  def tags_are_short
+    errors.add(:tag_list, "can have up to 20 characters each") if tag_names.any? { |name| name.length > 20 }
+  end
+
+  def cover_exists
+    errors.add(:cover_image_id, "is no longer in the library") if cover_image_id_before_type_cast.present? && cover_image.nil?
+  end
+
+  def facts_are_known
+    valid = facts.is_a?(Hash) && (facts.keys - FACTS).empty? && facts.values.all? { |value| value.to_s.length <= 80 }
+    errors.add(:facts, "can have up to 80 characters each") unless valid
+  end
+
+  def body_is_present
+    errors.add(:content, :blank) unless Content::Html.meaningful?(content)
+  end
+
+  def persist_tags
+    return if @tag_list.nil?
+    names = tag_names
+    known = Tag.where("lower(name) IN (?)", names.map(&:downcase)).to_a
+    missing = names.reject { |name| known.any? { |tag| tag.name.casecmp?(name) } }
+    Tag.insert_all(missing.map { |name| { name: name } }, unique_by: :index_tags_on_name) if missing.any?
+    self.tags = known + Tag.where(name: missing)
+    @tag_list = nil
   end
 end

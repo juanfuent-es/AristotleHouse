@@ -35,9 +35,12 @@ module ApplicationHelper
     tag.svg(tag.use(href: "/brand/micro.svg##{name}"), **aria, **options, fill: "currentColor")
   end
 
-  def nav_item(label, path, **options)
+  # nav_item("Work", path) or nav_item(path) { ... }
+  def nav_item(label, path = nil, **options, &block)
+    path ||= label
     active = request.path == path || request.path.start_with?("#{path}/")
-    link_to label, path, **options, "aria-current": (active ? "page" : nil)
+    options["aria-current"] = "page" if active
+    block ? link_to(path, **options, &block) : link_to(label, path, **options)
   end
 
   # Plain text with paragraphs. Never renders markup from the CMS.

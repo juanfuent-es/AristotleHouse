@@ -11,9 +11,9 @@ Requires Ruby 3.2+, Node 22.12+, Bundler 2.7.1, PostgreSQL, ImageMagick and FFmp
     bin/rails db:create db:schema:load db:seed
     bin/dev
 
-The seed creates the admin `admin@aristotlehouse.com`. That address is a placeholder
-used only to sign in at `/login`. In development the password is `aristotle-dev`;
-anywhere else set `ADMIN_PASSWORD` before seeding. Every setting is listed in
+The seed creates the admin `admin@aristotle-house.com`. That address is a placeholder
+used only to sign in at `/login`. In development the password is `password`;
+in production set `ADMIN_PASSWORD` before seeding. Every setting is listed in
 [.env.example](.env.example).
 
 ## Coming soon
@@ -35,8 +35,12 @@ scene. Preview any hour with `/?at=17:30`.
 
 ## Content
 
-Projects (`/work`), articles (`/thinking`) and static pages are stored in `pages` and
-`blocks`, with no schema changes. See [docs/cms.md](docs/cms.md).
+Projects (`/projects`) and fixed pages are edited on the page itself, with drafts, preview
+and publishing. `/admin` keeps the overview and the media library. See [docs/cms.md](docs/cms.md).
+
+`/technology` explains the environmental inputs, shader colour, 3D model and stack,
+and outlines possible project applications. Its day/night snapshots reuse `Climate`;
+the page follows the same pre-launch access rules as the rest of the site.
 
 ## Design
 

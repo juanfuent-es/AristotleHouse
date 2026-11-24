@@ -1,0 +1,17 @@
+<%= render "admin/shared/heading", title: model.model_name.human(count: 2).pluralize, action: ["New #{model.name.downcase}", new_polymorphic_path([:admin, model])] %>
+<%= form_with url: polymorphic_path([:admin, model]), method: :get, class: "mb-8 flex max-w-xl gap-2" do %>
+  <%= label_tag :q, "Search by title", class: "sr-only" %><%= search_field_tag :q, params[:q], class: "input", placeholder: "Search by title" %><button class="btn btn--quiet">Search</button>
+<% end %>
+<% if @assets.empty? %><div class="panel"><p class="title"><%= params[:q].present? ? "Nothing with that title" : "The library is empty" %></p><p class="mt-2">You can also upload files while editing a project.</p></div><% end %>
+<ul class="grid grid-cols-2 gap-6 md:grid-cols-3 xl:grid-cols-4">
+  <% @assets.each do |asset| %>
+    <li><%= link_to [:admin, asset], class: "block" do %>
+      <% if asset.is_a?(Image) %><%= image_tag Media::AssetUrl.call(asset, preview: true), alt: "", loading: "lazy", class: "aspect-square w-full object-cover" %><% else %><%= video_tag Media::AssetUrl.call(asset, preview: true), preload: "metadata", muted: true, class: "aspect-square w-full object-cover" %><% end %>
+      <span class="mt-2 block text-base font-medium [overflow-wrap:anywhere]"><%= asset.title %></span><span class="text-base text-(--text-muted)"><%= asset.published_file ? "Published" : "Private" %></span>
+    <% end %></li>
+  <% end %>
+</ul>
+<nav class="mt-8 flex gap-2" aria-label="Library pages">
+  <% if @listing > 1 %><%= link_to "Newer", polymorphic_path([:admin, model], q: params[:q].presence, page: @listing - 1), class: "btn btn--quiet" %><% end %>
+  <% if @more %><%= link_to "Older", polymorphic_path([:admin, model], q: params[:q].presence, page: @listing + 1), class: "btn btn--quiet" %><% end %>
+</nav>

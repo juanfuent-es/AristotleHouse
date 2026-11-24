@@ -24,6 +24,6 @@ void main() {
     s += touch(vUv) * .5;
 
     // Hot air glows more.
-    float q = (1. - exp(-s * mix(.75, 1.75, uWarmth))) * uHeat;
+    float q = (1. - exp(-s * mix(.5, 2.3, uWarmth))) * uHeat;
     gl_FragColor = vec4(read(q * mix(.78, .94, uPaper)), 1.);
 }

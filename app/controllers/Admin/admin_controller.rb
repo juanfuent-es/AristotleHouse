@@ -1,11 +1,7 @@
 class Admin::AdminController < Admin::BaseController
   def index
-    @counts = {
-      projects: Page.projects.count,
-      articles: Page.articles.count,
-      drafts: Page.drafts.count,
-      images: Image.count
-    }
-    @recent = Page.where(category: Page::CATEGORIES - ["web-lab"]).order(updated_at: :desc).limit(8)
+    @counts = { "Published" => Page.projects.published.count, "Drafts" => Page.editorial.where.not(draft_content: nil).count,
+      "Images" => Image.count, "Videos" => Video.count }
+    @recent = Page.editorial.order(updated_at: :desc).limit(8)
   end
 end

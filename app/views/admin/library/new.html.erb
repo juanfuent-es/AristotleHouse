@@ -1,0 +1,10 @@
+<% image = model == Image %>
+<%= render "admin/shared/heading", title: "New #{model.name.downcase}" %>
+<%= render "admin/shared/errors", object: @asset %>
+<%= form_with model: [:admin, @asset], multipart: true, class: "panel grid max-w-2xl gap-5" do |f| %>
+  <div class="field"><%= f.label :file, "File" %><%= f.file_field :file, class: "input", required: true, accept: image ? "image/jpeg,image/png,image/webp" : "video/mp4", data: { preview: ("file-preview" if image) } %><p class="field__hint"><%= image ? "JPEG, PNG or WebP, up to 15 MB." : "MP4 with H.264 video, up to 100 MB." %> It stays private until a page that uses it is published.</p></div>
+  <% if image %><img id="file-preview" alt="Preview" class="max-h-80 w-auto" hidden><% end %>
+  <div class="field"><%= f.label :title, "Title (optional)" %><%= f.text_field :title, class: "input", maxlength: 160 %></div>
+  <% if image %><div class="field"><%= f.label :alt, "Alternative text" %><%= f.text_field :alt, class: "input", maxlength: 255 %><p class="field__hint">What someone who cannot see the image should know.</p></div><% end %>
+  <p><%= f.submit "Add to library", class: "btn" %></p>
+<% end %>

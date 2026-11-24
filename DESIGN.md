@@ -118,24 +118,35 @@ The WebGL scene reads them from `app/javascript/scene/spectra.js`.
 - The default social image is `public/brand/share.jpg`, 1280 × 640. Its editable composition is `design/share.html`, using the self-hosted Zalando Sans Expanded and Inter fonts. Capture it at that viewport after fonts load; page covers still override it.
 
 ## Micrographics
-- The set lives in one sprite, `public/brand/micro.svg`, and is drawn in the text colour with the `micrograph` helper: crosshair, globe, barcode, ruler, peripatetic, portrait, seated, head-left, head-front, head-right. Labels use `.pill`, `.box` and `.bracket`.
-- They carry facts or do something: the heads turn the bust, the peripatetic stands at the temperature on the ruler, the sight says which weight it is over. Never publish the presentation's sample readings.
+- The set lives in one sprite, `public/brand/micro.svg`, drawn in the text colour with the `micrograph` helper: symbols (crosshair, globe, barcode, ruler, peripatetic, portrait, seated, head-left, head-front, head-right) and the toolkit's line icons (`icon-*`).
+- They belong to the interiors: projects, House, sign in, admin. Small, one per place, never louder than the text.
+- The holding screen only uses the three heads, which turn the bust, and a small sight on the pointer.
+- Never publish the presentation's sample readings.
 
 ## Climate
-- `/climate.json` describes the air over Dubai; the holding screen moves with it. Sun above 4° turns the page to bone and the spectrum to Lyceum day; below, ink and Lyceum. Never a mix of both. Near the horizon a band of heat rises.
-- Felt temperature warms the stone and the glow, wind drives the drift, humidity the halo, cloud flattens the light.
-- `Perceived` is the apparent temperature (Steadman) from MET Norway's forecast, credited on screen. With no data, the reading is hidden, not invented.
-- `/?at=13:00` previews any hour.
+- `/climate.json` describes the air over Dubai; the holding screen shows hour, temperature and wind, and moves with them. Sun above 4° turns the page to bone and the spectrum to Lyceum day; below, ink and Lyceum. Never a mix of both. Near the horizon a band of heat rises.
+- Temperature moves the whole reading along the spectrum: violet and lilac when cool, orange and cream when hot. Wind drives the drift, humidity the halo, cloud flattens the light.
+- Live, Day and Night preview the page with the forecast for 13:00 and 23:00. `/?at=17:10` previews any hour.
+- With no data the reading is hidden, not invented. MET Norway is credited in `/humans`.
 
 ## Layout & Elevation
 - Square corners, 1px rules, no shadows. Depth comes from light and from tone.
 - Corners carry the facts; the centre carries the feeling.
-- Public pages are ink. Case studies, articles, legal texts and admin are day.
+- Public pages are ink. Case studies, legal texts, the editor and admin are day.
 
 ## Motion
 - Heat moves slowly, like attention. Nothing bounces.
 - The bust turns to study whoever is there. The pointer leaves warmth that fades.
 - With reduced motion the scene is a still image.
+
+## Foil
+- The holographic foil of the presentation lives on type, not on cards: titles and text links take it while the pointer is on them. It spreads from the point of contact and follows it.
+- On ink it uses the presentation's eleven stops; on bone only their saturated half. Never on body text, buttons, forms or the editor.
+- Touch screens and keyboards keep the usual states.
+
+## Editing
+- Editing keeps the page as visitors see it: fields inherit its type and only add a 1px rule.
+- Tools are quiet: one bar at the top, one above the text.
 
 ## Do's and Don'ts
 - Do show people, clients' products and finished spaces as shot, without filters.

@@ -1,0 +1,18 @@
+<%= render "admin/shared/heading", title: @asset.title_in_database %>
+<%= render "admin/shared/errors", object: @asset %>
+<div class="grid gap-8 xl:grid-cols-[minmax(0,1fr)_22rem]">
+  <% url = Media::AssetUrl.call(@asset, preview: true) %>
+  <% if @asset.is_a?(Image) %><%= image_tag url, alt: @asset.alt, width: @asset.width, height: @asset.height, class: "h-auto w-full" %><% else %><%= video_tag url, controls: true, playsinline: true, preload: "metadata", class: "w-full" %><% end %>
+  <div class="space-y-4">
+    <%= form_with model: [:admin, @asset], class: "panel grid gap-4" do |f| %>
+      <div class="field"><%= f.label :title %><%= f.text_field :title, class: "input", required: true, maxlength: 160 %></div>
+      <% if @asset.is_a?(Image) %><div class="field"><%= f.label :alt, "Alternative text" %><%= f.text_field :alt, class: "input", maxlength: 255 %></div><% end %>
+      <p><%= f.submit "Save", class: "btn" %></p>
+    <% end %>
+    <% if @asset.in_use? %>
+      <p class="text-base text-(--text-muted)">This file is published or used in a page, so it has to stay.</p>
+    <% else %>
+      <details class="text-base"><summary class="cursor-pointer py-2">Delete this file</summary><p class="my-3">This cannot be undone.</p><%= button_to "Delete", [:admin, @asset], method: :delete, class: "btn btn--danger" %></details>
+    <% end %>
+  </div>
+</div>

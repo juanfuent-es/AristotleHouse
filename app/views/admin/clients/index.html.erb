@@ -1,6 +1,0 @@
-<%= render "admin/shared/heading", title: "Clients", action: ["New client", new_admin_client_path] %>
-<% if @clients.empty? %><div class="panel"><p class="title">No clients yet</p><p class="mt-2">Keep the House's contacts here. On a project, the client's name is written as a fact.</p></div><% else %>
-<table class="table"><thead><tr><th>Name</th><th>Country</th><th>Website</th></tr></thead><tbody>
-  <% @clients.each do |client| %><tr><td><%= link_to client.name, edit_admin_client_path(client), class: "link font-medium" %></td><td><%= client.country.name_en %></td><td><%= client.url %></td></tr><% end %>
-</tbody></table>
-<% end %>

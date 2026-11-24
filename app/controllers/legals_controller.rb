@@ -1,5 +1,5 @@
 class LegalsController < ApplicationController
-  before_action { @page = Page.static.find_by(slug: action_name) }
+  before_action { @page = Page.static.published.find_by(slug: action_name) }
 
   def terms = render(:show)
 

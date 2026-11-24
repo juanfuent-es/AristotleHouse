@@ -1,0 +1,20 @@
+<dialog class="library" aria-labelledby="library-title" data-content-editor-target="dialog">
+  <header class="flex items-center justify-between gap-4">
+    <h2 class="title" id="library-title">Library</h2>
+    <button type="button" class="btn btn--small btn--quiet" data-action="content-editor#closeLibrary">Close</button>
+  </header>
+  <div class="mt-4 flex flex-wrap items-center gap-2">
+    <button type="button" class="btn btn--small btn--quiet" data-kind="images" aria-pressed="true" data-content-editor-target="kind" data-action="content-editor#changeKind">Images</button>
+    <button type="button" class="btn btn--small btn--quiet" data-kind="videos" aria-pressed="false" data-content-editor-target="kind" data-action="content-editor#changeKind">Videos</button>
+    <label for="library-search" class="sr-only">Search by title</label>
+    <input id="library-search" type="search" class="input !w-auto flex-1" placeholder="Search by title" data-content-editor-target="search" data-action="keydown.enter->content-editor#searchLibrary">
+    <button type="button" class="btn btn--small btn--quiet" data-action="content-editor#searchLibrary">Search</button>
+  </div>
+  <form class="mt-4 flex flex-wrap items-end gap-2" data-content-editor-target="uploadForm" data-action="submit->content-editor#upload">
+    <div class="field flex-1"><label for="library-file">Upload a file</label><input type="file" id="library-file" name="asset[file]" required class="input" data-content-editor-target="uploadFile"></div>
+    <button type="submit" class="btn btn--small" data-content-editor-target="uploadButton">Upload and use</button>
+  </form>
+  <p class="mt-4 text-base text-(--text-muted)" role="status" data-content-editor-target="libraryStatus"></p>
+  <div class="library__grid" data-content-editor-target="grid"></div>
+  <button type="button" class="btn btn--small btn--quiet" hidden data-content-editor-target="more" data-action="content-editor#moreLibrary">More files</button>
+</dialog>

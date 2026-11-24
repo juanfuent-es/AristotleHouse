@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
   before_action :hold_until_launch
 
   after_action :set_vary_header
+  after_action :keep_private
   around_action :switch_lang
 
   helper_method :site, :admin?
@@ -12,7 +13,7 @@ class ApplicationController < ActionController::Base
   end
 
   def admin?
-    user_signed_in? && current_user.admin? && !current_user.banned?
+    EditorialPolicy.new(current_user).manage?
   end
 
   # Is there an administrator signed in?
@@ -46,6 +47,12 @@ class ApplicationController < ActionController::Base
   def redirect_nonwww
     return unless request.host.start_with?("www.")
     redirect_to "#{request.protocol}#{request.host.delete_prefix("www.")}#{request.fullpath}", status: :moved_permanently, allow_other_host: true
+  end
+
+  # Nothing an administrator sees is cached. Drafts never reach a search engine.
+  def keep_private
+    response.headers["Cache-Control"] = "private, no-store" if @private || admin?
+    response.headers["X-Robots-Tag"] = "noindex, nofollow" if @private
   end
 
   def set_vary_header

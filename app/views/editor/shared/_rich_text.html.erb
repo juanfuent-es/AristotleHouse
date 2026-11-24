@@ -1,0 +1,10 @@
+<div class="edit-tools" role="toolbar" aria-label="Text format" hidden data-content-editor-target="toolbar">
+  <% [["bold", "Bold"], ["italic", "Italic"], ["heading", "Heading"], ["bulletList", "List"], ["orderedList", "Numbers"], ["blockquote", "Quote"], ["link", "Link"], ["undo", "Undo"], ["redo", "Redo"]].each do |command, label| %>
+    <button type="button" class="edit-tool" data-command="<%= command %>" data-action="content-editor#format"><%= label %></button>
+  <% end %>
+  <button type="button" class="edit-tool" data-action="content-editor#insertMedia">Image or video</button>
+</div>
+<%= form.label :content, label, class: "sr-only" %>
+<%= form.text_area :content, value: Content::Html.render(content.content, preview: true), rows: 14, class: "input", aria: field_state(content, :content), data: { content_editor_target: "source" } %>
+<div class="edit-text" data-content-editor-target="surface"></div>
+<%= field_error(content, :content) %>

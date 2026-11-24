@@ -1,9 +1,0 @@
-<%= render "admin/shared/heading", title: "New share file" %>
-<%= render "admin/shared/errors", object: @og %>
-<%= form_with model: [:admin, @og], multipart: true, class: "panel grid max-w-2xl gap-5" do |f| %>
-  <div class="field"><%= f.label :category %><%= f.select :category, %w[image video audio], {}, class: "input" %></div>
-  <div class="field"><%= f.label :image %><%= f.file_field :image, class: "input", accept: "image/*" %></div>
-  <div class="field"><%= f.label :video %><%= f.file_field :video, class: "input", accept: "video/mp4" %></div>
-  <div class="field"><%= f.label :audio %><%= f.file_field :audio, class: "input", accept: "audio/mpeg" %></div>
-  <p><%= f.submit "Save", class: "btn" %></p>
-<% end %>

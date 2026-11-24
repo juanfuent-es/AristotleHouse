@@ -5,9 +5,13 @@
     <a href="#app" class="sr-only focus:not-sr-only">Skip to content</a>
     <%= render "shared/admin_bar" %>
     <%= render "shared/header" %>
-    <main id="app" class="flex-1"><%= yield %></main>
+    <main id="app" class="flex-1">
+      <% if notice.present? && !@editing %><p class="gutter" role="status"><span class="notice block"><%= notice %></span></p><% end %>
+      <%= yield %>
+    </main>
     <%= render "shared/footer" %>
     <%= vite_client_tag %>
     <%= vite_javascript_tag "application" %>
+    <%= vite_javascript_tag "editor" if @editing %>
   </body>
 </html>

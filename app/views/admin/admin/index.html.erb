@@ -1,9 +1,23 @@
-<%= render "admin/shared/heading", title: "Overview", action: ["New project", new_admin_project_path] %>
-<p class="notice mb-8"><% if site.coming_soon %>The site is closed. Visitors see the holding screen; you can browse everything while signed in.<% else %>The site is open to visitors.<% end %></p>
+<%= render "admin/shared/heading", title: "Overview", action: ["New project", new_project_path] %>
+<p class="notice mb-8"><% if site.coming_soon %>The site is closed. Visitors see the holding screen; you can browse and edit everything while signed in.<% else %>The site is open to visitors.<% end %></p>
 <dl class="mb-10 grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-4">
-  <% { "Projects" => :projects, "Articles" => :articles, "Drafts" => :drafts, "Images" => :images }.each do |label, key| %>
-    <div class="rule flex flex-col-reverse"><dt class="text-base text-[var(--text-muted)]"><%= label %></dt><dd class="title !text-4xl"><%= @counts[key] %></dd></div>
+  <% @counts.each do |label, count| %>
+    <div class="rule flex flex-col-reverse"><dt class="text-base text-(--text-muted)"><%= label %></dt><dd class="title !text-4xl"><%= count %></dd></div>
   <% end %>
 </dl>
 <h2 class="title mb-3">Recently edited</h2>
-<%= render "admin/content/table", pages: @recent, mixed: true %>
+<div class="relative overflow-x-auto">
+  <table class="table">
+    <thead><tr><th>Title</th><th>Status</th><th>Updated</th><th><span class="sr-only">Actions</span></th></tr></thead>
+    <tbody>
+      <% @recent.each do |page| %>
+        <tr>
+          <td><%= link_to page.editable_copy.title, content_edit_path(page), class: "link font-medium" %></td>
+          <td><span class="tag <%= "tag--on" if page.published? && !page.draft? %>"><%= page.archived? ? "Archived" : page.draft? ? "Draft" : "Published" %></span></td>
+          <td class="whitespace-nowrap"><%= l page.updated_at.to_date, format: :long %></td>
+          <td class="whitespace-nowrap text-right"><%= link_to page.published? ? "View" : "Preview", page.published? ? content_path(page) : content_preview_path(page), class: "link" %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

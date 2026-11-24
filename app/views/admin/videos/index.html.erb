@@ -1,6 +1,0 @@
-<%= render "admin/shared/heading", title: "Videos", action: ["New video", new_admin_video_path] %>
-<% if @videos.empty? %><div class="panel"><p class="title">The library is empty</p><p class="mt-2">Add videos here, then place them in projects and articles.</p></div><% else %>
-<table class="table"><thead><tr><th>Title</th><th>Added</th></tr></thead><tbody>
-  <% @videos.each do |video| %><tr><td><%= link_to video.title, admin_video_path(video), class: "link font-medium" %></td><td><%= l video.created_at.to_date, format: :long %></td></tr><% end %>
-</tbody></table>
-<% end %>

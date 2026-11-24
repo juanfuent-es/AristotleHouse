@@ -44,7 +44,6 @@ export default class HoldingScene {
         this.maxRatio = Math.min(window.devicePixelRatio || 1, window.innerWidth < 768 ? 1.75 : 1.6)
 
         this.ramp = new Ramp()
-        this.mode = 'live'
         this.air = { day: 0, horizon: 0, warmth: .4, wind: .2, haze: .4, cloud: 0 }
         this.shared = {
             uRamp: { value: this.ramp.texture },
@@ -162,23 +161,15 @@ export default class HoldingScene {
     }
 
     /**
-     * The air, from /climate.json. Sun picks the spectrum and the page, felt heat
+     * The air, from /climate.json. Sun picks the spectrum and the page, temperature
      * the stone and the glow, wind the drift, humidity the halo, cloud the light.
      */
     climate(air) {
         this.air = air
         const { uHorizon, uWarmth, uWind, uHaze, uCloud } = this.shared
         const to = [[uHorizon, 'horizon'], [uWarmth, 'warmth'], [uWind, 'wind'], [uHaze, 'haze'], [uCloud, 'cloud']]
-        to.forEach(([uniform, key]) => this.ease(uniform, { value: key === 'horizon' && this.mode !== 'live' ? 0 : air[key] }, 2.4))
-        this.travel(2.4)
-    }
-
-    // live | lyceum | ring | ultra. Isotherms belong to the ring reading.
-    read(mode) {
-        this.mode = mode
-        this.ease(this.shared.uIso, { value: mode === 'ring' ? 1 : 0 }, .9)
-        this.ease(this.shared.uHorizon, { value: mode === 'live' ? this.air.horizon : 0 }, .9)
-        this.travel(.9)
+        to.forEach(([uniform, key]) => this.ease(uniform, { value: air[key] }, 1.8))
+        this.travel(1.8)
     }
 
     // The three drawings of the head: left, front, right.
@@ -191,14 +182,11 @@ export default class HoldingScene {
     }
 
     travel(duration) {
-        const live = this.mode === 'live'
-        const paper = live ? this.air.day : 0
-        if (live) this.ramp.aim('lyceum', 'lday', this.air.day)
-        else this.ramp.aim(this.mode)
+        this.ramp.aim('lyceum', 'lday', this.air.day)
         this.rampTween?.kill()
         if (this.reduced) this.ramp.progress = 1
         else this.rampTween = gsap.fromTo(this.ramp, { step: 0 }, { step: 1, duration, ease: 'power2.inOut', onUpdate: () => { this.ramp.progress = this.ramp.step } })
-        this.ease(this.shared.uPaper, { value: paper, onUpdate: () => this.page() }, duration)
+        this.ease(this.shared.uPaper, { value: this.air.day, onUpdate: () => this.page() }, duration)
         this.page()
     }
 
@@ -329,13 +317,9 @@ export default class HoldingScene {
 
         this.glass.update(delta, this.time, idle ? null : this.cursor)
 
-        let heat = 0
-        this.trail.forEach((point) => {
-            point.z *= Math.exp(-delta * 1.15)
-            heat = Math.max(heat, point.z)
-        })
+        this.trail.forEach((point) => { point.z *= Math.exp(-delta * 1.15) })
         this.shared.uDrift.value += delta * (.05 + this.shared.uWind.value * .5)
-        this.onFrame({ heat, cursor: idle ? null : this.cursor, letter: this.glass.nearest })
+        this.onFrame(idle ? null : this.cursor)
     }
 
     render() {

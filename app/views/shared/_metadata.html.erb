@@ -1,17 +1,16 @@
 <%
-  if @page
-    provide(:title, @page.og_title.presence || @page.title) unless content_for?(:title)
-    provide(:description, @page.og_description) unless content_for?(:description)
-    provide(:image, @page.og_image.url) if @page.cover? && !content_for?(:image)
-    provide(:keywords, @page.keywords) unless content_for?(:keywords)
+  if (current = @content || @page)
+    provide(:title, current.title) unless content_for?(:title)
+    provide(:description, current.description) unless content_for?(:description)
+    provide(:image, cover_url(current)) if cover_url(current) && !content_for?(:image)
   end
   default_image = !content_for?(:image)
   share_image = meta_image(yield(:image))
   image_alt = default_image ? "#{site.name} · #{site.tagline}" : full_title(yield(:title))
 %>
 <title><%= full_title(yield(:title)) %></title>
+<% if @private %><meta name="robots" content="noindex, nofollow"><% end %>
 <meta name="description" content="<%= meta_description(yield(:description)) %>">
-<% if yield(:keywords).present? %><meta name="keywords" content="<%= yield(:keywords) %>"><% end %>
 <link rel="canonical" href="<%= canonical %>">
 
 <meta property="og:site_name" content="<%= site.name %>">

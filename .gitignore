@@ -55,3 +55,4 @@ node_modules
 /public/images/
 /public/videos/
 .env
+/public/media/

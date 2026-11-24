@@ -1,0 +1,54 @@
+<% creating = @page.new_record? %>
+<% provide(:theme, "day") %>
+<% provide(:title, creating ? "New project" : "Editing #{@page.title}") %>
+<div data-controller="content-editor" data-content-editor-images-url-value="<%= editor_images_path %>" data-content-editor-videos-url-value="<%= editor_videos_path %>" data-action="input->content-editor#changed change->content-editor#changed">
+  <div class="edit-bar gutter" role="group" aria-label="Editing tools">
+    <p class="flex flex-wrap items-center gap-x-3 text-base">
+      <span class="tag <%= "tag--on" if @page.published? && !@page.draft? %>"><%= creating ? "New" : @page.archived? ? "Archived" : @page.draft? ? "Draft" : "Published" %></span>
+      <span role="status" data-content-editor-target="status"><%= @content.errors.any? ? "Check the notes below" : notice.presence || (creating ? "Not saved yet" : "Saved") %></span>
+    </p>
+    <div class="flex flex-wrap gap-2">
+      <% unless creating %>
+        <%= link_to "Preview", content_preview_path(@page), class: "btn btn--small btn--quiet", target: "_blank", rel: "noopener" %>
+        <% if @page.published? %><%= link_to "View published", content_path(@page), class: "btn btn--small btn--quiet", target: "_blank", rel: "noopener" %><% end %>
+      <% end %>
+      <button type="submit" form="content-form" class="btn btn--small btn--quiet" data-content-editor-target="save" <%= "disabled" if @conflict %>>Save draft</button>
+      <% unless creating %>
+        <%= form_with url: editor_page_publication_path(@page), data: { action: "submit->content-editor#publishing" } do %>
+          <%= hidden_field_tag :lock_version, @page.lock_version, id: nil %>
+          <button type="submit" class="btn btn--small" data-content-editor-target="publish" <%= "disabled" if @conflict || @page.archived? || !@page.draft? %>>Publish</button>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <% if @content.errors.any? %>
+    <div class="gutter pt-6"><div class="notice notice--error" role="alert" tabindex="-1" data-content-editor-target="errors">
+      <p class="font-medium"><%= @error_title || "Not saved" %></p>
+      <ul class="mt-1 list-disc pl-5"><% @content.errors.full_messages.uniq.each do |message| %><li><%= message %></li><% end %></ul>
+      <% if @conflict %><p class="mt-2"><%= link_to "Reload the saved version", content_edit_path(@page), class: "link" %></p><% end %>
+    </div></div>
+  <% end %>
+
+  <%= form_with model: @content, scope: :page, url: creating ? editor_pages_path : editor_page_draft_path(@page), method: creating ? :post : :patch, id: "content-form", data: { content_editor_target: "form", action: "submit->content-editor#saving" } do |form| %>
+    <% unless creating %><%= hidden_field_tag :lock_version, @page.lock_version, id: nil %><% end %>
+    <% if @content.project? %>
+      <%= render "projects/composition", content: @content, form: form, preview: true %>
+      <div class="gutter"><div class="rule flex flex-wrap items-center gap-x-8 gap-y-4 text-base">
+        <label class="flex items-center gap-3"><%= form.check_box :featured_on_home, class: "size-5 accent-violet" %> Show on home</label>
+        <% unless creating %><%= link_to "Preview home with the saved draft", editor_home_preview_path(@page), class: "link", target: "_blank", rel: "noopener" %><% end %>
+      </div></div>
+    <% else %>
+      <%= render "editor/pages/document", content: @content, form: form %>
+    <% end %>
+  <% end %>
+
+  <% if @page.project? && !creating %>
+    <details class="gutter pt-10 text-base">
+      <summary class="cursor-pointer py-2"><%= @page.archived? ? "Restore this project" : "Archive this project" %></summary>
+      <p class="my-3 max-w-[60ch] text-(--text-soft)">An archived project leaves the site and keeps its content.</p>
+      <%= button_to @page.archived? ? "Restore" : "Archive", editor_page_archive_path(@page), method: :patch, params: { archived: @page.archived? ? "0" : "1", lock_version: @page.lock_version }, class: "btn btn--small btn--quiet" %>
+    </details>
+  <% end %>
+  <%= render "editor/shared/library" %>
+</div>

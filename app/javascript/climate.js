@@ -8,20 +8,29 @@ const EVERY = 5 * 60 * 1000
 export default class Climate {
     constructor(onChange) {
         this.onChange = onChange
-        // ?at=13:00 shows the page as it will be at that hour in Dubai
+        // ?at=17:10 opens the page as it will be at that hour in Dubai
         this.at = new URLSearchParams(location.search).get('at')
         this.check()
-        this.timer = setInterval(() => { if (!document.hidden) this.check() }, EVERY)
+        setInterval(() => { if (!document.hidden) this.check() }, EVERY)
         document.addEventListener('visibilitychange', () => {
             if (!document.hidden && Date.now() - this.last > EVERY) this.check()
         })
     }
 
+    // An hour to simulate ("13:00"), or null for the present.
+    simulate(at) {
+        this.at = at
+        return this.check()
+    }
+
     async check() {
         this.last = Date.now()
+        const { at } = this
         try {
-            const response = await fetch(`/climate.json${this.at ? `?at=${encodeURIComponent(this.at)}` : ''}`)
-            if (response.ok) this.onChange(await response.json(), !this.at)
+            const response = await fetch(`/climate.json${at ? `?at=${encodeURIComponent(at)}` : ''}`)
+            if (!response.ok) return
+            const reading = await response.json()
+            if (at === this.at) this.onChange(reading, !at) // a newer choice wins
         } catch {
             // Offline: the last reading stays.
         }

@@ -1,0 +1,15 @@
+<% headline = %w[house contact].include?(content.slug) %>
+<article class="gutter pt-16 md:pt-24">
+  <% if headline %>
+    <%= form.hidden_field :title %>
+    <%= form.label :description, "Headline", class: "sr-only" %>
+    <%= form.text_area :description, rows: 1, maxlength: 300, class: "edit display !text-[clamp(2.5rem,1rem+4.4vw,6rem)]", aria: field_state(content, :description), data: { action: "input->content-editor#resize" } %>
+    <%= field_error(content, :description) %>
+    <% if content.slug == "house" %><p class="mt-6 max-w-[60ch] text-base text-(--text-muted)">Leave the text empty to keep the designed page. Anything written here replaces what is under the headline.</p><% end %>
+  <% else %>
+    <%= form.label :title, class: "sr-only" %>
+    <%= form.text_area :title, rows: 1, maxlength: 160, required: true, class: "edit headline", aria: field_state(content, :title), data: { action: "input->content-editor#resize" } %>
+    <%= field_error(content, :title) %>
+  <% end %>
+  <div class="mt-10"><%= render "editor/shared/rich_text", form: form, content: content, label: "Text" %></div>
+</article>

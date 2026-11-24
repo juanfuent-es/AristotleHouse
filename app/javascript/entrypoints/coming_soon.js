@@ -15,11 +15,13 @@ const ui = new Interface(root, { reduced })
 let scene
 let air
 
-new Climate((reading, live) => {
+const climate = new Climate((reading, live) => {
     ui.climate(reading, live)
     air = reading.drive
     scene?.climate(air)
 })
+
+ui.onHour = (hour) => climate.simulate(hour)
 
 function supported() {
     try {
@@ -43,7 +45,7 @@ async function start() {
         lines: root.querySelectorAll('[data-glass]'),
         model: small ? canvas.dataset.modelSmall : canvas.dataset.model,
         reduced,
-        onFrame: (frame) => ui.frame(frame),
+        onFrame: (cursor) => ui.frame(cursor),
         onPaper: (day) => ui.paper(day)
     })
     await holding.load()
@@ -51,7 +53,6 @@ async function start() {
     root.classList.add('is-live')
     scene.start()
     if (air) scene.climate(air)
-    ui.onRead = (mode) => scene.read(mode)
     ui.onTurn = (view) => scene.turn(view)
     canvas.addEventListener('scene:lost', still)
     if (import.meta.env.MODE !== 'production') window.holding = scene

@@ -4,7 +4,7 @@
 Rails.application.config.x.site = ActiveSupport::OrderedOptions.new.merge!(
   name: "Aristotle House",
   short_name: "Aristotle",
-  tagline: "Experiential intelligence",
+  tagline: "Experiential agency",
   description: "Aristotle House is an experiential agency in Dubai. We read people before we build for them.",
   city: "Dubai",
   country: "UAE",

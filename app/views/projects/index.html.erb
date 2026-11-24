@@ -1,4 +1,21 @@
 <% provide(:title, "Work") %>
 <% provide(:description, "Worlds built for brands, and what people did inside them.") %>
-<header class="gutter pb-14 pt-16 md:pt-24"><h1 class="display">Work</h1></header>
+<header class="gutter flex flex-wrap items-end justify-between gap-6 pb-14 pt-16 md:pt-24">
+  <h1 class="display">Work</h1>
+  <% if admin? %><%= link_to "New project", new_project_path, class: "btn" %><% end %>
+</header>
 <section class="gutter"><%= render "projects/grid", projects: @projects %></section>
+<% if admin? %>
+  <% if @drafts.any? %>
+    <section class="gutter pt-24" aria-labelledby="drafts">
+      <div class="rule mb-8"><h2 class="title" id="drafts">Drafts</h2><p class="mt-2 text-base text-(--text-soft)">Only administrators see these.</p></div>
+      <%= render "projects/grid", projects: @drafts, drafts: true %>
+    </section>
+  <% end %>
+  <% if @archived.any? %>
+    <section class="gutter pt-24" aria-labelledby="archived">
+      <div class="rule mb-6"><h2 class="title" id="archived">Archived</h2></div>
+      <ul class="space-y-2"><% @archived.each do |project| %><li><%= link_to project.title, content_edit_path(project), class: "link" %></li><% end %></ul>
+    </section>
+  <% end %>
+<% end %>

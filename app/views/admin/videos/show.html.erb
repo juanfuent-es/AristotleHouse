@@ -1,3 +1,0 @@
-<%= render "admin/shared/heading", title: @video.title %>
-<%= video_tag @video.file.url, controls: true, playsinline: true, class: "w-full max-w-4xl" %>
-<p class="mt-6"><%= link_to "Delete video", admin_video_path(@video), method: :delete, data: { confirm: "Delete “#{@video.title}”? This cannot be undone." }, class: "btn btn--danger" %></p>
