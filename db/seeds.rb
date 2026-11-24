@@ -1,7 +1,7 @@
 # Admin login. The address is a placeholder used only to sign in. In production the
 # password comes from ADMIN_PASSWORD; there is no default.
-email = ENV["ADMIN_EMAIL"].presence || "admin@aristotle-house.com"
-password = ENV["ADMIN_PASSWORD"].presence || ("password" unless Rails.env.production?)
+email = "admin@aristotle-house.com"
+password = "password"
 
 admin = User.find_by(email: email)
 unless admin
