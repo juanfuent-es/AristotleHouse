@@ -1,0 +1,6 @@
+<%# The gaze has two masters, one per ground. The name is live type, so it takes the foil. %>
+<%= link_to !@bare && admin? ? home_path : root_path, class: "flex items-center gap-2.5 py-2", data: { foil: "wordmark" } do %>
+  <img src="/brand/gaze-light.svg" alt="" width="32" height="32" class="size-7 day:hidden md:size-8">
+  <img src="/brand/gaze-dark.svg" alt="" width="32" height="32" class="hidden size-7 day:block md:size-8">
+  <span class="wordmark"><%= site.name %></span>
+<% end %>

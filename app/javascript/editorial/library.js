@@ -61,12 +61,14 @@ export default class Library {
     append(asset) {
         const button = document.createElement('button')
         button.type = 'button'
-        button.className = 'library__item'
+        button.className = 'min-w-0 cursor-pointer text-left hover:text-accent'
         const media = document.createElement(asset.kind === 'image' ? 'img' : 'video')
+        media.className = 'aspect-4/3 w-full bg-surface object-cover'
         media.src = asset.url
         if (asset.kind === 'image') Object.assign(media, { alt: '', loading: 'lazy' })
         else Object.assign(media, { muted: true, preload: 'metadata' })
         const title = document.createElement('span')
+        title.className = 'mt-1.5 block text-sm wrap-anywhere'
         title.textContent = asset.title
         button.append(media, title)
         button.addEventListener('click', () => this.choose(asset))

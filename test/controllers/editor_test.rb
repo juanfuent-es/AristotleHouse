@@ -11,7 +11,7 @@ class EditorTest < ActionDispatch::IntegrationTest
       assert_select "a[href=?]", new_project_path, count: 0
       get project_path(page.slug)
       assert_select "h1", "Open case"
-      assert_select ".case__facts dd", "A client"
+      assert_select "[data-facts] dd", "A client"
       assert_select "[data-controller=content-editor]", count: 0
       get project_path("hidden-case")
       assert_response :not_found
@@ -60,7 +60,7 @@ class EditorTest < ActionDispatch::IntegrationTest
 
     get preview_project_path("a-reading")
     assert_select "h1", "A reading"
-    assert_select ".case__facts dd", "A client"
+    assert_select "[data-facts] dd", "A client"
     assert_select "span.tag", "Sound"
     assert_equal ["private, no-store", "noindex, nofollow"], response.headers.values_at("Cache-Control", "X-Robots-Tag")
 

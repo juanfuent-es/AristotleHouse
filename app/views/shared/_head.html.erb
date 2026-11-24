@@ -6,5 +6,7 @@
 <%= csrf_meta_tags %>
 <%= csp_meta_tag %>
 <%= stylesheet_link_tag "application" %>
-<%= render "shared/json_ld" %>
-<%= render "shared/tag_manager" unless @private %>
+<% unless @private %>
+  <%= render "shared/json_ld" %>
+  <%= render "shared/tag_manager" %>
+<% end %>

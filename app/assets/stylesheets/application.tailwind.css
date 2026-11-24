@@ -3,10 +3,6 @@
 @import "./design-system/tokens.css";
 @import "./design-system/theme.css";
 @import "./design-system/components.css";
-@import "./design-system/holding.css";
-@import "./design-system/foil.css";
-@import "./design-system/editorial.css";
-@import "./design-system/technology.css";
 
 @source "../../../app/helpers";
 @source "../../../app/javascript";

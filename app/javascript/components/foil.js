@@ -3,8 +3,11 @@
  * touches a title or a link, and follows it.
  * @author JuanFuent.es
  */
-const TEXT = 'main :is(h1, h2, h3, h4), main blockquote, .link, .nav-link'
-const SPREAD = 1000 // as long as the transition in foil.css
+const TEXT = '.display, .lead, .headline, .title, .wordmark, .link, .nav-link, .rich :is(h2, h3, blockquote, a)'
+// Larger things to point at, and what lights up inside them
+const GROUPS = 'a[data-foil]'
+const WRITING = 'input, textarea, [contenteditable=true]'
+const SPREAD = 1000 // as long as the transition in components.css
 
 const clamp = (value, from, to) => Math.max(from, Math.min(to, value))
 
@@ -17,10 +20,12 @@ export default class Foil {
         document.documentElement.addEventListener('pointerleave', () => this.off())
     }
 
-    // A card lights its title. Tools and text being written stay as they are.
+    // Text that is being written stays as it is.
     find(target) {
-        const el = target instanceof Element && (target.closest('a.group')?.querySelector('h3, .headline') || target.closest(TEXT))
-        return el && !el.closest('.admin-bar, [data-controller~="content-editor"]') ? el : null
+        if (!(target instanceof Element)) return null
+        const group = target.closest(GROUPS)
+        const el = group ? group.querySelector(`.${group.dataset.foil}`) : target.closest(TEXT)
+        return el?.closest(WRITING) ? null : el
     }
 
     over(e) {
@@ -46,6 +51,7 @@ export default class Foil {
     }
 
     move(e) {
+        this.over(e) // the page can load with the pointer already there
         if (!this.el || this.frame) return
         this.frame = requestAnimationFrame(() => {
             this.frame = null

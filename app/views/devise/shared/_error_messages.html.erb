@@ -1,5 +1,1 @@
-<% if flash[:alert].present? || resource.errors.any? %>
-  <div class="notice notice--error mb-6" role="alert"><%= flash[:alert].presence || resource.errors.full_messages.to_sentence %></div>
-<% elsif flash[:notice].present? %>
-  <div class="notice mb-6" role="status"><%= flash[:notice] %></div>
-<% end %>
+<% if resource.errors.any? %><div class="notice notice--error" role="alert"><%= resource.errors.full_messages.to_sentence %></div><% end %>

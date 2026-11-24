@@ -1,4 +1,5 @@
 import Credits from '../components/credits'
+import Foil from '../components/foil'
 import Climate from '../climate'
 import Interface from '../holding/interface'
 
@@ -7,6 +8,7 @@ import Interface from '../holding/interface'
  * WebGL replaces them once the model is ready.
  */
 new Credits()
+new Foil()
 
 const root = document.querySelector('[data-holding]')
 const canvas = root.querySelector('canvas')

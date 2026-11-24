@@ -1,17 +1,18 @@
+<%# The only page shell. admin, devise, errors and coming_soon render inside it. %>
 <!DOCTYPE html>
-<html lang="<%= @lang %>" class="<%= content_for(:theme).presence || "night" %>">
+<html lang="<%= I18n.locale %>" class="night">
   <head><%= render "shared/head" %></head>
-  <body class="flex min-h-dvh flex-col">
+  <body class="isolate flex min-h-dvh flex-col">
     <a href="#app" class="sr-only focus:not-sr-only">Skip to content</a>
-    <%= render "shared/admin_bar" %>
+    <% unless @bare %><%= render "shared/toolbar" %><% end %>
     <%= render "shared/header" %>
-    <main id="app" class="flex-1">
-      <% if notice.present? && !@editing %><p class="gutter" role="status"><span class="notice block"><%= notice %></span></p><% end %>
-      <%= yield %>
+    <main id="app" class="flex flex-1 flex-col">
+      <%= render "shared/flash" unless @editing %>
+      <%= content_for?(:shell) ? yield(:shell) : yield %>
     </main>
-    <%= render "shared/footer" %>
+    <% unless @stage %><%= render "shared/footer" %><% end %>
     <%= vite_client_tag %>
-    <%= vite_javascript_tag "application" %>
+    <%= vite_javascript_tag @stage ? "coming_soon" : "application" %>
     <%= vite_javascript_tag "editor" if @editing %>
   </body>
 </html>

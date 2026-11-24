@@ -10,7 +10,7 @@
       <p><%= f.submit "Save", class: "btn" %></p>
     <% end %>
     <% if @asset.in_use? %>
-      <p class="text-base text-(--text-muted)">This file is published or used in a page, so it has to stay.</p>
+      <p class="text-base text-mute">This file is published or used in a page, so it has to stay.</p>
     <% else %>
       <details class="text-base"><summary class="cursor-pointer py-2">Delete this file</summary><p class="my-3">This cannot be undone.</p><%= button_to "Delete", [:admin, @asset], method: :delete, class: "btn btn--danger" %></details>
     <% end %>

@@ -8,7 +8,7 @@
 <% if admin? %>
   <% if @drafts.any? %>
     <section class="gutter pt-24" aria-labelledby="drafts">
-      <div class="rule mb-8"><h2 class="title" id="drafts">Drafts</h2><p class="mt-2 text-base text-(--text-soft)">Only administrators see these.</p></div>
+      <div class="rule mb-8"><h2 class="title" id="drafts">Drafts</h2><p class="mt-2 text-base text-soft">Only administrators see these.</p></div>
       <%= render "projects/grid", projects: @drafts, drafts: true %>
     </section>
   <% end %>

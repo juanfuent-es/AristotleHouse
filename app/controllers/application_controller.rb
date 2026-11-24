@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   after_action :keep_private
   around_action :switch_lang
 
-  helper_method :site, :admin?
+  helper_method :site, :admin?, :open?
 
   def site
     Rails.configuration.x.site
@@ -14,6 +14,11 @@ class ApplicationController < ActionController::Base
 
   def admin?
     EditorialPolicy.new(current_user).manage?
+  end
+
+  # Can whoever is here browse the site?
+  def open?
+    !site.coming_soon || admin?
   end
 
   # Is there an administrator signed in?
@@ -40,7 +45,7 @@ class ApplicationController < ActionController::Base
   # Visitors only reach the holding screen until launch. Controllers that must
   # answer before launch (login, errors, robots...) skip this filter.
   def hold_until_launch
-    return if !site.coming_soon || admin? || devise_controller?
+    return if open? || devise_controller?
     redirect_to root_path
   end
 

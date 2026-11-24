@@ -1,0 +1,15 @@
+<%# What administrators find on top of every page. %>
+<% if admin? %>
+  <div class="micro gutter flex flex-wrap items-center gap-x-6 border-b border-line text-soft">
+    <%= link_to @preview ? "Draft preview" : site.coming_soon ? "Visitors see the holding screen" : "Site open", root_path, class: "nav-link #{"max-md:hidden" unless @preview}" %>
+    <% current = @draft || @page %>
+    <% if current&.id && !@editing && Page.editorial.exists?(current.id) %><%= link_to @preview ? "Back to editing" : "Edit this page", content_edit_path(current), class: "nav-link text-accent" %><% end %>
+    <nav class="flex flex-wrap gap-x-4 md:ml-auto md:gap-x-6" aria-label="Admin">
+      <%= link_to "Admin", admin_path, class: "nav-link", "aria-current": ("page" if request.path == admin_path) %>
+      <%= nav_item "Projects", projects_path, class: "nav-link" %>
+      <%= nav_item "Images", admin_images_path, class: "nav-link" %>
+      <%= nav_item "Videos", admin_videos_path, class: "nav-link" %>
+      <%= link_to "Sign out", destroy_user_session_path, class: "nav-link" %>
+    </nav>
+  </div>
+<% end %>

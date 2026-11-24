@@ -1,8 +1,7 @@
 <% creating = @page.new_record? %>
-<% provide(:theme, "day") %>
 <% provide(:title, creating ? "New project" : "Editing #{@page.title}") %>
 <div data-controller="content-editor" data-content-editor-images-url-value="<%= editor_images_path %>" data-content-editor-videos-url-value="<%= editor_videos_path %>" data-action="input->content-editor#changed change->content-editor#changed">
-  <div class="edit-bar gutter" role="group" aria-label="Editing tools">
+  <div class="gutter sticky top-0 z-20 flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-y border-line bg-canvas py-3" role="group" aria-label="Editing tools">
     <p class="flex flex-wrap items-center gap-x-3 text-base">
       <span class="tag <%= "tag--on" if @page.published? && !@page.draft? %>"><%= creating ? "New" : @page.archived? ? "Archived" : @page.draft? ? "Draft" : "Published" %></span>
       <span role="status" data-content-editor-target="status"><%= @content.errors.any? ? "Check the notes below" : notice.presence || (creating ? "Not saved yet" : "Saved") %></span>
@@ -46,7 +45,7 @@
   <% if @page.project? && !creating %>
     <details class="gutter pt-10 text-base">
       <summary class="cursor-pointer py-2"><%= @page.archived? ? "Restore this project" : "Archive this project" %></summary>
-      <p class="my-3 max-w-[60ch] text-(--text-soft)">An archived project leaves the site and keeps its content.</p>
+      <p class="my-3 max-w-[60ch] text-soft">An archived project leaves the site and keeps its content.</p>
       <%= button_to @page.archived? ? "Restore" : "Archive", editor_page_archive_path(@page), method: :patch, params: { archived: @page.archived? ? "0" : "1", lock_version: @page.lock_version }, class: "btn btn--small btn--quiet" %>
     </details>
   <% end %>

@@ -7,7 +7,7 @@
   <% @assets.each do |asset| %>
     <li><%= link_to [:admin, asset], class: "block" do %>
       <% if asset.is_a?(Image) %><%= image_tag Media::AssetUrl.call(asset, preview: true), alt: "", loading: "lazy", class: "aspect-square w-full object-cover" %><% else %><%= video_tag Media::AssetUrl.call(asset, preview: true), preload: "metadata", muted: true, class: "aspect-square w-full object-cover" %><% end %>
-      <span class="mt-2 block text-base font-medium [overflow-wrap:anywhere]"><%= asset.title %></span><span class="text-base text-(--text-muted)"><%= asset.published_file ? "Published" : "Private" %></span>
+      <span class="mt-2 block text-base font-medium wrap-anywhere"><%= asset.title %></span><span class="text-base text-mute"><%= asset.published_file ? "Published" : "Private" %></span>
     <% end %></li>
   <% end %>
 </ul>

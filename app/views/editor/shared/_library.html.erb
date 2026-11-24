@@ -1,4 +1,4 @@
-<dialog class="library" aria-labelledby="library-title" data-content-editor-target="dialog">
+<dialog class="m-auto max-h-[calc(100dvh-2rem)] w-[min(100%-2rem,60rem)] overflow-y-auto border border-control bg-canvas p-4 text-copy backdrop:bg-ink/70 md:p-8" aria-labelledby="library-title" data-content-editor-target="dialog">
   <header class="flex items-center justify-between gap-4">
     <h2 class="title" id="library-title">Library</h2>
     <button type="button" class="btn btn--small btn--quiet" data-action="content-editor#closeLibrary">Close</button>
@@ -14,7 +14,7 @@
     <div class="field flex-1"><label for="library-file">Upload a file</label><input type="file" id="library-file" name="asset[file]" required class="input" data-content-editor-target="uploadFile"></div>
     <button type="submit" class="btn btn--small" data-content-editor-target="uploadButton">Upload and use</button>
   </form>
-  <p class="mt-4 text-base text-(--text-muted)" role="status" data-content-editor-target="libraryStatus"></p>
-  <div class="library__grid" data-content-editor-target="grid"></div>
+  <p class="mt-4 text-base text-mute" role="status" data-content-editor-target="libraryStatus"></p>
+  <div class="my-4 grid grid-cols-[repeat(auto-fill,minmax(9rem,1fr))] gap-4" data-content-editor-target="grid"></div>
   <button type="button" class="btn btn--small btn--quiet" hidden data-content-editor-target="more" data-action="content-editor#moreLibrary">More files</button>
 </dialog>

@@ -1,5 +1,4 @@
-<% provide(:theme, "day") %>
 <%= render "projects/composition", content: @content, preview: @preview %>
 <% if @next %>
-  <nav class="gutter pt-16" aria-label="Next project"><div class="rule"><%= link_to content_path(@next), class: "group block" do %><span class="text-base text-(--text-muted)">Next project</span><span class="headline mt-2 block"><%= @next.title %></span><% end %></div></nav>
+  <nav class="gutter pt-16" aria-label="Next project"><div class="rule"><%= link_to content_path(@next), class: "block", data: { foil: "headline" } do %><span class="text-base text-mute">Next project</span><span class="headline mt-2 block"><%= @next.title %></span><% end %></div></nav>
 <% end %>

@@ -3,7 +3,7 @@
 
 <header class="gutter grid items-center gap-10 pb-16 pt-12 md:grid-cols-2 md:pt-20">
   <div>
-    <h1 class="display !text-[clamp(2.25rem,1rem+3.8vw,5rem)]">A system that reads where it is.</h1>
+    <h1 class="lead">A system that reads where it is.</h1>
     <p class="mt-8 max-w-[44ch] text-soft">The House has a place, a local hour and an atmosphere. Its digital presence takes those inputs and turns them into colour, light and movement, calculated in the browser.</p>
   </div>
   <figure>
@@ -24,7 +24,7 @@
   <section id="system" class="scroll-mt-8" aria-labelledby="system-title">
     <div class="grid gap-8 md:grid-cols-2">
       <h2 id="system-title" class="headline">One place.<br>A changing reading.</h2>
-      <div class="prose-house max-w-[60ch] text-soft">
+      <div class="space-y-4 max-w-[60ch] text-soft">
         <p>The starting point is <%= site.city %>: <%= site.coordinates.join(", ") %>. These coordinates locate the House, rather than the visitor. No visitor geolocation is needed.</p>
         <p>The date and time determine the sun’s angle above the horizon. Above <%= Climate::DAYBREAK %>°, the scene uses a bone ground and the daylight spectrum. Below that threshold, it uses ink and the night spectrum. Near the horizon, a band of warmth rises through the scene.</p>
         <p>A cached forecast from MET Norway adds temperature, wind, humidity and cloud cover. The sun is calculated locally; it continues to work when the weather service is unavailable.</p>
@@ -46,13 +46,13 @@
       <h2 id="colour-title" class="headline">Colour is an output.</h2>
       <p class="mt-8 max-w-[44ch] text-soft">The palette supplies the boundaries. The system decides where each point on the surface sits within them.</p>
     </div>
-    <div class="prose-house max-w-[60ch] text-soft">
+    <div class="space-y-4 max-w-[60ch] text-soft">
       <p>For each visible point, the shader combines surface orientation, light, the stone texture and local interaction into an intensity value. That value samples a colour ramp built from the brand’s spectrum stops, interpolated across 256 samples.</p>
       <p>Lyceum moves from deep violet through lilac and pink to warm cream. Lyceum day starts from bone so that the form can live on a light ground. Air temperature shifts the reading along the spectrum; it does not replace the palette with an arbitrary colour.</p>
       <p>Wind controls the speed of the atmospheric drift. Humidity changes the halo, cloud cover softens the light, and the pointer leaves a trace that fades. These inputs share one rendering system, so the bust and its surroundings respond together.</p>
       <p>The heat interprets these inputs. It does not measure the temperature of anyone.</p>
       <details class="rule mt-8">
-        <summary class="cursor-pointer py-2 text-base text-(--text)">How the weather becomes a parameter</summary>
+        <summary class="cursor-pointer py-2 text-base text-copy">How the weather becomes a parameter</summary>
         <div class="mt-4 space-y-4">
           <p>Temperature maps 12–46°C to warmth, wind maps 0–12 m/s to drift, humidity maps 30–95% to haze, and cloud cover maps 0–100% to softened light. Each value is clamped to the 0–1 range.</p>
           <p>Without a forecast, the scene uses baseline visual settings and hides the weather readings. The browser asks for an update every five minutes while the page is visible; the server shares one cached forecast across visitors.</p>
@@ -69,7 +69,7 @@
       </figure>
       <div>
         <h2 id="model-title" class="headline">A model.<br>Many readings.</h2>
-        <div class="prose-house mt-8 max-w-[60ch] text-soft">
+        <div class="space-y-4 mt-8 max-w-[60ch] text-soft">
           <p>The bust is a GLB asset loaded into Three.js. Its geometry defines the form; its surface textures preserve the detail of the stone. A custom shader replaces the original material to produce the House’s reading.</p>
           <p>The model can turn between left, front and right views and respond to the pointer. Colour and atmosphere change without rebuilding the geometry. Smaller screens load a lighter texture version of the same asset.</p>
           <p>The type is part of the scene too. The holding screen extrudes the variable font into glass letters, interpolating weight and thickness on the GPU. Those letters refract the scene behind them while the actual heading remains in the HTML.</p>
@@ -93,21 +93,8 @@
       <h2 id="applications-title" class="headline">From identity<br>to experience.</h2>
       <p class="max-w-[60ch] text-soft">The website is the first implementation. The next step is to use the same relationship between context, parameters and output in project work. These are possible extensions, with inputs and delivery defined for each brief.</p>
     </div>
-    <dl class="mt-12 grid gap-10 md:grid-cols-3">
-      <div class="rule">
-        <dt class="title">Digital experiences</dt>
-        <dd class="mt-4 text-soft">Adapt a campaign or product scene to its location, local hour or event schedule. Keep one visual language while letting each moment produce a different composition.</dd>
-      </div>
-      <div class="rule">
-        <dt class="title">Spatial installations</dt>
-        <dd class="mt-4 text-soft">Map an agreed input, such as ambient sound or a presence sensor, to movement, light or colour on a screen. This would require the sensor connection and calibration for the space.</dd>
-      </div>
-      <div class="rule">
-        <dt class="title">Project studies</dt>
-        <dd class="mt-4 text-soft">Bring a project model into a browser scene to study viewpoints, material behaviour and responsive compositions before adapting it for a campaign or installation.</dd>
-      </div>
-    </dl>
-    <p class="rule mt-12 max-w-[80ch] text-soft">Today the site reads the sun, the weather and the pointer. Any other source needs its own integration.</p>
+   
+    <p class="rule mt-12 max-w-[80ch] text-soft">Today the site reads the sun, the weather and the pointer.</p>
   </section>
 
   <section id="stack" class="grid scroll-mt-8 gap-10 md:grid-cols-2" aria-labelledby="stack-title">
@@ -126,9 +113,9 @@
 
   <section class="rule grid gap-8 md:grid-cols-2" aria-labelledby="delivery-title">
     <h2 id="delivery-title" class="headline">Built for the browser.</h2>
-    <div class="prose-house max-w-[60ch] text-soft">
+    <div class="space-y-4 max-w-[60ch] text-soft">
       <p>The scene pauses when its tab is hidden and lowers its resolution on slow devices. With reduced motion it is a still image. Without WebGL, a poster and the real text carry the page.</p>
-      <p class="flex flex-wrap gap-x-8 gap-y-2"><%= link_to "See the work", projects_path, class: "link text-(--text)" %><%= link_to "Discuss a project", contact_path, class: "link text-(--text)" %></p>
+      <p class="flex flex-wrap gap-x-8 gap-y-2"><%= link_to "See the work", projects_path, class: "link text-copy" %><%= link_to "Discuss a project", contact_path, class: "link text-copy" %></p>
     </div>
   </section>
 </div>

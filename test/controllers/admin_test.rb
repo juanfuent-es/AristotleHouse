@@ -7,7 +7,7 @@ class AdminTest < ActionDispatch::IntegrationTest
     create_draft
     get admin_path
     assert_response :success
-    assert_equal ["/admin", "/admin/images", "/admin/videos"], css_select("nav[aria-label=Admin] a").map { |link| link["href"] }
+    assert_equal ["/admin", "/projects", "/admin/images", "/admin/videos", "/logout"], css_select("nav[aria-label=Admin] a").map { |link| link["href"] }
     [admin_images_path, new_admin_image_path, admin_videos_path, new_admin_video_path].each do |path|
       get path
       assert_response :success, path

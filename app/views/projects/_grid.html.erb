@@ -7,10 +7,10 @@
       <% private_card = drafts || (@draft && project.id == @draft.id) %>
       <% wide = i.zero? && projects.size.odd? && !drafts %>
       <li class="<%= "md:col-span-2" if wide %>">
-        <%= link_to drafts ? content_edit_path(project) : private_card ? content_preview_path(project) : content_path(project), class: "group block" do %>
+        <%= link_to drafts ? content_edit_path(project) : private_card ? content_preview_path(project) : content_path(project), class: "block", data: { foil: "title" } do %>
           <%= image_tag(cover_url(card, preview: private_card) || "/brand/img/isotherm.webp", alt: "", loading: "lazy", class: "w-full object-cover #{wide ? "aspect-[4/3] md:aspect-[21/9]" : "aspect-[4/3]"}") %>
-          <h3 class="title mt-4 !text-2xl [overflow-wrap:anywhere]"><%= card.title %></h3>
-          <p class="mt-2 max-w-[60ch] text-(--text-soft)"><%= card.description %></p>
+          <h3 class="title mt-4 !text-2xl wrap-anywhere"><%= card.title %></h3>
+          <p class="mt-2 max-w-[60ch] text-soft"><%= card.description %></p>
           <p class="micro mt-3 flex flex-wrap gap-x-6"><% %w[client location year].filter_map { |name| card.fact(name) }.each do |value| %><span><%= value %></span><% end %></p>
         <% end %>
       </li>
@@ -18,5 +18,5 @@
   </ul>
 <% else %>
   <%= micrograph :crosshair, class: "mb-6 size-10" %>
-  <p class="subhead max-w-[36ch] text-(--text-soft)">The first readings are being taken.</p>
+  <p class="subhead max-w-[36ch] text-soft">The first readings are being taken.</p>
 <% end %>

@@ -1,78 +1,68 @@
-/* Roles. Components read these, never the palette. */
+/* One look: ink ground, bone type. `.day` is what the climate turns on. */
+@property --foil-spread {
+    syntax: "<length>";
+    inherits: false;
+    initial-value: 0px;
+}
+
 @layer base {
     :root,
     .night {
         color-scheme: dark;
-        --canvas: var(--color-ink);
-        --surface: var(--color-night);
-        --text: var(--color-bone);
-        --text-soft: var(--color-soft);
-        --text-muted: var(--color-mute);
-        --rule: var(--color-line);
+        --canvas: #0b0a0f;
+        --surface: #141416;
+        --copy: #f2efe8;
+        --soft: #c9c4d4;
+        --mute: #a49fb0;
+        --line: #3d3a4a;
         --control: #6f6a80;
         --accent: var(--color-lilac);
-        --focus: var(--color-lilac);
-        --error: var(--color-danger-night);
-        --fill: var(--color-bone);
-        --on-fill: var(--color-ink);
+        --danger: #ff7a9f;
+        --foil: #b9aee6 0%, #f3efe6 12%, #ff8fcb 22%, #c7b8ff 32%, #8fe9ff 42%, #ffefc2 52%, #ff4fb4 62%, #6e52ff 72%, #c7b8ff 82%, #f3efe6 92%, #b9aee6 100%;
+        --foil-light: rgb(255 255 255 / 0.55);
     }
 
     .day {
         color-scheme: light;
-        --canvas: var(--color-bone);
+        --canvas: #f2efe8;
         --surface: #faf8f4;
-        --text: var(--color-ink);
-        --text-soft: var(--color-charcoal);
-        --text-muted: var(--color-paper-mute);
-        --rule: var(--color-paper-line);
+        --copy: #0b0a0f;
+        --soft: #2e2e31;
+        --mute: #625d55;
+        --line: #cfcac0;
         --control: #8a847a;
         --accent: var(--color-violet);
-        --focus: var(--color-violet);
-        --error: var(--color-danger);
-        --fill: var(--color-ink);
-        --on-fill: var(--color-bone);
+        --danger: #c2185b;
+        /* On bone the pale half of the foil would vanish. */
+        --foil: #4b2ef5 0%, #6e52ff 16%, #d81b8c 32%, #ff2e7e 46%, #e0452c 58%, #d81b8c 72%, #6e52ff 86%, #4b2ef5 100%;
+        --foil-light: transparent;
     }
 
     html {
         -webkit-text-size-adjust: none;
         scrollbar-color: var(--control) var(--canvas);
         scrollbar-width: thin;
-    }
-
-    @media (prefers-reduced-motion: no-preference) {
-        html {
-            scroll-behavior: smooth;
-        }
+        @apply motion-safe:scroll-smooth;
     }
 
     body {
-        font-family: var(--font-body);
-        font-size: var(--text-body);
-        line-height: 1.5;
-        background-color: var(--canvas);
-        color: var(--text);
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
+        @apply bg-canvas font-body text-body text-copy antialiased;
     }
 
     ::selection {
-        background-color: var(--color-violet);
-        color: var(--color-bone);
+        @apply bg-violet text-bone;
     }
 
     :focus-visible {
-        outline: 2px solid var(--focus);
-        outline-offset: 3px;
+        @apply outline-2 outline-offset-3 outline-accent;
     }
 
     h1, h2, h3, h4 {
-        font-family: var(--font-display);
-        font-weight: 600;
-        text-wrap: balance;
+        @apply font-display font-semibold text-balance;
     }
 
     p {
-        text-wrap: pretty;
+        @apply text-pretty;
     }
 
     @media (prefers-reduced-motion: reduce) {

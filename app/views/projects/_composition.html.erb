@@ -11,34 +11,34 @@
       <%= form.text_area :description, rows: 1, maxlength: 300, placeholder: "One sentence that says what was built and what people did in it.", class: "edit subhead mt-8 max-w-[40ch]", aria: field_state(content, :description), data: { action: "input->content-editor#resize" } %>
       <%= field_error(content, :description) %>
     <% else %>
-      <h1 class="display max-w-[14ch] [overflow-wrap:anywhere]"><%= content.title %></h1>
+      <h1 class="display max-w-[14ch] wrap-anywhere"><%= content.title %></h1>
       <% if content.description.present? %><p class="subhead mt-8 max-w-[40ch]"><%= content.description %></p><% end %>
     <% end %>
   </header>
 
   <% url = cover_url(content, preview: preview) %>
   <% if form %>
-    <div class="edit-cover" data-content-editor-target="coverBox">
-      <img src="<%= url %>" alt="" class="case__cover" data-content-editor-target="cover" <%= "hidden" unless url %>>
+    <div class="relative min-h-32 border-y border-dashed border-control" data-content-editor-target="coverBox">
+      <img src="<%= url %>" alt="" class="h-auto max-h-[90vh] w-full object-cover" data-content-editor-target="cover" <%= "hidden" unless url %>>
       <%= form.hidden_field :cover_image_id, data: { content_editor_target: "coverId" } %>
-      <div class="edit-cover__tools">
+      <div class="absolute right-gutter bottom-6 flex gap-2">
         <button type="button" class="btn btn--small" data-action="content-editor#chooseCover"><span data-content-editor-target="coverLabel"><%= url ? "Change cover" : "Add a cover" %></span></button>
-        <button type="button" class="btn btn--small btn--quiet" data-content-editor-target="coverRemove" data-action="content-editor#removeCover" <%= "hidden" unless url %>>Remove</button>
+        <button type="button" class="btn btn--small btn--quiet bg-canvas" data-content-editor-target="coverRemove" data-action="content-editor#removeCover" <%= "hidden" unless url %>>Remove</button>
       </div>
       <%= field_error(content, :cover_image_id) %>
     </div>
   <% elsif url %>
-    <%= image_tag url, alt: content.cover_image.alt, width: content.cover_image.width, height: content.cover_image.height, class: "case__cover", fetchpriority: "high" %>
+    <%= image_tag url, alt: content.cover_image.alt, width: content.cover_image.width, height: content.cover_image.height, class: "h-auto max-h-[90vh] w-full object-cover", fetchpriority: "high" %>
   <% end %>
 
   <div class="gutter">
     <% if form || content.facts.values.any?(&:present?) %>
-      <dl class="case__facts">
+      <dl data-facts class="grid gap-x-6 gap-y-8 py-10 md:grid-cols-4 <%= "grid-cols-2" unless form %>">
         <% Page::FACTS.each do |name| %>
           <% next unless form || content.fact(name) %>
-          <div>
-            <dt><%= form ? label_tag("page_facts_#{name}", name.capitalize) : name.capitalize %></dt>
-            <dd class="title"><% if form %><%= text_field_tag "page[facts][#{name}]", content.facts[name], id: "page_facts_#{name}", maxlength: 80, placeholder: "Not set", autocomplete: "off", class: "edit title" %><% else %><%= content.fact(name) %><% end %></dd>
+          <div class="rule min-w-0">
+            <dt class="text-base text-mute"><%= form ? label_tag("page_facts_#{name}", name.capitalize) : name.capitalize %></dt>
+            <dd class="title mt-1 wrap-anywhere <%= "w-full" if form %>"><% if form %><%= text_field_tag "page[facts][#{name}]", content.facts[name], id: "page_facts_#{name}", maxlength: 80, placeholder: "Not set", autocomplete: "off", class: "edit title" %><% else %><%= content.fact(name) %><% end %></dd>
           </div>
         <% end %>
       </dl>
@@ -50,9 +50,9 @@
     </div>
 
     <% if form %>
-      <div class="field max-w-[40ch] py-6"><%= form.label :tag_list, "Tags" %><%= form.text_field :tag_list, class: "input", autocomplete: "off", aria: field_state(content, :tag_list) %><p class="field__hint">Separate them with commas. 20 characters each.</p><%= field_error(content, :tag_list) %></div>
+      <div class="field max-w-[40ch] py-6"><%= form.label :tag_list, "Tags" %><%= form.text_field :tag_list, class: "input", autocomplete: "off", aria: field_state(content, :tag_list) %><p class="hint">Separate them with commas. 20 characters each.</p><%= field_error(content, :tag_list) %></div>
     <% else %>
-      <p class="micro flex items-end gap-4 pt-6 text-(--text-muted)"><%= micrograph :peripatetic, class: "h-10 w-7 text-(--text)" %><span class="bracket">Perceive → Understand → Build</span></p>
+      <p class="micro flex items-end gap-4 pt-6 text-mute"><%= micrograph :peripatetic, class: "h-10 w-7 text-copy" %><span class="bracket">Perceive → Understand → Build</span></p>
       <% if content.tag_names.any? %><p class="flex flex-wrap gap-2 py-6"><% content.tag_names.each do |name| %><span class="tag"><%= name %></span><% end %></p><% end %>
     <% end %>
   </div>

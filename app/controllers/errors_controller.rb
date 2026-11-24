@@ -1,5 +1,6 @@
 class ErrorsController < ApplicationController
   skip_before_action :hold_until_launch
+  skip_after_action :keep_private # asks for the session, and the database may be down
 
   # https://guides.rubyonrails.org/v4.2.0/action_controller_overview.html
   layout "errors"

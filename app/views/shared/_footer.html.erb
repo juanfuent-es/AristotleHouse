@@ -6,9 +6,11 @@
     <nav class="flex flex-wrap gap-x-6 gap-y-1 md:ml-auto" aria-label="Legal and social">
       <% if site.instagram_url %><%= link_to "Instagram", site.instagram_url, class: "nav-link", rel: "noopener" %><% end %>
       <% if site.linkedin_url %><%= link_to "LinkedIn", site.linkedin_url, class: "nav-link", rel: "noopener" %><% end %>
+      <% if !@bare && open? %>
       <%= nav_item "Privacy", privacy_path, class: "nav-link" %>
       <%= nav_item "Cookies", cookies_path, class: "nav-link" %>
       <%= nav_item "Terms", terms_path, class: "nav-link" %>
+      <% end %>
     </nav>
   </div>
 </footer>

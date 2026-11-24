@@ -1,303 +1,260 @@
+/* The components of the House, for the site, the editor and admin alike. Built with
+   utilities: what only happens once is written in the view. */
 @layer components {
-    /* Micrographic layer: the quiet readouts around everything. */
-    .micro {
-        font-family: var(--font-body);
-        font-weight: 500;
-        font-size: var(--text-micro);
-        line-height: 1.4;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-        font-variant-numeric: tabular-nums;
-    }
-
-    .dot {
-        display: inline-block;
-        width: 0.5em;
-        height: 0.5em;
-        border-radius: 50%;
-        background: currentColor;
-        margin-right: 0.5em;
-        vertical-align: 0.08em;
-    }
-
-    /* Micrographic labels */
-    .pill,
-    .box {
-        display: inline-flex;
-        align-items: center;
-        border: 1.3px solid currentColor;
-        padding: 0.125rem 0.5rem;
-        white-space: nowrap;
-    }
-
-    .pill {
-        border-radius: 99px;
-        padding-inline: 0.75rem;
-    }
-
-    .night .only-day,
-    .day .only-night {
-        display: none;
-    }
-
-    .bracket::before {
-        content: "[\2002";
-    }
-
-    .bracket::after {
-        content: "\2002]";
-    }
-
-    .gutter {
-        padding-inline: clamp(1rem, 4vw, 4rem);
-    }
-
+    /* Type. Titles are as wide as their words. */
     .display {
-        font-family: var(--font-display);
-        font-weight: 600;
-        font-size: var(--text-display);
-        line-height: 0.92;
-        letter-spacing: -0.03em;
-        text-transform: uppercase;
+        @apply w-fit font-display text-display font-semibold uppercase;
+    }
+
+    .lead {
+        @apply w-fit font-display text-lead font-semibold uppercase;
     }
 
     .headline {
-        font-family: var(--font-display);
-        font-weight: 600;
-        font-size: var(--text-headline);
-        line-height: 1;
-        letter-spacing: -0.02em;
-        text-transform: uppercase;
-    }
-
-    .subhead {
-        font-family: var(--font-body);
-        font-weight: 500;
-        font-size: var(--text-subhead);
-        line-height: 1.2;
+        @apply w-fit font-display text-headline font-semibold uppercase;
     }
 
     .title {
-        font-family: var(--font-display);
-        font-weight: 700;
-        font-size: 1.25rem;
-        line-height: 1.15;
-        letter-spacing: -0.01em;
-        text-transform: uppercase;
+        @apply w-fit font-display text-title font-bold uppercase;
+    }
+
+    .wordmark {
+        @apply font-display text-xl leading-none font-extrabold tracking-[-0.03em] whitespace-nowrap md:text-2xl;
+    }
+
+    .subhead {
+        @apply font-body text-subhead font-medium;
+    }
+
+    .micro {
+        @apply font-body text-micro font-medium uppercase tabular-nums;
+    }
+
+    .bracket {
+        @apply before:content-['[\2002'] after:content-['\2002]'];
+    }
+
+    /* Layout */
+    .gutter {
+        @apply px-gutter;
     }
 
     .rule {
-        border-top: 1px solid var(--rule);
-        padding-top: 1.125rem;
+        @apply border-t border-line pt-4.5;
+    }
+
+    .panel {
+        @apply border border-line bg-surface p-4 md:p-6;
     }
 
     /* Dissolves the square edge of a reading into ink. */
     .reading-cut {
-        mix-blend-mode: lighten;
-        mask-image: radial-gradient(closest-side, #000 78%, transparent);
+        @apply mix-blend-lighten mask-radial-closest-side mask-radial-from-78% mask-radial-to-100%;
     }
 
+    /* Links */
     .link {
-        text-decoration: underline;
-        text-decoration-thickness: 1px;
-        text-underline-offset: 0.25em;
+        @apply underline decoration-1 underline-offset-4;
     }
 
-    .link:not(.foil):hover {
-        color: var(--accent);
+    .nav-link {
+        @apply py-3 aria-[current]:text-accent aria-[current]:underline aria-[current]:underline-offset-6;
     }
 
-    .prose-house > * + * {
-        margin-top: 1em;
+    /* Foil: components/foil.js puts it on titles and links while the pointer is on them.
+       Three layers: what is still plain, the light under the pointer, the colours. */
+    .foil {
+        background:
+            radial-gradient(circle at var(--foil-x, 50%) var(--foil-y, 50%), transparent calc(var(--foil-spread) * 0.6), currentColor var(--foil-spread)) 0 0 / 100% 100%,
+            radial-gradient(circle at var(--foil-x, 50%) var(--foil-y, 50%), var(--foil-light), transparent 26%) 0 0 / 100% 100%,
+            linear-gradient(calc(115deg + var(--foil-turn, 0deg)), var(--foil)) var(--foil-shift-x, 50%) var(--foil-shift-y, 50%) / 300% 300%;
+        background-blend-mode: normal, soft-light, normal;
+        -webkit-text-fill-color: transparent;
+        transition: --foil-spread 1s cubic-bezier(0.45, 0, 0.3, 1);
+        @apply bg-clip-text;
+    }
+
+    .foil--on {
+        --foil-spread: var(--foil-reach);
     }
 
     /* Buttons */
     .btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        min-height: 2.75rem;
-        padding: 0.5rem 1.25rem;
-        border: 1px solid var(--fill);
-        background: var(--fill);
-        color: var(--on-fill);
-        font: 500 0.9375rem/1.2 var(--font-body);
-        cursor: pointer;
-        transition: background-color 0.2s, color 0.2s, border-color 0.2s;
-    }
-
-    .btn:hover {
-        background: var(--color-violet);
-        border-color: var(--color-violet);
-        color: var(--color-bone);
+        @apply inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 border border-copy bg-copy px-5 py-2 text-[0.9375rem] leading-tight font-medium text-canvas transition-colors;
+        @apply hover:border-violet hover:bg-violet hover:text-bone disabled:pointer-events-none disabled:opacity-45;
     }
 
     .btn--quiet {
-        background: transparent;
-        border-color: var(--control);
-        color: var(--text);
+        @apply border-control bg-transparent text-copy aria-pressed:border-copy aria-pressed:bg-copy aria-pressed:text-canvas;
     }
 
     .btn--danger {
-        background: transparent;
-        border-color: var(--error);
-        color: var(--error);
-    }
-
-    .btn--danger:hover {
-        background: var(--error);
-        border-color: var(--error);
-        color: var(--canvas);
+        @apply border-danger bg-transparent text-danger hover:border-danger hover:bg-danger hover:text-canvas;
     }
 
     .btn--small {
-        min-height: 2.25rem;
-        padding: 0.25rem 0.75rem;
-        font-size: 0.875rem;
+        @apply min-h-9 px-3 py-1 text-sm;
     }
 
     /* Forms */
-    .field {
-        display: block;
+    .field > label {
+        @apply mb-1.5 block text-sm font-medium;
     }
 
-    .field > label,
-    .field__label {
-        display: block;
-        margin-bottom: 0.375rem;
-        font: 500 0.875rem/1.4 var(--font-body);
-        color: var(--text);
-    }
-
-    .field__hint {
-        margin-top: 0.375rem;
-        font-size: 0.875rem;
-        line-height: 1.4;
-        color: var(--text-muted);
+    .hint {
+        @apply mt-1.5 text-sm text-mute;
     }
 
     .input {
-        display: block;
-        width: 100%;
-        min-height: 2.75rem;
-        padding: 0.5rem 0.75rem;
-        border: 1px solid var(--control);
-        background-color: var(--surface);
-        color: var(--text);
-        font: 400 1rem/1.5 var(--font-body);
-    }
-
-    .input::placeholder {
-        color: var(--text-muted);
-        opacity: 1;
-    }
-
-    .input:focus {
-        border-color: var(--focus);
-        outline: 2px solid var(--focus);
-        outline-offset: 0;
-        box-shadow: none;
-    }
-
-    textarea.input {
-        min-height: 8rem;
-        resize: vertical;
-    }
-
-    .field_with_errors {
-        display: contents;
-    }
-
-    .field_with_errors > .input {
-        border-color: var(--error);
-    }
-
-    .notice {
-        border: 1px solid var(--rule);
-        border-left: 4px solid var(--accent);
-        padding: 0.75rem 1rem;
-        font-size: 1rem;
-    }
-
-    .notice--error {
-        border-left-color: var(--error);
-    }
-
-    .tag {
-        display: inline-flex;
-        align-items: center;
-        padding: 0.125rem 0.5rem;
-        border: 1px solid var(--control);
-        font: 500 0.8125rem/1.5 var(--font-body);
-    }
-
-    .tag--on {
-        border-color: var(--fill);
-        background: var(--fill);
-        color: var(--on-fill);
-    }
-
-    /* Navigation */
-    .nav-link {
-        padding-block: 0.75rem;
-    }
-
-    .nav-link:not(.foil):hover,
-    .nav-link[aria-current] {
-        color: var(--accent);
-    }
-
-    .nav-link[aria-current] {
-        text-decoration: underline;
-        text-underline-offset: 0.4em;
-    }
-
-    /* Admin */
-    .admin-link {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        padding: 0.5rem 0.75rem;
-        font: 500 1rem/1.5 var(--font-body);
-        border-left: 3px solid transparent;
-    }
-
-    .admin-link:hover {
-        border-color: var(--control);
-    }
-
-    .admin-link[aria-current] {
-        border-color: var(--accent);
-        background: var(--surface);
-    }
-
-    .table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 1rem;
-    }
-
-    .table th {
-        text-align: left;
-        font: 500 0.875rem/1.4 var(--font-body);
-        color: var(--text-muted);
-    }
-
-    .table th,
-    .table td {
-        padding: 0.75rem 1rem 0.75rem 0;
-        border-bottom: 1px solid var(--rule);
-        vertical-align: middle;
-    }
-
-    .panel {
-        border: 1px solid var(--rule);
-        background: var(--surface);
-        padding: clamp(1rem, 2vw, 1.5rem);
+        @apply block min-h-11 w-full border border-control bg-surface px-3 py-2 text-base text-copy placeholder:text-mute placeholder:opacity-100 focus:border-accent focus:outline-1 focus:outline-offset-0 focus:outline-accent;
     }
 
     .panel .input {
-        background-color: var(--canvas);
+        @apply bg-canvas;
+    }
+
+    .field_with_errors {
+        @apply contents;
+    }
+
+    .field_with_errors > .input {
+        @apply border-danger;
+    }
+
+    .notice {
+        @apply border border-l-4 border-line border-l-accent px-4 py-3 text-base;
+    }
+
+    .notice--error {
+        @apply border-l-danger;
+    }
+
+    .tag {
+        @apply inline-flex items-center border border-control px-2 py-0.5 text-micro font-medium tracking-normal;
+    }
+
+    .tag--on {
+        @apply border-copy bg-copy text-canvas;
+    }
+
+    .table {
+        @apply w-full border-collapse text-base;
+    }
+
+    .table :is(th, td) {
+        @apply border-b border-line py-3 pr-4 text-left align-middle;
+    }
+
+    .table th {
+        @apply text-sm font-medium text-mute;
+    }
+
+    .meter {
+        @apply block h-1.5 w-full appearance-none border-0 bg-line bg-none;
+    }
+
+    .meter::-webkit-meter-bar {
+        @apply h-1.5 rounded-none border-0 bg-line bg-none;
+    }
+
+    .meter::-webkit-meter-optimum-value {
+        @apply bg-accent bg-none;
+    }
+
+    .meter::-moz-meter-bar {
+        @apply bg-accent bg-none;
+    }
+
+    /* A field that looks like the text it writes. */
+    .edit {
+        @apply block w-full resize-none overflow-hidden border-0 bg-transparent p-0 text-inherit shadow-[0_1px_0_var(--line)] placeholder:text-mute placeholder:opacity-100;
+        @apply hover:shadow-[0_1px_0_var(--control)] focus:shadow-[0_2px_0_var(--accent)] focus:outline-none aria-[invalid=true]:shadow-[0_2px_0_var(--danger)];
+    }
+
+    .edit-error {
+        @apply mt-2 text-base text-danger;
+    }
+
+    .tool {
+        @apply min-h-11 cursor-pointer px-3 text-sm leading-tight font-medium hover:text-accent aria-pressed:bg-copy aria-pressed:text-canvas;
+    }
+
+    /* Text from the editor: it has no classes of its own. In a case, headings stand to
+       the left of what they introduce and media takes the full width. */
+    .rich {
+        @apply grid grid-cols-[minmax(0,1fr)] gap-y-5 wrap-anywhere;
+    }
+
+    .rich > * {
+        @apply max-w-[65ch] min-w-0;
+    }
+
+    .rich h2 {
+        @apply mt-12 w-fit text-3xl leading-none tracking-[-0.02em] uppercase;
+    }
+
+    .rich h3 {
+        @apply mt-4 w-fit text-title uppercase;
+    }
+
+    .rich > :first-child {
+        @apply mt-0;
+    }
+
+    .rich ul {
+        @apply list-disc pl-5;
+    }
+
+    .rich ol {
+        @apply list-decimal pl-5;
+    }
+
+    .rich a {
+        @apply underline underline-offset-4;
+    }
+
+    .rich blockquote {
+        @apply my-10 w-fit max-w-5xl font-display text-headline font-semibold uppercase;
+    }
+
+    .rich :is(img, video) {
+        @apply my-10 h-auto w-full max-w-none;
+    }
+
+    .rich hr {
+        @apply my-8 w-full max-w-none border-line;
+    }
+
+    .case .rich {
+        @apply md:grid-cols-12 md:gap-x-10;
+    }
+
+    .case .rich > * {
+        @apply md:col-span-7 md:col-start-6;
+    }
+
+    .case .rich > h2 {
+        @apply md:col-span-5 md:col-start-1;
+    }
+
+    .case .rich > h2:not(:first-child) + p {
+        @apply md:mt-12;
+    }
+
+    .case .rich > :is(blockquote, img, video, hr) {
+        @apply md:col-span-full md:col-start-1;
+    }
+
+    /* While it is being written */
+    .rich.tiptap {
+        @apply min-h-64 content-start whitespace-pre-wrap outline-1 outline-offset-16 outline-line outline-dashed focus:outline-accent;
+    }
+
+    .rich.tiptap p:has(> br:only-child) {
+        @apply border-b border-line;
+    }
+
+    .rich .ProseMirror-selectednode {
+        @apply outline-2 outline-offset-3 outline-accent;
     }
 }

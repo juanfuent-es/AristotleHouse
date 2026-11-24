@@ -1,37 +1,32 @@
 <% provide(:title, "Coming soon") %>
-<main class="holding" data-holding>
-  <picture class="holding__poster">
+<%# The poster and the text are the page. WebGL adds `is-live` when it takes over. %>
+<div class="group relative grid flex-1 grid-rows-[1fr_auto] overflow-hidden" data-holding>
+  <picture class="fixed inset-0 -z-10">
     <source media="(max-aspect-ratio: 4/5)" srcset="/brand/poster-portrait.webp" type="image/webp">
-    <img src="/brand/poster.webp" alt="" width="1920" height="1080" fetchpriority="high">
+    <img src="/brand/poster.webp" alt="" width="1920" height="1080" fetchpriority="high" class="size-full object-cover">
   </picture>
-  <canvas class="holding__canvas" aria-hidden="true" data-model="/models/aristotle_2k_webp.glb" data-model-small="/models/aristotle_1k_webp.glb"></canvas>
+  <canvas class="fixed inset-0 -z-10 size-full touch-pan-y opacity-0 group-[.is-live]:opacity-100 group-[.is-live]:transition-opacity group-[.is-live]:duration-600 forced-colors:hidden" aria-hidden="true" data-model="/models/aristotle_2k_webp.glb" data-model-small="/models/aristotle_1k_webp.glb"></canvas>
 
-  <header class="gutter micro flex items-center justify-between gap-6 pt-6">
-    <div>
-      <%= lockup(class: "only-night w-44 h-auto md:w-52") %>
-      <%= lockup(tone: :dark, class: "only-day w-44 h-auto md:w-52") %>
-    </div>
-    <p class="text-right"><%= site.tagline %></p>
-  </header>
-
-  <div class="holding__side holding__live gutter" role="group" aria-label="View of the bust">
+  <%# Over the face there is no room for a side menu. %>
+  <div class="gutter invisible absolute top-1/2 left-0 -ml-2 flex -translate-y-1/2 flex-col group-[.is-live]:visible tall:hidden" role="group" aria-label="View of the bust">
     <% [["left", "head-left", "Left profile"], ["front", "head-front", "Front"], ["right", "head-right", "Right profile"]].each do |view, symbol, label| %>
-      <button type="button" class="holding__view" data-view="<%= view %>" aria-pressed="<%= view == "front" %>" aria-label="<%= label %>"><%= micrograph symbol, class: "size-6" %></button>
+      <button type="button" class="grid size-10 cursor-pointer place-items-center opacity-45 transition-opacity hover:opacity-100 aria-pressed:opacity-100" data-view="<%= view %>" aria-pressed="<%= view == "front" %>" aria-label="<%= label %>"><%= micrograph symbol, class: "size-6" %></button>
     <% end %>
   </div>
 
-  <div class="holding__word">
-    <h1><span data-glass>Coming</span> <span data-glass>soon</span></h1>
+  <%# The glass stands exactly where the text is, hidden once it is live. Portrait: both lines share the same measure. %>
+  <div class="self-end pb-[clamp(0.5rem,6vh,5rem)] text-center select-none">
+    <h1 class="text-[min(9.5vw,30vh)] leading-none font-extrabold tracking-[-0.012em] text-nowrap uppercase group-[.is-live]:opacity-0 forced-colors:opacity-100! tall:text-[16.6vw] tall:leading-[0.86]"><span data-glass class="inline-block whitespace-nowrap tall:mx-auto tall:block tall:w-fit">Coming</span> <span data-glass class="inline-block whitespace-nowrap tall:mx-auto tall:block tall:w-fit tall:text-[1.4em]">soon</span></h1>
   </div>
 
   <footer class="gutter micro flex flex-wrap items-center justify-between gap-x-6 pb-3">
-    <p class="holding__air"><%= site.city %> <span data-ui="clock"></span><span class="holding__weather">&emsp;<span data-ui="temperature"></span>&emsp;Wind <span class="normal-case" data-ui="wind"></span></span></p>
-    <div class="holding__hours holding__live flex gap-1" role="group" aria-label="Time of day">
-      <button type="button" class="micro" data-hour="" aria-pressed="true">Live</button>
-      <button type="button" class="micro" data-hour="13:00" aria-pressed="false">Day</button>
-      <button type="button" class="micro" data-hour="23:00" aria-pressed="false">Night</button>
+    <p><%= site.city %> <span data-ui="clock"></span><span class="hidden group-[.has-weather]:inline">&emsp;<span data-ui="temperature"></span>&emsp;Wind <span class="normal-case" data-ui="wind"></span></span></p>
+    <div class="invisible flex gap-1 group-[.is-live]:visible" role="group" aria-label="Time of day">
+      <% [["Live", ""], ["Day", "13:00"], ["Night", "23:00"]].each do |label, hour| %>
+        <button type="button" class="micro min-h-11 cursor-pointer px-2 text-soft aria-pressed:text-copy aria-pressed:underline aria-pressed:decoration-pink aria-pressed:decoration-2 aria-pressed:underline-offset-8" data-hour="<%= hour %>" aria-pressed="<%= hour.empty? %>"><%= label %></button>
+      <% end %>
     </div>
   </footer>
 
-  <div class="holding__sight" data-ui="sight" aria-hidden="true"><%= micrograph :crosshair, class: "size-5" %></div>
-</main>
+  <div class="pointer-events-none fixed top-0 left-0 z-10 opacity-0 transition-opacity duration-300 will-change-transform [&.is-on]:opacity-75" data-ui="sight" aria-hidden="true"><%= micrograph :crosshair, class: "absolute -top-2.5 -left-2.5 size-5" %></div>
+</div>

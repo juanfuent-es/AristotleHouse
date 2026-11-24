@@ -12,17 +12,6 @@
     --color-violet: #4b2ef5;
     --color-lilac: #c7b8ff;
     --color-pink: #ff4fb4;
-    /* Quiet steps between shadow and marble */
-    --color-night: #141416;
-    --color-soft: #c9c4d4;
-    --color-mute: #a49fb0;
-    --color-line: #3d3a4a;
-    --color-paper-line: #cfcac0;
-    --color-paper-mute: #625d55;
-    --color-paper: #e6e2d9;
-    /* Status */
-    --color-danger: #c2185b;
-    --color-danger-night: #ff7a9f;
 
     --font-display: "Zalando Sans Expanded", "Arial Black", sans-serif;
     --font-body: "Inter", system-ui, sans-serif;
@@ -32,16 +21,43 @@
     --text-micro--letter-spacing: 0.04em;
     --text-body: 1.125rem;
     --text-body--line-height: 1.5;
+    --text-title: 1.25rem;
+    --text-title--line-height: 1.15;
+    --text-title--letter-spacing: -0.01em;
     --text-subhead: clamp(1.375rem, 1rem + 1.2vw, 1.875rem);
     --text-subhead--line-height: 1.2;
     --text-headline: clamp(2rem, 1.2rem + 2.8vw, 3.5rem);
     --text-headline--line-height: 1;
     --text-headline--letter-spacing: -0.02em;
+    /* Titles that share the width with a picture */
+    --text-lead: clamp(2.25rem, 1rem + 3.8vw, 5rem);
+    --text-lead--line-height: 0.95;
+    --text-lead--letter-spacing: -0.03em;
     --text-display: clamp(2.75rem, 0.6rem + 7.2vw, 8.75rem);
     --text-display--line-height: 0.92;
     --text-display--letter-spacing: -0.03em;
+
+    --spacing-gutter: clamp(1rem, 4vw, 4rem);
 
     /* Nothing in the House has round corners. */
     --radius-*: initial;
     --radius-none: 0;
 }
+
+/* Roles. `text-soft`, `border-line`, `bg-canvas`… follow the ground they stand on. */
+@theme inline {
+    --color-canvas: var(--canvas);
+    --color-surface: var(--surface);
+    --color-copy: var(--copy);
+    --color-soft: var(--soft);
+    --color-mute: var(--mute);
+    --color-line: var(--line);
+    --color-control: var(--control);
+    --color-accent: var(--accent);
+    --color-danger: var(--danger);
+}
+
+/* The screen is taller than it is wide. */
+@custom-variant tall (@media (max-aspect-ratio: 4/5));
+/* The ground is bone. Only the climate of Dubai turns it. */
+@custom-variant day (&:where(.day, .day *));

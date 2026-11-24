@@ -1,17 +1,6 @@
-<!DOCTYPE html>
-<html lang="<%= I18n.locale %>" class="night">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="robots" content="noindex">
-    <title><%= full_title(yield(:title)) %></title>
-    <%= render "shared/fonts" %>
-    <%= render "shared/favicons" %>
-    <%= stylesheet_link_tag "application" %>
-  </head>
-  <body class="gutter flex min-h-dvh flex-col justify-between py-6">
-    <header><%= link_to root_path, class: "inline-block py-2" do %><%= lockup(class: "w-52 h-auto md:w-60") %><% end %></header>
-    <main class="max-w-5xl py-16"><%= yield %></main>
-    <footer class="micro rule flex flex-wrap justify-between gap-3"><span class="flex items-center gap-3"><%= micrograph :crosshair, class: "size-4" %><%= yield(:code) %></span><span><%= site.city %>, <%= site.country %></span></footer>
-  </body>
-</html>
+<%# Nothing here asks the database: it also has to work when the database is down. %>
+<% @private = @bare = true %>
+<% content_for :shell do %>
+  <div class="gutter my-auto py-16"><%= yield %><p class="micro mt-16 flex items-center gap-3 text-mute"><%= micrograph :crosshair, class: "size-4" %><%= yield(:code) %></p></div>
+<% end %>
+<%= render template: "layouts/application" %>

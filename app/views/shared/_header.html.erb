@@ -1,10 +1,13 @@
-<% tone = content_for(:theme).to_s == "day" ? :dark : :light %>
-<header class="gutter flex items-center justify-between gap-x-6 gap-y-1 flex-wrap pt-5 pb-4">
-  <%= link_to root_path, class: "block py-2" do %><%= lockup(tone: tone, class: "w-52 h-auto md:w-60") %><% end %>
-  <nav class="micro flex flex-wrap gap-x-5 gap-y-1 md:gap-x-8" aria-label="Main">
-    <%= nav_item t("site.nav.work"), projects_path, class: "nav-link" %>
-    <%= nav_item t("site.nav.house"), house_path, class: "nav-link" %>
-    <%= nav_item t("site.nav.technology"), technology_path, class: "nav-link" %>
-    <%= nav_item t("site.nav.contact"), contact_path, class: "nav-link" %>
-  </nav>
+<header class="gutter flex flex-wrap items-center justify-between gap-x-6 gap-y-1 pt-5 pb-4">
+  <%= render "shared/brand" %>
+  <% if !@bare && open? %>
+    <nav class="micro flex flex-wrap gap-x-5 gap-y-1 md:gap-x-8" aria-label="Main">
+      <%= nav_item t("site.nav.work"), projects_path, class: "nav-link" %>
+      <%= nav_item t("site.nav.house"), house_path, class: "nav-link" %>
+      <%= nav_item t("site.nav.technology"), technology_path, class: "nav-link" %>
+      <%= nav_item t("site.nav.contact"), contact_path, class: "nav-link" %>
+    </nav>
+  <% else %>
+    <p class="micro"><%= site.tagline %></p>
+  <% end %>
 </header>

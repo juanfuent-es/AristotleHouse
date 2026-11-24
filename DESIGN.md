@@ -13,7 +13,6 @@ colors:
   soft: "#C9C4D4"
   mute: "#A49FB0"
   line: "#3D3A4A"
-  paper: "#E6E2D9"
   paper-line: "#CFCAC0"
   paper-mute: "#625D55"
   danger: "#C2185B"
@@ -103,7 +102,7 @@ surface is ink or bone; heat appears where there is something to read.
 The WebGL scene reads them from `app/javascript/scene/spectra.js`.
 
 ## Typography
-- **Zalando Sans Expanded** for display and headlines, always in capitals (CSS `text-transform`, so content stays in sentence case). The wordmark stays in title case (800, −4%).
+- **Zalando Sans Expanded** for display and headlines, always in capitals (CSS `text-transform`, so content stays in sentence case). In the header the name is live type: Zalando, capitals, 800, so it takes the foil. The wordmark artwork in `public/brand` keeps its own case.
 - On the holding screen its weight axis (200–900) is live: the letter under the cursor turns black, the far ones go thin. Glass thickness follows the weight.
 - **Inter** for everything that is read, and for the readouts (500, 13px, caps, +4%).
 - Readouts are a quiet layer at the edges. Do not use them as a label above every section.
@@ -132,7 +131,8 @@ The WebGL scene reads them from `app/javascript/scene/spectra.js`.
 ## Layout & Elevation
 - Square corners, 1px rules, no shadows. Depth comes from light and from tone.
 - Corners carry the facts; the centre carries the feeling.
-- Public pages are ink. Case studies, legal texts, the editor and admin are day.
+- Everything is ink with bone type: site, sign in, admin, editor and errors. Bone grounds appear only when it is day in Dubai.
+- One shell for every page, `layouts/application`. Admin, sign in, errors and the holding screen render inside it, with the same header, footer and components. Administrators get one thin bar on top.
 
 ## Motion
 - Heat moves slowly, like attention. Nothing bounces.
@@ -140,8 +140,8 @@ The WebGL scene reads them from `app/javascript/scene/spectra.js`.
 - With reduced motion the scene is a still image.
 
 ## Foil
-- The holographic foil of the presentation lives on type, not on cards: titles and text links take it while the pointer is on them. It spreads from the point of contact and follows it.
-- On ink it uses the presentation's eleven stops; on bone only their saturated half. Never on body text, buttons, forms or the editor.
+- The holographic foil of the presentation lives on type, not on cards. Whatever is set in Zalando capitals takes it (`display`, `lead`, `headline`, `title`, `wordmark`), and so do text links. It spreads from the point of contact and follows the pointer.
+- On ink it uses the presentation's eleven stops; on bone only their saturated half. Never on body text, buttons or fields.
 - Touch screens and keyboards keep the usual states.
 
 ## Editing
@@ -155,7 +155,12 @@ The WebGL scene reads them from `app/javascript/scene/spectra.js`.
 - Don't publish the presentation's sample clients, people or figures.
 
 ## Implementation
-`app/assets/stylesheets/design-system/` holds tokens (`tokens.css`, the Tailwind
-theme), roles (`theme.css`, classes `.night` and `.day`), components and the holding
-screen. Components read roles, never the palette. Token values are kept in step with
-this front matter by hand.
+Tailwind is the only styling layer, in `app/assets/stylesheets/design-system/`:
+
+- `tokens.css`: palette, type scale, the gutter and the roles as utilities (`bg-canvas`, `text-copy`, `text-soft`, `text-mute`, `border-line`, `text-accent`, `text-danger`), plus the variants `day:` and `tall:`.
+- `theme.css`: the values of those roles for `.night` and `.day`, and the base styles.
+- `components.css`: the components, written with `@apply`.
+
+A pattern that repeats becomes a component there; anything that happens once is written
+with utilities in the view. No other stylesheets, and no raw colours in views. Token values
+are kept in step with this front matter by hand.
